@@ -1,0 +1,61 @@
+﻿syntax = "proto3";
+
+package protocol;
+
+enum MessageCode {
+    LOGIN = 0;
+    S_LOAD = 1; // 유저들 정보 전달
+    S_INSERTPLAYER = 2; // 추가되는 유저 정보
+    S_MOVE = 3; // 이동 
+    S_CHAT = 4; // 채팅
+    S_PLAYERDATA = 5; // 내 정보(추가) 
+    S_CLOSEPLAYER = 6;
+}
+
+message Login {
+    string name = 1;
+    int32 type = 2;
+    int32 hp = 100;
+}
+
+message Position {
+    int32 x = 1;
+    int32 y = 2;
+    int32 z = 3;
+    float yew = 4;
+}
+
+message Player {
+    uint32 type = 1;
+    uint32 hp = 2;
+    uint32 code = 3;
+    Position position = 4;
+    string name = 5;
+}
+
+message SLoad {
+    repeated Player player = 1;
+}
+
+message SInsertplayer {
+    Player player = 1;
+}
+
+message SMove {
+    uint32 code = 1;
+    Position position = 2;
+}
+
+message SChat {
+    uint32 type = 1;
+    uint32 code = 2;
+    string text = 5;
+}
+
+message SPlayerData {
+    Player player = 1;
+}
+
+message SClosePlayer {
+    uint32 code = 1;
+}

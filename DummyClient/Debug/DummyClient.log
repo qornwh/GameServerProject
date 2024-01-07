@@ -1,0 +1,10 @@
+﻿  DummyClient.cpp
+  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
+  - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
+  - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
+  Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
+DummyService.obj : error LNK2019: "public: __thiscall Service::Service(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,unsigned short,int,int)" (??0Service@@QAE@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@GHH@Z)"public: __thiscall DummyService::DummyService(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,unsigned short)" (??0DummyService@@QAE@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@G@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+DummyService.obj : error LNK2019: "public: __thiscall Service::~Service(void)" (??1Service@@QAE@XZ)"public: __thiscall DummyService::~DummyService(void)" (??1DummyService@@QAE@XZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+DummyService.obj : error LNK2019: "public: class boost::shared_ptr<class Session> __thiscall Service::CreateSession(void)" (?CreateSession@Service@@QAE?AV?$shared_ptr@VSession@@@boost@@XZ)"public: bool __thiscall DummyService::Start(void)" (?Start@DummyService@@QAE_NXZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+DummyService.obj : error LNK2019: "public: bool __thiscall Session::AsyncConnect(void)" (?AsyncConnect@Session@@QAE_NXZ)"public: bool __thiscall DummyService::Start(void)" (?Start@DummyService@@QAE_NXZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+D:\tester\TestClient\binary\Debug\DummyClient.exe : fatal error LNK1120: 4개의 확인할 수 없는 외부 참조입니다.

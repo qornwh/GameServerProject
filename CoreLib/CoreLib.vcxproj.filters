@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="ReadBuffer.h" />
+    <ClInclude Include="ReadWriteLock.h" />
+    <ClInclude Include="Service.h" />
+    <ClInclude Include="Session.h" />
+    <ClInclude Include="ThreadManager.h" />
+    <ClInclude Include="Types.h" />
+    <ClInclude Include="WriteBuffer.h" />
+    <ClInclude Include="CorePch.h" />
+    <ClInclude Include="CoreGlobal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="..\..\..\myProject\projectBS\coreLib\mainTest.cpp" />
+    <ClCompile Include="ReadBuffer.cpp" />
+    <ClCompile Include="ReadWriteLock.cpp" />
+    <ClCompile Include="Service.cpp" />
+    <ClCompile Include="Session.cpp" />
+    <ClCompile Include="ThreadManager.cpp" />
+    <ClCompile Include="WriteBuffer.cpp" />
+    <ClCompile Include="CorePch.cpp" />
+    <ClCompile Include="CoreGlobal.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{2669a5de-bbed-49f6-8c9c-c54d61dac6a5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="IRoom.cpp" />
+    <ClCompile Include="GameSerivce.cpp" />
+    <ClCompile Include="GameSession.cpp" />
+    <ClCompile Include="GameService.pb.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="IRoom.h" />
+    <ClInclude Include="PacketUtils.h" />
+    <ClInclude Include="GameSerivce.h" />
+    <ClInclude Include="GameSession.h" />
+    <ClInclude Include="GameService.pb.h" />
+  </ItemGroup>
+</Project>

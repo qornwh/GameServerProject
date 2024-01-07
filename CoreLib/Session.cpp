@@ -1,0 +1,181 @@
+#include "pch.h"
+#include "Session.h"
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/write.hpp>
+
+#include "SendBuffer.h"
+
+Session::Session(boost::asio::io_context& io_context,
+                 const boost::asio::ip::tcp::endpoint& ep) : _ep(ep), _socket(io_context), _recvBuffer(4096)
+{
+}
+
+Session::~Session()
+{
+    std::cout << "~Session" << std::endl;
+}
+
+bool Session::AsyncConnect()
+{
+    _socket.async_connect(_ep, [this](const boost::system::error_code& ec)
+    {
+        this->OnConnect(ec);
+    });
+    return true;
+}
+
+void Session::OnConnect(const boost::system::error_code& ec)
+{
+    if (ec)
+    {
+        // TODO : error 처리 세션 종료
+    }
+    else
+    {
+        std::cout << "OnConnect !!!" << std::endl;
+        Connect();
+        AsyncRead();
+    }
+}
+
+int32 Session::OnRecv(BYTE* buffer, int32 len)
+{
+    return len;
+}
+
+void Session::AsyncRead()
+{
+    const uint64 _recvBufferSize = static_cast<uint64>(_recvBuffer.FreeSize());
+    BYTE* _buffer = _recvBuffer.ReadPos();
+    auto ptr = shared_from_this();
+    _socket.async_read_some(
+        // 이거 데이터 한계가 있다. => 아니다 size_t 자료형 크기다 ㅅㅂ 와 이거 1시간 날림
+        boost::asio::buffer(_buffer, _recvBufferSize),
+        // boost::asio::buffer(_TESTrecvBuffer, 4096),
+        [ptr](const boost::system::error_code ec, const size_t bytes_transferred)
+        {
+            ptr->OnRead(ec, bytes_transferred);
+        }
+    );
+}
+
+void Session::OnRead(const boost::system::error_code err, size_t bytes_transferred)
+{
+    // 컨텐츠단 구성 필요
+    if (!err)
+    {
+        // TODO : recv 처리
+        if (bytes_transferred == 0)
+        {
+            // 룸에서 모두 탈출
+            Disconnect();
+        }
+        else
+        {
+            if (!_recvBuffer.OnWrite(bytes_transferred))
+            {
+                Disconnect();
+                return;
+            }
+
+            int32 dataSize = _recvBuffer.DataSize();
+
+            BYTE* buffer = _recvBuffer.ReadPos();
+            int32 processLen = OnRecv(buffer, dataSize);
+            if (!_recvBuffer.OnRead(processLen) || processLen <= 0 || dataSize < processLen)
+            {
+                Disconnect();
+                return;
+            }
+            _recvBuffer.Clean();
+
+            AsyncRead();
+        }
+    }
+    else
+    {
+        // TODO : error 처리
+        std::cout << "OnRead error code: " << err.value() << ", msg: " << err.message() << std::endl;
+
+        // 룸에서 모두 탈출
+        Disconnect();
+    }
+}
+
+void Session::AsyncWrite()
+{
+    std::string _buffer = "Hello World!!";
+    auto ptr = shared_from_this();
+    _socket.async_write_some(
+        boost::asio::buffer(_buffer),
+        [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
+        {
+            ptr->OnWrite(ec, bytes_transferred);
+        });
+}
+
+void Session::AsyncWrite(void* data, std::size_t size_in_bytes)
+{
+    auto ptr = shared_from_this();
+    _socket.async_write_some(
+        boost::asio::buffer(data, size_in_bytes),
+        [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
+        {
+            ptr->OnWrite(ec, bytes_transferred);
+        });
+}
+
+void Session::AsyncWrite(SendBufferRef sendBuffer)
+{
+    std::vector<boost::asio::const_buffer> buffers;
+    {
+        WriteLockGuard wl(lock, "write");
+        _sendBuffers.emplace_back(sendBuffer);
+        for (auto buffer : _sendBuffers)
+        {
+            buffers.emplace_back(boost::asio::buffer(sendBuffer->Buffer(), sendBuffer->WriteSize()));
+        }
+    }
+    auto ptr = shared_from_this();
+    boost::asio::async_write(
+        _socket,
+        buffers,
+        [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
+        {
+            ptr->OnWrite(ec, bytes_transferred);
+            WriteLockGuard wl(ptr->lock, "write");
+            ptr->_sendBuffers.clear();
+            // std::cout << "sendbuffer size !!! : " << bytes_transferred << std::endl;
+            // 세션 shared_ptr관리 필요?? disconnected될때 끊길 확률 있다
+        });
+}
+
+void Session::OnWrite(const boost::system::error_code err, const size_t bytes_transferred)
+{
+    if (!err)
+    {
+        // TODO : recv 처리
+    }
+    else
+    {
+        // TODO : error 처리
+        std::cout << "OnWrite error code: " << err.value() << "msg: " << err.message() << std::endl;
+    }
+}
+
+void Session::Connect()
+{
+    _connected.store(true);
+}
+
+void Session::Disconnect()
+{
+    _recvBuffer.Clean();
+    _sendBuffers.clear(); // queue clear 함수 없어서 이렇게함
+    _connected.exchange(false);
+
+    if (_serviceRef.lock() != nullptr)
+    {
+        _serviceRef.lock()->ReleaseSession(shared_from_this());
+    }
+}
