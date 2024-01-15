@@ -15,6 +15,7 @@ public:
     GameRoomManager();
     ~GameRoomManager();
     void CreateRoom(GameServiceRef gameService);
+    void CreateRoom(GameServiceRef gameService, int32 id);
     void EreaseRoom(int32 id);
     GameRoomRef getRoom(int32 id);
 

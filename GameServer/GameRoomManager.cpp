@@ -13,10 +13,24 @@ GameRoomManager::~GameRoomManager()
 void GameRoomManager::CreateRoom(GameServiceRef gameService)
 {
     // room생성
-    uint32 id = _id;
-    GameRoomRef room = boost::make_shared<GameRoom>(gameService, id);
-    _roomMap[_id] = room;
-    _id.fetch_add(1);
+    int32 id = _id;
+    
+    if (_roomMap.find(id) == _roomMap.end())
+    {
+        GameRoomRef room = boost::make_shared<GameRoom>(gameService, id);
+        _roomMap[_id] = room;
+        _id.fetch_add(1);
+    }
+}
+
+void GameRoomManager::CreateRoom(GameServiceRef gameService, int32 id)
+{
+    // room생성
+    if (_roomMap.find(id) == _roomMap.end())
+    {
+        GameRoomRef room = boost::make_shared<GameRoom>(gameService, id);
+        _roomMap[id] = room;
+    }
 }
 
 void GameRoomManager::EreaseRoom(int32 id)

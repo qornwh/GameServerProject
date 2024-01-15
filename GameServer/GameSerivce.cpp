@@ -25,9 +25,9 @@ GameService::~GameService()
 void GameService::InitRoom()
 {
     // 일반몹 맵 = 0
-    GRoomManger->CreateRoom(static_pointer_cast<GameService>(shared_from_this()));
+    GRoomManger->CreateRoom(static_pointer_cast<GameService>(shared_from_this()), 0);
     // 보스몹 맵 = 1
-    GRoomManger->CreateRoom(static_pointer_cast<GameService>(shared_from_this()));
+    GRoomManger->CreateRoom(static_pointer_cast<GameService>(shared_from_this()), 1);
 }
 
 SessionRef GameService::CreateSession()

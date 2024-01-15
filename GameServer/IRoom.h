@@ -14,11 +14,15 @@ template <typename T, typename = std::enable_if_t<std::is_base_of_v<SessionRef, 
 class IRoom : public enable_shared_from_this<IRoom<T, SessionRef>>
 {
 public:
-    IRoom(GameServiceRef gameService, uint32 id) : _gameService(gameService), _id(id), _strand(boost::asio::make_strand(_gameService.lock()->GetIoContext()))
+    IRoom(GameServiceRef gameService, uint32 id) : _gameService(gameService), _id(id),
+                                                   _strand(
+                                                       boost::asio::make_strand(_gameService.lock()->GetIoContext()))
     {
     }
 
-    virtual ~IRoom() {};
+    virtual ~IRoom()
+    {
+    };
 
     virtual void EnterSession(T session)
     {
@@ -54,12 +58,20 @@ public:
         }));
     }
 
-    void SetTimer();
+    virtual void SetTimer()
+    {
+    }
+
+    virtual void Tick()
+    {
+    }
 
 protected:
     set<T> sessionList;
     int32 _id;
     uint32 _type;
+
+    int32 frameTime = 50; // 50ms, 20프레임
 
     boost::weak_ptr<GameService> _gameService;
     boost::asio::strand<boost::asio::io_context::executor_type> _strand;
@@ -68,9 +80,13 @@ protected:
 class GameRoom : public IRoom<GameSessionRef, SessionRef>
 {
 public:
-    GameRoom(GameServiceRef gameService, uint32 id) : IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>(gameService, id)
+    GameRoom(GameServiceRef gameService, uint32 id) :
+        IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>(gameService, id),
+        _timer(_gameService.lock()->GetIoContext(), _timerDelay),
+        _gameStrand(boost::asio::make_strand(_gameService.lock()->GetIoContext()))
     {
         _type = GRoomManger->RoomType::space; // 일단 디폴트
+        StartGameRoom();
     }
 
     ~GameRoom() override
@@ -81,7 +97,7 @@ public:
     void EnterSession(GameSessionRef session) override;
 
     void OutSession(boost::shared_ptr<GameSession> session) override;
-    
+
     void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
     {
         boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
@@ -94,4 +110,13 @@ public:
             }
         }));
     }
+
+    void StartGameRoom();
+    void Tick() override;
+    void Task();
+
+private:
+    boost::asio::steady_timer _timer;
+    boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
+    boost::asio::chrono::milliseconds _timerDelay = boost::asio::chrono::milliseconds(100);
 };
