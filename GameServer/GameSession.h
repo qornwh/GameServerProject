@@ -17,7 +17,7 @@ public:
     void HandlePacket(const boost::asio::mutable_buffer& buffer, int32 offset, PacketHeader* header);
     int32 OnRecv(BYTE* buffer, int32 len) override;
     void CreatePlayerInfo(int32 type, int32 hp);
-    boost::shared_ptr<class GamePlayer> GetPlayer();
+    boost::shared_ptr<class GamePlayerInfo> GetPlayer();
 
     uint16 GetSessionId() { return _sessionId; }
 
@@ -25,7 +25,7 @@ public:
     int32 GetRoomId() { return _roomId; }
 
 private:
-    boost::shared_ptr<class GamePlayer> _player;
+    boost::shared_ptr<class GamePlayerInfo> _player;
     int32 _roomId = -1;
 
     uint16 _sessionId = -1;

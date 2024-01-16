@@ -6,7 +6,7 @@
 #include "GameSerivce.h"
 #include "pch.h"
 #include "GameSession.h"
-#include "GamePlayer.h"
+#include "GameObjectInfo.h"
 
 // 일단 이구간 템플릿 연구 필요 아직 템플릿 숙지 덜됨, 컴파일시 어떻게 돌아가는지??
 
@@ -86,6 +86,7 @@ public:
         _gameStrand(boost::asio::make_strand(_gameService.lock()->GetIoContext()))
     {
         _type = GRoomManger->RoomType::space; // 일단 디폴트
+        CreateMapInfo(id);
         StartGameRoom();
     }
 
@@ -115,8 +116,17 @@ public:
     void Tick() override;
     void Task();
 
+    void CreateMapInfo(int32 type);
+
+    void InitMonsters();
+    void SpawnMonsters();
+    void MoveMonsters();
+    void AttackMonster();
+
 private:
     boost::asio::steady_timer _timer;
     boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
     boost::asio::chrono::milliseconds _timerDelay = boost::asio::chrono::milliseconds(100);
+
+    boost::shared_ptr<class GameMapInfo> _gameMapInfo;
 };

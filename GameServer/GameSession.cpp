@@ -5,7 +5,7 @@
 #include "PacketHeader.h"
 #include "GamePacketHandler.h"
 #include "GameRoomManager.h"
-#include "GamePlayer.h"
+#include "GameObjectInfo.h"
 #include "IRoom.h"
 
 GameSession::GameSession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep) : Session(
@@ -39,11 +39,11 @@ int32 GameSession::OnRecv(BYTE* buffer, int32 len)
 
 void GameSession::CreatePlayerInfo(int32 type, int32 hp)
 {
-    _player = boost::make_shared<GamePlayer>(reinterpret_pointer_cast<GameSession>(shared_from_this()), _sessionId,
+    _player = boost::make_shared<GamePlayerInfo>(reinterpret_pointer_cast<GameSession>(shared_from_this()), _sessionId,
                                              type, hp);
 }
 
-boost::shared_ptr<GamePlayer> GameSession::GetPlayer()
+boost::shared_ptr<GamePlayerInfo> GameSession::GetPlayer()
 {
     return _player;
 }
@@ -154,7 +154,7 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
 
                 if (gameSession->GetPlayer() != nullptr)
                 {
-                    boost::shared_ptr<GamePlayer> info = gameSession->GetPlayer();
+                    boost::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
                     // 설마 안지우지는 않겠지. pkt 소멸되면 메모리도 같이 날리겠지. 그냥 믿겠다!!!
                     protocol::Player* player = sendPkt.add_player();
                     player->set_name(info->GetName());

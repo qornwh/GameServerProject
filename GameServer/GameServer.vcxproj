@@ -171,7 +171,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameGlobal.h" />
-    <ClInclude Include="GamePlayer.h" />
+    <ClInclude Include="GameMapInfo.h" />
+    <ClInclude Include="GameObjectInfo.h" />
     <ClInclude Include="GameRoomManager.h" />
     <ClInclude Include="IRoom.h" />
     <ClInclude Include="GamePacketHandler.h" />
@@ -181,7 +182,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameGlobal.cpp" />
-    <ClCompile Include="GamePlayer.cpp" />
+    <ClCompile Include="GameMapInfo.cpp" />
+    <ClCompile Include="GameObjectInfo.cpp" />
     <ClCompile Include="GameRoomManager.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="IRoom.cpp" />

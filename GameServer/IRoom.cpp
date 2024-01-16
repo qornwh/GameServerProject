@@ -1,5 +1,6 @@
 ﻿#include "IRoom.h"
 
+#include "GameMapInfo.h"
 #include "GamePacketHandler.h"
 #include "GameService.pb.h"
 
@@ -50,9 +51,9 @@ void GameRoom::Tick()
     {
         // 룸의 일정 시간마다 작업 (일단 20프레임 해봄)
         Task();
-        // 다시 Tick 등록
-        Tick();
     }));
+    // 다시 Tick 등록
+    Tick();
 }
 
 void GameRoom::Task()
@@ -73,4 +74,37 @@ void GameRoom::Task()
     // 공격받은 몬스터들은 플레이어 쪽으로 이동 (방향전환 함께)
     // 케이스 4
     // 공격받은 몬스터들의 공격범위에 플레이어가 있으면 공격 및 데미지 계산 플레이어 Hit처리후 클라에게 공격 데미지 메시지 전달. 
+}
+
+void GameRoom::CreateMapInfo(int32 type)
+{
+    // 일단 하드코딩으로 생성해둔다.
+    if (type == 0)
+    {
+        // 일반 몹 맵
+        _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
+        _gameMapInfo->CreateMonsterMapInfo(25, 15, 0, 0, MapType::MONSTER);
+    }
+    else if (type == 1)
+    {
+        // 보스 몹 맵
+        _gameMapInfo = boost::make_shared<GameMapInfo>(15, 15, 0, 0);
+        _gameMapInfo->CreateMonsterMapInfo(10, 10, 0, 0, MapType::BOS);
+    }
+}
+
+void GameRoom::InitMonsters()
+{
+}
+
+void GameRoom::SpawnMonsters()
+{
+}
+
+void GameRoom::MoveMonsters()
+{
+}
+
+void GameRoom::AttackMonster()
+{
 }

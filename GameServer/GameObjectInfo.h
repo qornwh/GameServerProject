@@ -13,13 +13,23 @@ struct FVector
     float Yew;
 };
 
-class GamePlayer : public boost::enable_shared_from_this<GamePlayer>
+class GameObject
 {
-public:
-    GamePlayer(GameSessionRef gameSession, int32 sessionId, int32 type, int32 hp);
-    ~GamePlayer();
+    
+};
 
+class GameMonster
+{
+    
+};
+
+class GameObjectInfo : public boost::enable_shared_from_this<GameObjectInfo>
+{
+    
 public:
+    GameObjectInfo(int32 uuid, int32 type, int32 hp);
+    ~GameObjectInfo();
+
     void SetPosition(FVector& position);
     void SetPosition(int32 X, int32 Y, int32 Z);
 
@@ -29,11 +39,7 @@ public:
     BYTE GetHp() { return _hp; }
     FVector& GetPosition() { return _position; }
 
-    GameSessionRef GetGameSession() { return _gameSession.lock(); }
     void SetName(const string& name);
-
-private:
-    int _sessionId;
 
 private:
     std::string _name;
@@ -43,7 +49,17 @@ private:
     int32 _type;
 
     FVector _position{0, 0, 0, 0};
-    // uuid 필요
+};
+
+class GamePlayerInfo : public GameObjectInfo
+{
+public:
+    GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp);
+    ~GamePlayerInfo();
+
+    GameSessionRef GetGameSession() { return _gameSession.lock(); }
+
+private:
 
     // 혹시나 해서 들고 있는다.
     boost::weak_ptr<GameSession> _gameSession;
