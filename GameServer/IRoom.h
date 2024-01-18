@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <set>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
 
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
@@ -7,6 +9,7 @@
 #include "pch.h"
 #include "GameSession.h"
 #include "GameObjectInfo.h"
+#include "GameUtils.h"
 
 // 일단 이구간 템플릿 연구 필요 아직 템플릿 숙지 덜됨, 컴파일시 어떻게 돌아가는지??
 
@@ -14,15 +17,13 @@ template <typename T, typename = std::enable_if_t<std::is_base_of_v<SessionRef, 
 class IRoom : public enable_shared_from_this<IRoom<T, SessionRef>>
 {
 public:
-    IRoom(GameServiceRef gameService, uint32 id) : _gameService(gameService), _id(id),
-                                                   _strand(
-                                                       boost::asio::make_strand(_gameService.lock()->GetIoContext()))
+    IRoom(boost::asio::io_context& io_context, uint32 id) : _id(id), _strand(boost::asio::make_strand(io_context))
     {
     }
 
     virtual ~IRoom()
     {
-    };
+    }
 
     virtual void EnterSession(T session)
     {
@@ -73,17 +74,16 @@ protected:
 
     int32 frameTime = 50; // 50ms, 20프레임
 
-    boost::weak_ptr<GameService> _gameService;
     boost::asio::strand<boost::asio::io_context::executor_type> _strand;
 };
 
 class GameRoom : public IRoom<GameSessionRef, SessionRef>
 {
 public:
-    GameRoom(GameServiceRef gameService, uint32 id) :
-        IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>(gameService, id),
-        _timer(_gameService.lock()->GetIoContext(), _timerDelay),
-        _gameStrand(boost::asio::make_strand(_gameService.lock()->GetIoContext()))
+    GameRoom(boost::asio::io_context& io_context, uint32 id) :
+        IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>(io_context, id),
+        _timer(io_context, _timerDelay),
+        _gameStrand(boost::asio::make_strand(io_context))
     {
         _type = GRoomManger->RoomType::space; // 일단 디폴트
         CreateMapInfo(id);
@@ -129,4 +129,15 @@ private:
     boost::asio::chrono::milliseconds _timerDelay = boost::asio::chrono::milliseconds(100);
 
     boost::shared_ptr<class GameMapInfo> _gameMapInfo;
+
+    int32 _monsterCount = -1;
+    int32 _bosMonsterCount = -1;
+
+    boost::random::mt19937 rng;
+
+    unordered_map<int32, GameMosterInfoRef> _monsterMap;
+
+    Atomic<bool> _isTask{false};
+
+    GameUtils::TickCounter _tickCounter{10};
 };

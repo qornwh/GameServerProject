@@ -54,7 +54,8 @@ public:
     bool InRect(int32 x, int32 y);
     bool InSetRect(int32& x, int32& y);
 
-    int32 GetMapType() { return type; }
+    Rect& GetRect();
+    MapType GetMapType() { return type; }
 
 private:
     Rect _mapInfo{0, 0, 0, 0};
@@ -70,9 +71,9 @@ public:
     void CreateMonsterMapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type);
 
     MapInfo& GetMapInfo();
-    boost::shared_ptr<MapInfo> GetMonsterMapInfo();
+    MapInfoRef GetMonsterMapInfo();
     
 private:
     MapInfo _mapInfo;
-    boost::shared_ptr<MapInfo> _monsterMapInfo;
+    MapInfoRef _monsterMapInfo;
 };

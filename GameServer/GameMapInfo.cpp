@@ -53,6 +53,11 @@ bool MapInfo::InSetRect(int32& x, int32& y)
     return flag;
 }
 
+Rect& MapInfo::GetRect()
+{
+    return _mapInfo;
+}
+
 GameMapInfo::GameMapInfo(int32 x, int32 y, int32 centerX, int32 centerY) : _mapInfo(
     x, y, centerX, centerY, MapType::COMMON)
 {
@@ -74,7 +79,7 @@ MapInfo& GameMapInfo::GetMapInfo()
     return _mapInfo;
 }
 
-boost::shared_ptr<MapInfo> GameMapInfo::GetMonsterMapInfo()
+MapInfoRef GameMapInfo::GetMonsterMapInfo()
 {
     return _monsterMapInfo;
 }

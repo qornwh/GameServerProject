@@ -46,19 +46,56 @@ void GameRoom::Tick()
     // _gameStrand는 Tick 처리용도이다.
     // 먼저 딜레이후 일정 시간마다 _gameStrand에 Tick 함수를 계속 집어넣어서 시작한다.
     _timer.expires_at(_timer.expiry() + _timerDelay);
+    _tickCounter.Add();
+    // while (_isTask)
+    // {
+    //     _timer.expires_at(_timer.expiry() + _timerDelay);
+    //     _tickCounter.Add();
+    // }
 
     _timer.async_wait(boost::asio::bind_executor(_gameStrand, [this](boost::system::error_code error)
     {
-        // 룸의 일정 시간마다 작업 (일단 20프레임 해봄)
+        // 룸의 일정 시간마다 작업 (일단 10프레임 해봄)
         Task();
     }));
-    // 다시 Tick 등록
-    Tick();
 }
 
 void GameRoom::Task()
 {
-    cout << "TASK : " << _id << " !!!" << endl;
+    _isTask.exchange(true);
+    MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
+    Rect& rect = _gameMapInfo->GetMonsterMapInfo()->GetRect();
+
+    bool IsUpdate = false;
+    if (_tickCounter.GetTick() == 0)
+    {
+        IsUpdate = true;
+    }
+    if (mapType == MapType::MONSTER)
+    {
+        for (auto& it : _monsterMap)
+        {
+            int32 uuid = it.first;
+            GameMosterInfoRef info = it.second;
+            if (IsUpdate)
+            {
+                info->UpdateYaw();
+            }
+            FVector pos = info->GetPosition();
+            info->Move(GameUtils::MathUtils::GetCos(pos.X, pos.Yaw, 1),
+                       GameUtils::MathUtils::GetSin(pos.Z, pos.Yaw, 1));
+
+
+            // 생각 1
+            // 미리 이동될거리를 보내고
+            // 이동될 거리를 계산한다.
+            // 
+        }
+    }
+    _isTask.exchange(false);
+    // 다시 Tick 등록
+    Tick();
+
     // 몬스터 이동.
     // -- 포지션, 방향 좌표 계산 필요
     // 몬스터 플레이어 충돌 및 타격
@@ -84,17 +121,36 @@ void GameRoom::CreateMapInfo(int32 type)
         // 일반 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(25, 15, 0, 0, MapType::MONSTER);
+        _monsterCount = 10;
     }
     else if (type == 1)
     {
         // 보스 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(15, 15, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(10, 10, 0, 0, MapType::BOS);
+        _bosMonsterCount = 1;
     }
 }
 
 void GameRoom::InitMonsters()
 {
+    MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
+    Rect& rect = _gameMapInfo->GetMonsterMapInfo()->GetRect();
+    boost::random::uniform_int_distribution<> genX(rect.StartX(), rect.EndX());
+    boost::random::uniform_int_distribution<> genY(rect.StartY(), rect.EndX());
+    boost::random::uniform_int_distribution<> genYaw(0, 360);
+
+    if (mapType == MapType::MONSTER)
+    {
+        for (int32 i = 0; i < _monsterCount; i++)
+        {
+            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100);
+            info->SetStartPosition(genX(rng), genY(rng), genYaw(rng));
+        }
+    }
+    else if (mapType == MapType::BOS)
+    {
+    }
 }
 
 void GameRoom::SpawnMonsters()

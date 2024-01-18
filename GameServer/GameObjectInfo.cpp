@@ -27,6 +27,50 @@ void GameObjectInfo::SetName(const string& name)
     _name = name;
 }
 
+GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp): GameObjectInfo(uuid, type, hp), _startX(0),
+                                                                  _startZ(0), _targetUUid(-1), genYaw(-20, 20)
+{
+}
+
+GameMosterInfo::~GameMosterInfo()
+{
+}
+
+void GameMosterInfo::SetStartPosition(int32 x, int32 z, float Yaw)
+{
+    _position.X = x;
+    _position.Z = z;
+    _position.Yaw = Yaw;
+}
+
+void GameMosterInfo::GetStartPosition(int32& x, int32& z)
+{
+    x = _startX;
+    z = _startZ;
+}
+
+void GameMosterInfo::SetTarget(int32 uuid)
+{
+    _targetUUid = uuid;
+}
+
+void GameMosterInfo::Move(int32 x, int32 z)
+{
+    _position.X = x;
+    _position.Z = z;
+}
+
+void GameMosterInfo::TargetMove(int32 x, int32 z)
+{
+}
+
+void GameMosterInfo::UpdateYaw()
+{
+    _position.Yaw += genYaw(rng);
+    if (_position.Yaw < 0)
+        _position.Yaw = 360 - _position.Yaw;
+}
+
 GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
     uuid, type, hp)
 {

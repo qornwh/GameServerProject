@@ -165,7 +165,7 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
                     position->set_x(info->GetPosition().X);
                     position->set_y(info->GetPosition().Y);
                     position->set_z(info->GetPosition().Z);
-                    position->set_yew(info->GetPosition().Yew);
+                    position->set_yew(info->GetPosition().Yaw);
                     // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
                     player->set_allocated_position(position);
                 }

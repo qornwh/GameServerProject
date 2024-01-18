@@ -15,3 +15,7 @@ using GameServiceRef = boost::shared_ptr<class GameService>;
 
 using GameMapInfoRef = boost::shared_ptr<class GameMapInfo>;
 using MapInfoRef = boost::shared_ptr<class MapInfo>;
+
+using GameObjectInfoRef = boost::shared_ptr<class GameObjectInfo>;
+using GameMosterInfoRef = boost::shared_ptr<class GameMosterInfo>;
+using GamePlayerInfoRef = boost::shared_ptr<class GamePlayerInfo>;
