@@ -9,7 +9,8 @@ enum MessageCode {
     S_MOVE = 3; // 이동 
     S_CHAT = 4; // 채팅
     S_PLAYERDATA = 5; // 내 정보(추가) 
-    S_CLOSEPLAYER = 6;
+    S_CLOSEPLAYER = 6; // 유저 종료
+    S_MOVES = 7; // 여러 유닛(유저, 몬스터) 이동
 }
 
 message Login {
@@ -22,7 +23,7 @@ message Position {
     int32 x = 1;
     int32 y = 2;
     int32 z = 3;
-    float yew = 4;
+    float yaw = 4;
 }
 
 message Player {
@@ -44,6 +45,7 @@ message SInsertplayer {
 message SMove {
     uint32 code = 1;
     Position position = 2;
+    bool is_monster = 3;
 }
 
 message SChat {
@@ -58,4 +60,8 @@ message SPlayerData {
 
 message SClosePlayer {
     uint32 code = 1;
+}
+
+message SMoves {
+    repeated SMove move = 1;
 }

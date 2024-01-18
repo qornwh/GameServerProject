@@ -40,7 +40,7 @@ int32 GameSession::OnRecv(BYTE* buffer, int32 len)
 void GameSession::CreatePlayerInfo(int32 type, int32 hp)
 {
     _player = boost::make_shared<GamePlayerInfo>(reinterpret_pointer_cast<GameSession>(shared_from_this()), _sessionId,
-                                             type, hp);
+                                                 type, hp);
 }
 
 boost::shared_ptr<GamePlayerInfo> GameSession::GetPlayer()
@@ -98,9 +98,10 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
         playerPosition->set_x(position.x());
         playerPosition->set_y(position.y());
         playerPosition->set_z(position.z());
-        playerPosition->set_yew(position.yew());
+        playerPosition->set_yaw(position.yaw());
         pkt.set_allocated_position(playerPosition);
-        
+        pkt.set_is_monster(false);
+
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_MOVE);
         GetService()->BroadCast(sendBuffer);
         // AsyncWrite(sendBuffer);
@@ -165,7 +166,7 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
                     position->set_x(info->GetPosition().X);
                     position->set_y(info->GetPosition().Y);
                     position->set_z(info->GetPosition().Z);
-                    position->set_yew(info->GetPosition().Yaw);
+                    position->set_yaw(info->GetPosition().Yaw);
                     // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
                     player->set_allocated_position(position);
                 }

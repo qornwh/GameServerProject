@@ -7,9 +7,10 @@
 enum ObjectState
 {
     IDLE = 0,
-    ATTACK = 1,
-    HITED = 2,
-    DIE = 3,
+    MOVE = 1,
+    ATTACK = 2,
+    HITED = 3,
+    DIE = 4,
 };
 
 struct FVector
@@ -22,6 +23,13 @@ struct FVector
     int32 Y;
     int32 Z;
     float Yaw;
+
+    FVector& operator=(const FVector& ref)
+    {
+        X = ref.X;
+        Z = ref.Z;
+        return *this;
+    }
 };
 
 class GameObjectInfo : public boost::enable_shared_from_this<GameObjectInfo>
@@ -41,7 +49,9 @@ public:
 
     void SetName(const string& name);
 
+    void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
+
 
 protected:
     std::string _name;
@@ -64,14 +74,14 @@ public:
     GameMosterInfo(int32 uuid, int32 type, int32 hp);
     ~GameMosterInfo();
 
-    void SetStartPosition(int32 x, int32 z, float Yaw);
+    void SetStartPosition(int32 x, int32 z);
 
     void GetStartPosition(int32& x, int32& z);
 
     void SetTarget(int32 uuid);
     int32 GetTarget() { return _targetUUid; }
 
-    void Move(int32 x, int32 z);
+    void Move();
     void TargetMove(int32 x, int32 z);
 
     void UpdateYaw();
@@ -85,8 +95,9 @@ private:
     int32 _startX;
     int32 _startZ;
     int32 _targetUUid;
-    
-    FVector _nextPosition{0, 0, 0, 0};
+
+    // 이전 위치
+    FVector _prePosition{0, 0, 0, 0};
 
     boost::random::mt19937 rng;
     boost::random::uniform_int_distribution<> genYaw;

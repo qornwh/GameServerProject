@@ -71,26 +71,45 @@ void GameRoom::Task()
     {
         IsUpdate = true;
     }
+
+    protocol::SMoves pkt;
     if (mapType == MapType::MONSTER)
     {
         for (auto& it : _monsterMap)
         {
             int32 uuid = it.first;
             GameMosterInfoRef info = it.second;
-            if (IsUpdate)
+            if (info->GetObjectState() != ObjectState::DIE)
             {
-                info->UpdateYaw();
+                if (IsUpdate)
+                {
+                    info->UpdateYaw();
+                    info->Move();
+                    protocol::SMove* childPkt = pkt.add_move();
+                    protocol::Position* position = new protocol::Position();
+                    childPkt->set_code(info->GetCode());
+                    position->set_x(info->GetPosition().X);
+                    position->set_y(info->GetPosition().Y);
+                    position->set_z(info->GetPosition().Z);
+                    position->set_yaw(info->GetPosition().Yaw);
+                    childPkt->set_allocated_position(position);
+                    childPkt->set_is_monster(true);
+                }
             }
-            FVector pos = info->GetPosition();
-            info->Move(GameUtils::MathUtils::GetCos(pos.X, pos.Yaw, 1),
-                       GameUtils::MathUtils::GetSin(pos.Z, pos.Yaw, 1));
-
-
-            // 생각 1
-            // 미리 이동될거리를 보내고
-            // 이동될 거리를 계산한다.
-            // 
+            else
+            {
+                if (IsUpdate)
+                {
+                    // 몬스터 리스폰 설정만 해둠
+                    info->SetObjecteState(ObjectState::IDLE);
+                }
+            }
         }
+    }
+    if (pkt.move_size() > 0)
+    {
+        SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_MOVES);
+        BroadCast(sendBuffer);
     }
     _isTask.exchange(false);
     // 다시 Tick 등록
@@ -138,14 +157,13 @@ void GameRoom::InitMonsters()
     Rect& rect = _gameMapInfo->GetMonsterMapInfo()->GetRect();
     boost::random::uniform_int_distribution<> genX(rect.StartX(), rect.EndX());
     boost::random::uniform_int_distribution<> genY(rect.StartY(), rect.EndX());
-    boost::random::uniform_int_distribution<> genYaw(0, 360);
 
     if (mapType == MapType::MONSTER)
     {
         for (int32 i = 0; i < _monsterCount; i++)
         {
             GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100);
-            info->SetStartPosition(genX(rng), genY(rng), genYaw(rng));
+            info->SetStartPosition(genX(rng), genY(rng));
         }
     }
     else if (mapType == MapType::BOS)

@@ -70,6 +70,9 @@ extern SLoadDefaultTypeInternal _SLoad_default_instance_;
 class SMove;
 struct SMoveDefaultTypeInternal;
 extern SMoveDefaultTypeInternal _SMove_default_instance_;
+class SMoves;
+struct SMovesDefaultTypeInternal;
+extern SMovesDefaultTypeInternal _SMoves_default_instance_;
 class SPlayerData;
 struct SPlayerDataDefaultTypeInternal;
 extern SPlayerDataDefaultTypeInternal _SPlayerData_default_instance_;
@@ -83,6 +86,7 @@ template<> ::protocol::SClosePlayer* Arena::CreateMaybeMessage<::protocol::SClos
 template<> ::protocol::SInsertplayer* Arena::CreateMaybeMessage<::protocol::SInsertplayer>(Arena*);
 template<> ::protocol::SLoad* Arena::CreateMaybeMessage<::protocol::SLoad>(Arena*);
 template<> ::protocol::SMove* Arena::CreateMaybeMessage<::protocol::SMove>(Arena*);
+template<> ::protocol::SMoves* Arena::CreateMaybeMessage<::protocol::SMoves>(Arena*);
 template<> ::protocol::SPlayerData* Arena::CreateMaybeMessage<::protocol::SPlayerData>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace protocol {
@@ -95,12 +99,13 @@ enum MessageCode : int {
   S_CHAT = 4,
   S_PLAYERDATA = 5,
   S_CLOSEPLAYER = 6,
+  S_MOVES = 7,
   MessageCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MessageCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MessageCode_IsValid(int value);
 constexpr MessageCode MessageCode_MIN = LOGIN;
-constexpr MessageCode MessageCode_MAX = S_CLOSEPLAYER;
+constexpr MessageCode MessageCode_MAX = S_MOVES;
 constexpr int MessageCode_ARRAYSIZE = MessageCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageCode_descriptor();
@@ -418,7 +423,7 @@ class Position final :
     kXFieldNumber = 1,
     kYFieldNumber = 2,
     kZFieldNumber = 3,
-    kYewFieldNumber = 4,
+    kYawFieldNumber = 4,
   };
   // int32 x = 1;
   void clear_x();
@@ -447,13 +452,13 @@ class Position final :
   void _internal_set_z(int32_t value);
   public:
 
-  // float yew = 4;
-  void clear_yew();
-  float yew() const;
-  void set_yew(float value);
+  // float yaw = 4;
+  void clear_yaw();
+  float yaw() const;
+  void set_yaw(float value);
   private:
-  float _internal_yew() const;
-  void _internal_set_yew(float value);
+  float _internal_yaw() const;
+  void _internal_set_yaw(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:protocol.Position)
@@ -467,7 +472,7 @@ class Position final :
     int32_t x_;
     int32_t y_;
     int32_t z_;
-    float yew_;
+    float yaw_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1118,6 +1123,7 @@ class SMove final :
   enum : int {
     kPositionFieldNumber = 2,
     kCodeFieldNumber = 1,
+    kIsMonsterFieldNumber = 3,
   };
   // .protocol.Position position = 2;
   bool has_position() const;
@@ -1146,6 +1152,15 @@ class SMove final :
   void _internal_set_code(uint32_t value);
   public:
 
+  // bool is_monster = 3;
+  void clear_is_monster();
+  bool is_monster() const;
+  void set_is_monster(bool value);
+  private:
+  bool _internal_is_monster() const;
+  void _internal_set_is_monster(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:protocol.SMove)
  private:
   class _Internal;
@@ -1156,6 +1171,7 @@ class SMove final :
   struct Impl_ {
     ::protocol::Position* position_;
     uint32_t code_;
+    bool is_monster_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1641,6 +1657,163 @@ class SClosePlayer final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_GameService_2eproto;
 };
+// -------------------------------------------------------------------
+
+class SMoves final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.SMoves) */ {
+ public:
+  inline SMoves() : SMoves(nullptr) {}
+  ~SMoves() override;
+  explicit PROTOBUF_CONSTEXPR SMoves(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SMoves(const SMoves& from);
+  SMoves(SMoves&& from) noexcept
+    : SMoves() {
+    *this = ::std::move(from);
+  }
+
+  inline SMoves& operator=(const SMoves& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SMoves& operator=(SMoves&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SMoves& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SMoves* internal_default_instance() {
+    return reinterpret_cast<const SMoves*>(
+               &_SMoves_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(SMoves& a, SMoves& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SMoves* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SMoves* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SMoves* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SMoves>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SMoves& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SMoves& from) {
+    SMoves::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SMoves* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "protocol.SMoves";
+  }
+  protected:
+  explicit SMoves(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMoveFieldNumber = 1,
+  };
+  // repeated .protocol.SMove move = 1;
+  int move_size() const;
+  private:
+  int _internal_move_size() const;
+  public:
+  void clear_move();
+  ::protocol::SMove* mutable_move(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::SMove >*
+      mutable_move();
+  private:
+  const ::protocol::SMove& _internal_move(int index) const;
+  ::protocol::SMove* _internal_add_move();
+  public:
+  const ::protocol::SMove& move(int index) const;
+  ::protocol::SMove* add_move();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::SMove >&
+      move() const;
+
+  // @@protoc_insertion_point(class_scope:protocol.SMoves)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::SMove > move_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GameService_2eproto;
+};
 // ===================================================================
 
 
@@ -1806,24 +1979,24 @@ inline void Position::set_z(int32_t value) {
   // @@protoc_insertion_point(field_set:protocol.Position.z)
 }
 
-// float yew = 4;
-inline void Position::clear_yew() {
-  _impl_.yew_ = 0;
+// float yaw = 4;
+inline void Position::clear_yaw() {
+  _impl_.yaw_ = 0;
 }
-inline float Position::_internal_yew() const {
-  return _impl_.yew_;
+inline float Position::_internal_yaw() const {
+  return _impl_.yaw_;
 }
-inline float Position::yew() const {
-  // @@protoc_insertion_point(field_get:protocol.Position.yew)
-  return _internal_yew();
+inline float Position::yaw() const {
+  // @@protoc_insertion_point(field_get:protocol.Position.yaw)
+  return _internal_yaw();
 }
-inline void Position::_internal_set_yew(float value) {
+inline void Position::_internal_set_yaw(float value) {
   
-  _impl_.yew_ = value;
+  _impl_.yaw_ = value;
 }
-inline void Position::set_yew(float value) {
-  _internal_set_yew(value);
-  // @@protoc_insertion_point(field_set:protocol.Position.yew)
+inline void Position::set_yaw(float value) {
+  _internal_set_yaw(value);
+  // @@protoc_insertion_point(field_set:protocol.Position.yaw)
 }
 
 // -------------------------------------------------------------------
@@ -2282,6 +2455,26 @@ inline void SMove::set_allocated_position(::protocol::Position* position) {
   // @@protoc_insertion_point(field_set_allocated:protocol.SMove.position)
 }
 
+// bool is_monster = 3;
+inline void SMove::clear_is_monster() {
+  _impl_.is_monster_ = false;
+}
+inline bool SMove::_internal_is_monster() const {
+  return _impl_.is_monster_;
+}
+inline bool SMove::is_monster() const {
+  // @@protoc_insertion_point(field_get:protocol.SMove.is_monster)
+  return _internal_is_monster();
+}
+inline void SMove::_internal_set_is_monster(bool value) {
+  
+  _impl_.is_monster_ = value;
+}
+inline void SMove::set_is_monster(bool value) {
+  _internal_set_is_monster(value);
+  // @@protoc_insertion_point(field_set:protocol.SMove.is_monster)
+}
+
 // -------------------------------------------------------------------
 
 // SChat
@@ -2494,9 +2687,55 @@ inline void SClosePlayer::set_code(uint32_t value) {
   // @@protoc_insertion_point(field_set:protocol.SClosePlayer.code)
 }
 
+// -------------------------------------------------------------------
+
+// SMoves
+
+// repeated .protocol.SMove move = 1;
+inline int SMoves::_internal_move_size() const {
+  return _impl_.move_.size();
+}
+inline int SMoves::move_size() const {
+  return _internal_move_size();
+}
+inline void SMoves::clear_move() {
+  _impl_.move_.Clear();
+}
+inline ::protocol::SMove* SMoves::mutable_move(int index) {
+  // @@protoc_insertion_point(field_mutable:protocol.SMoves.move)
+  return _impl_.move_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::SMove >*
+SMoves::mutable_move() {
+  // @@protoc_insertion_point(field_mutable_list:protocol.SMoves.move)
+  return &_impl_.move_;
+}
+inline const ::protocol::SMove& SMoves::_internal_move(int index) const {
+  return _impl_.move_.Get(index);
+}
+inline const ::protocol::SMove& SMoves::move(int index) const {
+  // @@protoc_insertion_point(field_get:protocol.SMoves.move)
+  return _internal_move(index);
+}
+inline ::protocol::SMove* SMoves::_internal_add_move() {
+  return _impl_.move_.Add();
+}
+inline ::protocol::SMove* SMoves::add_move() {
+  ::protocol::SMove* _add = _internal_add_move();
+  // @@protoc_insertion_point(field_add:protocol.SMoves.move)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::SMove >&
+SMoves::move() const {
+  // @@protoc_insertion_point(field_list:protocol.SMoves.move)
+  return _impl_.move_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -27,8 +27,13 @@ void GameObjectInfo::SetName(const string& name)
     _name = name;
 }
 
+void GameObjectInfo::SetObjecteState(ObjectState state)
+{
+    _state = state;
+}
+
 GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp): GameObjectInfo(uuid, type, hp), _startX(0),
-                                                                  _startZ(0), _targetUUid(-1), genYaw(-20, 20)
+                                                                  _startZ(0), _targetUUid(-1), genYaw(0, 7)
 {
 }
 
@@ -36,11 +41,11 @@ GameMosterInfo::~GameMosterInfo()
 {
 }
 
-void GameMosterInfo::SetStartPosition(int32 x, int32 z, float Yaw)
+void GameMosterInfo::SetStartPosition(int32 x, int32 z)
 {
+    UpdateYaw();
     _position.X = x;
     _position.Z = z;
-    _position.Yaw = Yaw;
 }
 
 void GameMosterInfo::GetStartPosition(int32& x, int32& z)
@@ -54,10 +59,30 @@ void GameMosterInfo::SetTarget(int32 uuid)
     _targetUUid = uuid;
 }
 
-void GameMosterInfo::Move(int32 x, int32 z)
+void GameMosterInfo::Move()
 {
-    _position.X = x;
-    _position.Z = z;
+    _prePosition = _position;
+    const int32 val = static_cast<int32>(_position.Yaw) / 30;
+    if (val == 7 || val <= 1)
+    {
+        // z 축 증가
+        _position.Z++;
+    }
+    else if (3 <= val && val <= 5)
+    {
+        // z 축 감소
+        _position.Z--;
+    }
+    if (1 <= val && val <= 3)
+    {
+        // x 축 증가
+        _position.X++;
+    }
+    else if (5 <= val && val <= 7)
+    {
+        // x 축 감소 
+        _position.X--;
+    }
 }
 
 void GameMosterInfo::TargetMove(int32 x, int32 z)
@@ -66,9 +91,7 @@ void GameMosterInfo::TargetMove(int32 x, int32 z)
 
 void GameMosterInfo::UpdateYaw()
 {
-    _position.Yaw += genYaw(rng);
-    if (_position.Yaw < 0)
-        _position.Yaw = 360 - _position.Yaw;
+    _position.Yaw = genYaw(rng) * 45;
 }
 
 GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
