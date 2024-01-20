@@ -37,12 +37,12 @@ namespace GameUtils
     public:
         static float GetSin(float yaw, float distance)
         {
-            return static_cast<float>(distance * sin(yaw * 3.14 / 180));
+            return distance * sinf(yaw * 3.14 / 180);
         }
 
         static float GetCos(float yaw, float distance)
         {
-            return static_cast<float>(distance * cos(yaw * 3.14 / 180));
+            return distance * cosf(yaw * 3.14 / 180);
         }
     };
 }
