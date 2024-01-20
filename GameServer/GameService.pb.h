@@ -433,31 +433,31 @@ class Position final :
     kZFieldNumber = 3,
     kYawFieldNumber = 4,
   };
-  // int32 x = 1;
+  // float x = 1;
   void clear_x();
-  int32_t x() const;
-  void set_x(int32_t value);
+  float x() const;
+  void set_x(float value);
   private:
-  int32_t _internal_x() const;
-  void _internal_set_x(int32_t value);
+  float _internal_x() const;
+  void _internal_set_x(float value);
   public:
 
-  // int32 y = 2;
+  // float y = 2;
   void clear_y();
-  int32_t y() const;
-  void set_y(int32_t value);
+  float y() const;
+  void set_y(float value);
   private:
-  int32_t _internal_y() const;
-  void _internal_set_y(int32_t value);
+  float _internal_y() const;
+  void _internal_set_y(float value);
   public:
 
-  // int32 z = 3;
+  // float z = 3;
   void clear_z();
-  int32_t z() const;
-  void set_z(int32_t value);
+  float z() const;
+  void set_z(float value);
   private:
-  int32_t _internal_z() const;
-  void _internal_set_z(int32_t value);
+  float _internal_z() const;
+  void _internal_set_z(float value);
   public:
 
   // float yaw = 4;
@@ -477,9 +477,9 @@ class Position final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    int32_t x_;
-    int32_t y_;
-    int32_t z_;
+    float x_;
+    float y_;
+    float z_;
     float yaw_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -2272,62 +2272,62 @@ inline void Login::set_hp(int32_t value) {
 
 // Position
 
-// int32 x = 1;
+// float x = 1;
 inline void Position::clear_x() {
   _impl_.x_ = 0;
 }
-inline int32_t Position::_internal_x() const {
+inline float Position::_internal_x() const {
   return _impl_.x_;
 }
-inline int32_t Position::x() const {
+inline float Position::x() const {
   // @@protoc_insertion_point(field_get:protocol.Position.x)
   return _internal_x();
 }
-inline void Position::_internal_set_x(int32_t value) {
+inline void Position::_internal_set_x(float value) {
   
   _impl_.x_ = value;
 }
-inline void Position::set_x(int32_t value) {
+inline void Position::set_x(float value) {
   _internal_set_x(value);
   // @@protoc_insertion_point(field_set:protocol.Position.x)
 }
 
-// int32 y = 2;
+// float y = 2;
 inline void Position::clear_y() {
   _impl_.y_ = 0;
 }
-inline int32_t Position::_internal_y() const {
+inline float Position::_internal_y() const {
   return _impl_.y_;
 }
-inline int32_t Position::y() const {
+inline float Position::y() const {
   // @@protoc_insertion_point(field_get:protocol.Position.y)
   return _internal_y();
 }
-inline void Position::_internal_set_y(int32_t value) {
+inline void Position::_internal_set_y(float value) {
   
   _impl_.y_ = value;
 }
-inline void Position::set_y(int32_t value) {
+inline void Position::set_y(float value) {
   _internal_set_y(value);
   // @@protoc_insertion_point(field_set:protocol.Position.y)
 }
 
-// int32 z = 3;
+// float z = 3;
 inline void Position::clear_z() {
   _impl_.z_ = 0;
 }
-inline int32_t Position::_internal_z() const {
+inline float Position::_internal_z() const {
   return _impl_.z_;
 }
-inline int32_t Position::z() const {
+inline float Position::z() const {
   // @@protoc_insertion_point(field_get:protocol.Position.z)
   return _internal_z();
 }
-inline void Position::_internal_set_z(int32_t value) {
+inline void Position::_internal_set_z(float value) {
   
   _impl_.z_ = value;
 }
-inline void Position::set_z(int32_t value) {
+inline void Position::set_z(float value) {
   _internal_set_z(value);
   // @@protoc_insertion_point(field_set:protocol.Position.z)
 }

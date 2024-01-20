@@ -51,8 +51,8 @@ public:
     MapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type);
     ~MapInfo();
 
-    bool InRect(int32 x, int32 y);
-    bool InSetRect(int32& x, int32& y);
+    bool InRect(float x, float y);
+    bool InSetRect(float& x, float& y);
 
     Rect& GetRect();
     MapType GetMapType() { return _type; }

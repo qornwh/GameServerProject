@@ -5,7 +5,8 @@ MapInfo::MapInfo(MapType type)
     cout << "MapInfo : " << type << endl;
 }
 
-MapInfo::MapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type) : _mapInfo(x, y, centerX, centerY), _type(type)
+MapInfo::MapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type) : _mapInfo(x, y, centerX, centerY),
+    _type(type)
 {
     cout << "MapInfo : " << type << endl;
 }
@@ -14,7 +15,7 @@ MapInfo::~MapInfo()
 {
 }
 
-bool MapInfo::InRect(int32 x, int32 y)
+bool MapInfo::InRect(float x, float y)
 {
     if (_mapInfo.StartX() < x && _mapInfo.EndX() > x && _mapInfo.StartY() < y && _mapInfo.EndY() > y)
         return true;
@@ -22,7 +23,7 @@ bool MapInfo::InRect(int32 x, int32 y)
     return false;
 }
 
-bool MapInfo::InSetRect(int32& x, int32& y)
+bool MapInfo::InSetRect(float& x, float& y)
 {
     bool flag = false;
     // 몬스터 영역 튀어나오는 값이면 제일 끝값으로 교체한다.

@@ -20,13 +20,13 @@ enum ObjectState
 
 struct FVector
 {
-    FVector(int32 X, int32 Y, int32 Z, float Yaw) : X(X), Y(Y), Z(Z), Yaw(Yaw)
+    FVector(float X, float Y, float Z, float Yaw) : X(X), Y(Y), Z(Z), Yaw(Yaw)
     {
     }
 
-    int32 X;
-    int32 Y;
-    int32 Z;
+    float X;
+    float Y;
+    float Z;
     float Yaw;
 
     FVector& operator=(const FVector& ref)
@@ -44,7 +44,7 @@ public:
     ~GameObjectInfo();
 
     void SetPosition(FVector& position);
-    void SetPosition(int32 X, int32 Y, int32 Z);
+    void SetPosition(float X, float Y, float Z);
 
     std::string& GetName() { return _name; }
     int32 GetCode() { return _uuid; }

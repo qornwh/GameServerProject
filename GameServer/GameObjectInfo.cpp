@@ -15,7 +15,7 @@ void GameObjectInfo::SetPosition(FVector& position)
     _position.Z = position.Z;
 }
 
-void GameObjectInfo::SetPosition(int32 X, int32 Y, int32 Z)
+void GameObjectInfo::SetPosition(float X, float Y, float Z)
 {
     _position.X = X;
     _position.Y = Y;
