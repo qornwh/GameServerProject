@@ -33,7 +33,7 @@ void GameObjectInfo::SetObjecteState(ObjectState state)
 }
 
 GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp): GameObjectInfo(uuid, type, hp), _startX(0),
-                                                                  _startZ(0), _targetUUid(-1), genYaw(0, 7)
+                                                                  _startZ(0), _targetUUid(-1), genYaw(0, 360)
 {
 }
 
@@ -62,27 +62,14 @@ void GameMosterInfo::SetTarget(int32 uuid)
 void GameMosterInfo::Move()
 {
     _prePosition = _position;
-    const int32 val = static_cast<int32>(_position.Yaw) / 30;
-    if (val == 7 || val <= 1)
+    if (_YawCounter.Add() == 0)
     {
-        // z 축 증가
-        _position.Z++;
+        _position.Yaw = genYaw(rng);
     }
-    else if (3 <= val && val <= 5)
-    {
-        // z 축 감소
-        _position.Z--;
-    }
-    if (1 <= val && val <= 3)
-    {
-        // x 축 증가
-        _position.X++;
-    }
-    else if (5 <= val && val <= 7)
-    {
-        // x 축 감소 
-        _position.X--;
-    }
+    // 기본 거리 5
+
+    _position.X = GameUtils::MathUtils::GetCos(_position.X, _position.Yaw, _speed);
+    _position.Z = GameUtils::MathUtils::GetSin(_position.Z, _position.Yaw, _speed);
 }
 
 void GameMosterInfo::TargetMove(int32 x, int32 z)

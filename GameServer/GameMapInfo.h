@@ -55,11 +55,11 @@ public:
     bool InSetRect(int32& x, int32& y);
 
     Rect& GetRect();
-    MapType GetMapType() { return type; }
+    MapType GetMapType() { return _type; }
 
 private:
     Rect _mapInfo{0, 0, 0, 0};
-    MapType type = COMMON;
+    MapType _type = COMMON;
 };
 
 class GameMapInfo : public boost::enable_shared_from_this<GameMapInfo>

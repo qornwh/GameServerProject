@@ -5,10 +5,8 @@ MapInfo::MapInfo(MapType type)
     cout << "MapInfo : " << type << endl;
 }
 
-MapInfo::MapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type)
+MapInfo::MapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type) : _mapInfo(x, y, centerX, centerY), _type(type)
 {
-    _mapInfo.X = x;
-    _mapInfo.Y = y;
     cout << "MapInfo : " << type << endl;
 }
 

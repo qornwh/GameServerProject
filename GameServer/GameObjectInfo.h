@@ -2,7 +2,10 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
+#include "GameUtils.h"
 #include "pch.h"
+
+static boost::random::mt19937_64 rng;
 
 enum ObjectState
 {
@@ -54,7 +57,6 @@ public:
     void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
 
-
 protected:
     std::string _name;
     int32 _uuid;
@@ -97,12 +99,14 @@ private:
     int32 _startX;
     int32 _startZ;
     int32 _targetUUid;
+    int32 _speed = 5;
 
     // 이전 위치
     FVector _prePosition{0, 0, 0, 0};
 
-    boost::random::mt19937 rng;
     boost::random::uniform_int_distribution<> genYaw;
+
+    GameUtils::TickCounter _YawCounter{4};
 };
 
 class GamePlayerInfo : public GameObjectInfo

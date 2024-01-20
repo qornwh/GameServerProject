@@ -133,7 +133,7 @@ private:
     int32 _monsterCount = -1;
     int32 _bosMonsterCount = -1;
 
-    boost::random::mt19937 rng;
+    boost::random::mt19937_64 rng;
 
     unordered_map<int32, GameMosterInfoRef> _monsterMap;
 

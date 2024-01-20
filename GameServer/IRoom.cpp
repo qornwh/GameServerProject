@@ -146,6 +146,7 @@ void GameRoom::Task()
                 {
                     info->UpdateYaw();
                     info->Move();
+                    _gameMapInfo->GetMonsterMapInfo()->InSetRect(info->GetPosition().X, info->GetPosition().Z);
                     protocol::SMove* childPkt = pkt.add_move();
                     protocol::Position* position = new protocol::Position();
                     childPkt->set_code(info->GetCode());
@@ -200,7 +201,7 @@ void GameRoom::CreateMapInfo(int32 type)
     {
         // 일반 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
-        _gameMapInfo->CreateMonsterMapInfo(25, 15, 0, 0, MapType::MONSTER);
+        _gameMapInfo->CreateMonsterMapInfo(22, 15, 0, 0, MapType::MONSTER);
         _monsterCount = 10;
     }
     else if (type == 1)
@@ -210,6 +211,8 @@ void GameRoom::CreateMapInfo(int32 type)
         _gameMapInfo->CreateMonsterMapInfo(10, 10, 0, 0, MapType::BOS);
         _bosMonsterCount = 1;
     }
+
+    InitMonsters();
 }
 
 void GameRoom::InitMonsters()
@@ -217,7 +220,7 @@ void GameRoom::InitMonsters()
     MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
     Rect& rect = _gameMapInfo->GetMonsterMapInfo()->GetRect();
     boost::random::uniform_int_distribution<> genX(rect.StartX(), rect.EndX());
-    boost::random::uniform_int_distribution<> genY(rect.StartY(), rect.EndX());
+    boost::random::uniform_int_distribution<> genY(rect.StartY(), rect.EndY());
 
     if (mapType == MapType::MONSTER)
     {
@@ -225,6 +228,8 @@ void GameRoom::InitMonsters()
         {
             GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100);
             info->SetStartPosition(genX(rng), genY(rng));
+
+            _monsterMap[i] = info;
         }
     }
     else if (mapType == MapType::BOS)
