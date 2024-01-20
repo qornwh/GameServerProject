@@ -131,10 +131,11 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
         {
             protocol::SPlayerData sendPkt;
             protocol::Player* player = new protocol::Player;
-            player->set_name(_player->GetName());
-            player->set_code(_player->GetCode());
-            player->set_type(_player->GetType());
-            player->set_hp(_player->GetHp());
+            protocol::Unit* unit = new protocol::Unit;
+            unit->set_name(_player->GetName());
+            unit->set_code(_player->GetCode());
+            unit->set_type(_player->GetType());
+            unit->set_hp(_player->GetHp());
             sendPkt.set_allocated_player(player);
 
             SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(

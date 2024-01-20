@@ -12,10 +12,12 @@ void GameRoom::EnterSession(GameSessionRef session)
     {
         protocol::SInsertplayer sendPkt;
         protocol::Player* player = new protocol::Player;
-        player->set_name(session->GetPlayer()->GetName());
-        player->set_code(session->GetPlayer()->GetCode());
-        player->set_type(session->GetPlayer()->GetType());
-        player->set_hp(session->GetPlayer()->GetHp());
+        protocol::Unit* unit = new protocol::Unit;
+        unit->set_name(session->GetPlayer()->GetName());
+        unit->set_code(session->GetPlayer()->GetCode());
+        unit->set_type(session->GetPlayer()->GetType());
+        unit->set_hp(session->GetPlayer()->GetHp());
+        player->set_allocated_unit(unit);
         sendPkt.set_allocated_player(player);
 
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_INSERTPLAYER);
@@ -38,17 +40,19 @@ void GameRoom::EnterSession(GameSessionRef session)
                     boost::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
                     // 설마 안지우지는 않겠지. pkt 소멸되면 메모리도 같이 날리겠지. 그냥 믿겠다!!!
                     protocol::Player* player = sendPkt.add_player();
-                    player->set_name(info->GetName());
-                    player->set_code(info->GetCode());
-                    player->set_type(info->GetType());
-                    player->set_hp(info->GetHp());
+                    protocol::Unit* unit = new protocol::Unit;
+                    unit->set_name(info->GetName());
+                    unit->set_code(info->GetCode());
+                    unit->set_type(info->GetType());
+                    unit->set_hp(info->GetHp());
                     protocol::Position* position = new protocol::Position;
                     position->set_x(info->GetPosition().X);
                     position->set_y(info->GetPosition().Y);
                     position->set_z(info->GetPosition().Z);
                     position->set_yaw(info->GetPosition().Yaw);
                     // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
-                    player->set_allocated_position(position);
+                    unit->set_allocated_position(position);
+                    player->set_allocated_unit(unit);
                 }
             }
         }
@@ -58,18 +62,20 @@ void GameRoom::EnterSession(GameSessionRef session)
             int32 uuid = it.first;
             GameMosterInfoRef info = it.second;
             protocol::Monster* monster = sendPkt.add_monster();
-            monster->set_name(info->GetName());
-            monster->set_code(info->GetCode());
-            monster->set_type(info->GetType());
-            monster->set_hp(info->GetHp());
-            monster->set_state(info->GetObjectState());
+            protocol::Unit* unit = new protocol::Unit;
+            unit->set_name(info->GetName());
+            unit->set_code(info->GetCode());
+            unit->set_type(info->GetType());
+            unit->set_hp(info->GetHp());
             protocol::Position* position = new protocol::Position;
             position->set_x(info->GetPosition().X);
             position->set_y(info->GetPosition().Y);
             position->set_z(info->GetPosition().Z);
             position->set_yaw(info->GetPosition().Yaw);
             // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
-            monster->set_allocated_position(position);
+            unit->set_allocated_position(position);
+            monster->set_state(info->GetObjectState());
+            monster->set_allocated_unit(unit);
         }
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
         session->AsyncWrite(sendBuffer);

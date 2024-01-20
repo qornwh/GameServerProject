@@ -52,13 +52,26 @@ struct PositionDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PositionDefaultTypeInternal _Position_default_instance_;
-PROTOBUF_CONSTEXPR Player::Player(
+PROTOBUF_CONSTEXPR Unit::Unit(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.hp_)*/0u
   , /*decltype(_impl_.code_)*/0u
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct UnitDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR UnitDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~UnitDefaultTypeInternal() {}
+  union {
+    Unit _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 UnitDefaultTypeInternal _Unit_default_instance_;
+PROTOBUF_CONSTEXPR Player::Player(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.unit_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct PlayerDefaultTypeInternal {
   PROTOBUF_CONSTEXPR PlayerDefaultTypeInternal()
@@ -71,11 +84,7 @@ struct PlayerDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PlayerDefaultTypeInternal _Player_default_instance_;
 PROTOBUF_CONSTEXPR Monster::Monster(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.position_)*/nullptr
-  , /*decltype(_impl_.type_)*/0u
-  , /*decltype(_impl_.hp_)*/0u
-  , /*decltype(_impl_.code_)*/0u
+    /*decltype(_impl_.unit_)*/nullptr
   , /*decltype(_impl_.state_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct MonsterDefaultTypeInternal {
@@ -184,7 +193,7 @@ struct SMovesDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SMovesDefaultTypeInternal _SMoves_default_instance_;
 }  // namespace protocol
-static ::_pb::Metadata file_level_metadata_GameService_2eproto[11];
+static ::_pb::Metadata file_level_metadata_GameService_2eproto[12];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_GameService_2eproto[1];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_GameService_2eproto = nullptr;
 
@@ -209,27 +218,30 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::protocol::Position, _impl_.z_),
   PROTOBUF_FIELD_OFFSET(::protocol::Position, _impl_.yaw_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::protocol::Unit, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::protocol::Unit, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Unit, _impl_.hp_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Unit, _impl_.code_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Unit, _impl_.position_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Unit, _impl_.name_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::Player, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::protocol::Player, _impl_.type_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Player, _impl_.hp_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Player, _impl_.code_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Player, _impl_.position_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Player, _impl_.name_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Player, _impl_.unit_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::Monster, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::protocol::Monster, _impl_.type_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Monster, _impl_.hp_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Monster, _impl_.code_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Monster, _impl_.position_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Monster, _impl_.name_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Monster, _impl_.unit_),
   PROTOBUF_FIELD_OFFSET(::protocol::Monster, _impl_.state_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::SLoad, _internal_metadata_),
@@ -289,20 +301,22 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::protocol::Login)},
   { 9, -1, -1, sizeof(::protocol::Position)},
-  { 19, -1, -1, sizeof(::protocol::Player)},
-  { 30, -1, -1, sizeof(::protocol::Monster)},
-  { 42, -1, -1, sizeof(::protocol::SLoad)},
-  { 50, -1, -1, sizeof(::protocol::SInsertplayer)},
-  { 57, -1, -1, sizeof(::protocol::SMove)},
-  { 66, -1, -1, sizeof(::protocol::SChat)},
-  { 75, -1, -1, sizeof(::protocol::SPlayerData)},
-  { 82, -1, -1, sizeof(::protocol::SClosePlayer)},
-  { 89, -1, -1, sizeof(::protocol::SMoves)},
+  { 19, -1, -1, sizeof(::protocol::Unit)},
+  { 30, -1, -1, sizeof(::protocol::Player)},
+  { 37, -1, -1, sizeof(::protocol::Monster)},
+  { 45, -1, -1, sizeof(::protocol::SLoad)},
+  { 53, -1, -1, sizeof(::protocol::SInsertplayer)},
+  { 60, -1, -1, sizeof(::protocol::SMove)},
+  { 69, -1, -1, sizeof(::protocol::SChat)},
+  { 78, -1, -1, sizeof(::protocol::SPlayerData)},
+  { 85, -1, -1, sizeof(::protocol::SClosePlayer)},
+  { 92, -1, -1, sizeof(::protocol::SMoves)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
   &::protocol::_Login_default_instance_._instance,
   &::protocol::_Position_default_instance_._instance,
+  &::protocol::_Unit_default_instance_._instance,
   &::protocol::_Player_default_instance_._instance,
   &::protocol::_Monster_default_instance_._instance,
   &::protocol::_SLoad_default_instance_._instance,
@@ -318,31 +332,31 @@ const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARI
   "\n\021GameService.proto\022\010protocol\"/\n\005Login\022\014"
   "\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\n\n\002hp\030d \001(\005\"8"
   "\n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\t\n\001z\030\003 "
-  "\001(\005\022\013\n\003yaw\030\004 \001(\002\"d\n\006Player\022\014\n\004type\030\001 \001(\r"
-  "\022\n\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\r\022$\n\010position\030\004"
-  " \001(\0132\022.protocol.Position\022\014\n\004name\030\005 \001(\t\"t"
-  "\n\007Monster\022\014\n\004type\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\022\014\n\004c"
-  "ode\030\003 \001(\r\022$\n\010position\030\004 \001(\0132\022.protocol.P"
-  "osition\022\014\n\004name\030\005 \001(\t\022\r\n\005state\030\006 \001(\r\"M\n\005"
-  "SLoad\022 \n\006player\030\001 \003(\0132\020.protocol.Player\022"
-  "\"\n\007monster\030\002 \003(\0132\021.protocol.Monster\"1\n\rS"
-  "Insertplayer\022 \n\006player\030\001 \001(\0132\020.protocol."
-  "Player\"O\n\005SMove\022\014\n\004code\030\001 \001(\r\022$\n\010positio"
-  "n\030\002 \001(\0132\022.protocol.Position\022\022\n\nis_monste"
-  "r\030\003 \001(\010\"1\n\005SChat\022\014\n\004type\030\001 \001(\r\022\014\n\004code\030\002"
-  " \001(\r\022\014\n\004text\030\005 \001(\t\"/\n\013SPlayerData\022 \n\006pla"
-  "yer\030\001 \001(\0132\020.protocol.Player\"\034\n\014SClosePla"
-  "yer\022\014\n\004code\030\001 \001(\r\"\'\n\006SMoves\022\035\n\004move\030\001 \003("
-  "\0132\017.protocol.SMove*\202\001\n\013MessageCode\022\t\n\005LO"
-  "GIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_INSERTPLAYER\020\002\022\n\n"
-  "\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n\014S_PLAYERDATA\020\005\022"
-  "\021\n\rS_CLOSEPLAYER\020\006\022\013\n\007S_MOVES\020\007b\006proto3"
+  "\001(\005\022\013\n\003yaw\030\004 \001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001(\r\022\n"
+  "\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\r\022$\n\010position\030\004 \001"
+  "(\0132\022.protocol.Position\022\014\n\004name\030\005 \001(\t\"&\n\006"
+  "Player\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\"6\n\007"
+  "Monster\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\022\r\n"
+  "\005state\030\002 \001(\r\"M\n\005SLoad\022 \n\006player\030\001 \003(\0132\020."
+  "protocol.Player\022\"\n\007monster\030\002 \003(\0132\021.proto"
+  "col.Monster\"1\n\rSInsertplayer\022 \n\006player\030\001"
+  " \001(\0132\020.protocol.Player\"O\n\005SMove\022\014\n\004code\030"
+  "\001 \001(\r\022$\n\010position\030\002 \001(\0132\022.protocol.Posit"
+  "ion\022\022\n\nis_monster\030\003 \001(\010\"1\n\005SChat\022\014\n\004type"
+  "\030\001 \001(\r\022\014\n\004code\030\002 \001(\r\022\014\n\004text\030\005 \001(\t\"/\n\013SP"
+  "layerData\022 \n\006player\030\001 \001(\0132\020.protocol.Pla"
+  "yer\"\034\n\014SClosePlayer\022\014\n\004code\030\001 \001(\r\"\'\n\006SMo"
+  "ves\022\035\n\004move\030\001 \003(\0132\017.protocol.SMove*\202\001\n\013M"
+  "essageCode\022\t\n\005LOGIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_I"
+  "NSERTPLAYER\020\002\022\n\n\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n"
+  "\014S_PLAYERDATA\020\005\022\021\n\rS_CLOSEPLAYER\020\006\022\013\n\007S_"
+  "MOVES\020\007b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GameService_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GameService_2eproto = {
-    false, false, 879, descriptor_table_protodef_GameService_2eproto,
+    false, false, 855, descriptor_table_protodef_GameService_2eproto,
     "GameService.proto",
-    &descriptor_table_GameService_2eproto_once, nullptr, 0, 11,
+    &descriptor_table_GameService_2eproto_once, nullptr, 0, 12,
     schemas, file_default_instances, TableStruct_GameService_2eproto::offsets,
     file_level_metadata_GameService_2eproto, file_level_enum_descriptors_GameService_2eproto,
     file_level_service_descriptors_GameService_2eproto,
@@ -913,24 +927,24 @@ void Position::InternalSwap(Position* other) {
 
 // ===================================================================
 
-class Player::_Internal {
+class Unit::_Internal {
  public:
-  static const ::protocol::Position& position(const Player* msg);
+  static const ::protocol::Position& position(const Unit* msg);
 };
 
 const ::protocol::Position&
-Player::_Internal::position(const Player* msg) {
+Unit::_Internal::position(const Unit* msg) {
   return *msg->_impl_.position_;
 }
-Player::Player(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+Unit::Unit(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor(arena, is_message_owned);
-  // @@protoc_insertion_point(arena_constructor:protocol.Player)
+  // @@protoc_insertion_point(arena_constructor:protocol.Unit)
 }
-Player::Player(const Player& from)
+Unit::Unit(const Unit& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
-  Player* const _this = this; (void)_this;
+  Unit* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.name_){}
     , decltype(_impl_.position_){nullptr}
@@ -954,10 +968,10 @@ Player::Player(const Player& from)
   ::memcpy(&_impl_.type_, &from._impl_.type_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.code_) -
     reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.code_));
-  // @@protoc_insertion_point(copy_constructor:protocol.Player)
+  // @@protoc_insertion_point(copy_constructor:protocol.Unit)
 }
 
-inline void Player::SharedCtor(
+inline void Unit::SharedCtor(
     ::_pb::Arena* arena, bool is_message_owned) {
   (void)arena;
   (void)is_message_owned;
@@ -975,8 +989,8 @@ inline void Player::SharedCtor(
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-Player::~Player() {
-  // @@protoc_insertion_point(destructor:protocol.Player)
+Unit::~Unit() {
+  // @@protoc_insertion_point(destructor:protocol.Unit)
   if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
   (void)arena;
     return;
@@ -984,18 +998,18 @@ Player::~Player() {
   SharedDtor();
 }
 
-inline void Player::SharedDtor() {
+inline void Unit::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.name_.Destroy();
   if (this != internal_default_instance()) delete _impl_.position_;
 }
 
-void Player::SetCachedSize(int size) const {
+void Unit::SetCachedSize(int size) const {
   _impl_._cached_size_.Set(size);
 }
 
-void Player::Clear() {
-// @@protoc_insertion_point(message_clear_start:protocol.Player)
+void Unit::Clear() {
+// @@protoc_insertion_point(message_clear_start:protocol.Unit)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1011,7 +1025,7 @@ void Player::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* Player::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+const char* Unit::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -1055,7 +1069,7 @@ const char* Player::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
           auto str = _internal_mutable_name();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "protocol.Player.name"));
+          CHK_(::_pbi::VerifyUTF8(str, "protocol.Unit.name"));
         } else
           goto handle_unusual;
         continue;
@@ -1082,9 +1096,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* Player::_InternalSerialize(
+uint8_t* Unit::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:protocol.Player)
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.Unit)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1118,7 +1132,7 @@ uint8_t* Player::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "protocol.Player.name");
+      "protocol.Unit.name");
     target = stream->WriteStringMaybeAliased(
         5, this->_internal_name(), target);
   }
@@ -1127,12 +1141,12 @@ uint8_t* Player::_InternalSerialize(
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:protocol.Player)
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.Unit)
   return target;
 }
 
-size_t Player::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:protocol.Player)
+size_t Unit::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:protocol.Unit)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -1171,17 +1185,17 @@ size_t Player::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Player::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Unit::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-    Player::MergeImpl
+    Unit::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Player::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Unit::GetClassData() const { return &_class_data_; }
 
 
-void Player::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
-  auto* const _this = static_cast<Player*>(&to_msg);
-  auto& from = static_cast<const Player&>(from_msg);
-  // @@protoc_insertion_point(class_specific_merge_from_start:protocol.Player)
+void Unit::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<Unit*>(&to_msg);
+  auto& from = static_cast<const Unit&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:protocol.Unit)
   GOOGLE_DCHECK_NE(&from, _this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -1205,6 +1219,210 @@ void Player::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBU
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
+void Unit::CopyFrom(const Unit& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:protocol.Unit)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Unit::IsInitialized() const {
+  return true;
+}
+
+void Unit::InternalSwap(Unit* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.name_, lhs_arena,
+      &other->_impl_.name_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(Unit, _impl_.code_)
+      + sizeof(Unit::_impl_.code_)
+      - PROTOBUF_FIELD_OFFSET(Unit, _impl_.position_)>(
+          reinterpret_cast<char*>(&_impl_.position_),
+          reinterpret_cast<char*>(&other->_impl_.position_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Unit::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
+      file_level_metadata_GameService_2eproto[2]);
+}
+
+// ===================================================================
+
+class Player::_Internal {
+ public:
+  static const ::protocol::Unit& unit(const Player* msg);
+};
+
+const ::protocol::Unit&
+Player::_Internal::unit(const Player* msg) {
+  return *msg->_impl_.unit_;
+}
+Player::Player(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:protocol.Player)
+}
+Player::Player(const Player& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  Player* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.unit_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_unit()) {
+    _this->_impl_.unit_ = new ::protocol::Unit(*from._impl_.unit_);
+  }
+  // @@protoc_insertion_point(copy_constructor:protocol.Player)
+}
+
+inline void Player::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.unit_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+Player::~Player() {
+  // @@protoc_insertion_point(destructor:protocol.Player)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void Player::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.unit_;
+}
+
+void Player::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void Player::Clear() {
+// @@protoc_insertion_point(message_clear_start:protocol.Player)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.unit_ != nullptr) {
+    delete _impl_.unit_;
+  }
+  _impl_.unit_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* Player::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .protocol.Unit unit = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_unit(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* Player::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.Player)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .protocol.Unit unit = 1;
+  if (this->_internal_has_unit()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::unit(this),
+        _Internal::unit(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.Player)
+  return target;
+}
+
+size_t Player::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:protocol.Player)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .protocol.Unit unit = 1;
+  if (this->_internal_has_unit()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.unit_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Player::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    Player::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Player::GetClassData() const { return &_class_data_; }
+
+
+void Player::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<Player*>(&to_msg);
+  auto& from = static_cast<const Player&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:protocol.Player)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_unit()) {
+    _this->_internal_mutable_unit()->::protocol::Unit::MergeFrom(
+        from._internal_unit());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
 void Player::CopyFrom(const Player& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:protocol.Player)
   if (&from == this) return;
@@ -1218,37 +1436,26 @@ bool Player::IsInitialized() const {
 
 void Player::InternalSwap(Player* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.name_, lhs_arena,
-      &other->_impl_.name_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Player, _impl_.code_)
-      + sizeof(Player::_impl_.code_)
-      - PROTOBUF_FIELD_OFFSET(Player, _impl_.position_)>(
-          reinterpret_cast<char*>(&_impl_.position_),
-          reinterpret_cast<char*>(&other->_impl_.position_));
+  swap(_impl_.unit_, other->_impl_.unit_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Player::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[2]);
+      file_level_metadata_GameService_2eproto[3]);
 }
 
 // ===================================================================
 
 class Monster::_Internal {
  public:
-  static const ::protocol::Position& position(const Monster* msg);
+  static const ::protocol::Unit& unit(const Monster* msg);
 };
 
-const ::protocol::Position&
-Monster::_Internal::position(const Monster* msg) {
-  return *msg->_impl_.position_;
+const ::protocol::Unit&
+Monster::_Internal::unit(const Monster* msg) {
+  return *msg->_impl_.unit_;
 }
 Monster::Monster(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -1260,29 +1467,15 @@ Monster::Monster(const Monster& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   Monster* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.name_){}
-    , decltype(_impl_.position_){nullptr}
-    , decltype(_impl_.type_){}
-    , decltype(_impl_.hp_){}
-    , decltype(_impl_.code_){}
+      decltype(_impl_.unit_){nullptr}
     , decltype(_impl_.state_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.name_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_name().empty()) {
-    _this->_impl_.name_.Set(from._internal_name(), 
-      _this->GetArenaForAllocation());
+  if (from._internal_has_unit()) {
+    _this->_impl_.unit_ = new ::protocol::Unit(*from._impl_.unit_);
   }
-  if (from._internal_has_position()) {
-    _this->_impl_.position_ = new ::protocol::Position(*from._impl_.position_);
-  }
-  ::memcpy(&_impl_.type_, &from._impl_.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.state_) -
-    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.state_));
+  _this->_impl_.state_ = from._impl_.state_;
   // @@protoc_insertion_point(copy_constructor:protocol.Monster)
 }
 
@@ -1291,18 +1484,10 @@ inline void Monster::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.name_){}
-    , decltype(_impl_.position_){nullptr}
-    , decltype(_impl_.type_){0u}
-    , decltype(_impl_.hp_){0u}
-    , decltype(_impl_.code_){0u}
+      decltype(_impl_.unit_){nullptr}
     , decltype(_impl_.state_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
-  _impl_.name_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.name_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 Monster::~Monster() {
@@ -1316,8 +1501,7 @@ Monster::~Monster() {
 
 inline void Monster::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  _impl_.name_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.position_;
+  if (this != internal_default_instance()) delete _impl_.unit_;
 }
 
 void Monster::SetCachedSize(int size) const {
@@ -1330,14 +1514,11 @@ void Monster::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.name_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
-    delete _impl_.position_;
+  if (GetArenaForAllocation() == nullptr && _impl_.unit_ != nullptr) {
+    delete _impl_.unit_;
   }
-  _impl_.position_ = nullptr;
-  ::memset(&_impl_.type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.state_) -
-      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.state_));
+  _impl_.unit_ = nullptr;
+  _impl_.state_ = 0u;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1347,51 +1528,17 @@ const char* Monster::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) 
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint32 type = 1;
+      // .protocol.Unit unit = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          _impl_.type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_unit(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // uint32 hp = 2;
+      // uint32 state = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 code = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // .protocol.Position position = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_position(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // string name = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
-          auto str = _internal_mutable_name();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "protocol.Monster.name"));
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 state = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
           _impl_.state_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
@@ -1426,45 +1573,17 @@ uint8_t* Monster::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 type = 1;
-  if (this->_internal_type() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_type(), target);
-  }
-
-  // uint32 hp = 2;
-  if (this->_internal_hp() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_hp(), target);
-  }
-
-  // uint32 code = 3;
-  if (this->_internal_code() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_code(), target);
-  }
-
-  // .protocol.Position position = 4;
-  if (this->_internal_has_position()) {
+  // .protocol.Unit unit = 1;
+  if (this->_internal_has_unit()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(4, _Internal::position(this),
-        _Internal::position(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(1, _Internal::unit(this),
+        _Internal::unit(this).GetCachedSize(), target, stream);
   }
 
-  // string name = 5;
-  if (!this->_internal_name().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_name().data(), static_cast<int>(this->_internal_name().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "protocol.Monster.name");
-    target = stream->WriteStringMaybeAliased(
-        5, this->_internal_name(), target);
-  }
-
-  // uint32 state = 6;
+  // uint32 state = 2;
   if (this->_internal_state() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_state(), target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_state(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1483,36 +1602,14 @@ size_t Monster::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string name = 5;
-  if (!this->_internal_name().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_name());
-  }
-
-  // .protocol.Position position = 4;
-  if (this->_internal_has_position()) {
+  // .protocol.Unit unit = 1;
+  if (this->_internal_has_unit()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.position_);
+        *_impl_.unit_);
   }
 
-  // uint32 type = 1;
-  if (this->_internal_type() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
-  }
-
-  // uint32 hp = 2;
-  if (this->_internal_hp() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_hp());
-  }
-
-  // uint32 code = 3;
-  if (this->_internal_code() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_code());
-  }
-
-  // uint32 state = 6;
+  // uint32 state = 2;
   if (this->_internal_state() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_state());
   }
@@ -1535,21 +1632,9 @@ void Monster::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOB
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_name().empty()) {
-    _this->_internal_set_name(from._internal_name());
-  }
-  if (from._internal_has_position()) {
-    _this->_internal_mutable_position()->::protocol::Position::MergeFrom(
-        from._internal_position());
-  }
-  if (from._internal_type() != 0) {
-    _this->_internal_set_type(from._internal_type());
-  }
-  if (from._internal_hp() != 0) {
-    _this->_internal_set_hp(from._internal_hp());
-  }
-  if (from._internal_code() != 0) {
-    _this->_internal_set_code(from._internal_code());
+  if (from._internal_has_unit()) {
+    _this->_internal_mutable_unit()->::protocol::Unit::MergeFrom(
+        from._internal_unit());
   }
   if (from._internal_state() != 0) {
     _this->_internal_set_state(from._internal_state());
@@ -1570,25 +1655,19 @@ bool Monster::IsInitialized() const {
 
 void Monster::InternalSwap(Monster* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.name_, lhs_arena,
-      &other->_impl_.name_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(Monster, _impl_.state_)
       + sizeof(Monster::_impl_.state_)
-      - PROTOBUF_FIELD_OFFSET(Monster, _impl_.position_)>(
-          reinterpret_cast<char*>(&_impl_.position_),
-          reinterpret_cast<char*>(&other->_impl_.position_));
+      - PROTOBUF_FIELD_OFFSET(Monster, _impl_.unit_)>(
+          reinterpret_cast<char*>(&_impl_.unit_),
+          reinterpret_cast<char*>(&other->_impl_.unit_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Monster::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[3]);
+      file_level_metadata_GameService_2eproto[4]);
 }
 
 // ===================================================================
@@ -1807,7 +1886,7 @@ void SLoad::InternalSwap(SLoad* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SLoad::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[4]);
+      file_level_metadata_GameService_2eproto[5]);
 }
 
 // ===================================================================
@@ -2000,7 +2079,7 @@ void SInsertplayer::InternalSwap(SInsertplayer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SInsertplayer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[5]);
+      file_level_metadata_GameService_2eproto[6]);
 }
 
 // ===================================================================
@@ -2252,7 +2331,7 @@ void SMove::InternalSwap(SMove* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SMove::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[6]);
+      file_level_metadata_GameService_2eproto[7]);
 }
 
 // ===================================================================
@@ -2515,7 +2594,7 @@ void SChat::InternalSwap(SChat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SChat::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[7]);
+      file_level_metadata_GameService_2eproto[8]);
 }
 
 // ===================================================================
@@ -2708,7 +2787,7 @@ void SPlayerData::InternalSwap(SPlayerData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SPlayerData::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[8]);
+      file_level_metadata_GameService_2eproto[9]);
 }
 
 // ===================================================================
@@ -2886,7 +2965,7 @@ void SClosePlayer::InternalSwap(SClosePlayer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SClosePlayer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[9]);
+      file_level_metadata_GameService_2eproto[10]);
 }
 
 // ===================================================================
@@ -3071,7 +3150,7 @@ void SMoves::InternalSwap(SMoves* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SMoves::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[10]);
+      file_level_metadata_GameService_2eproto[11]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -3084,6 +3163,10 @@ Arena::CreateMaybeMessage< ::protocol::Login >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::protocol::Position*
 Arena::CreateMaybeMessage< ::protocol::Position >(Arena* arena) {
   return Arena::CreateMessageInternal< ::protocol::Position >(arena);
+}
+template<> PROTOBUF_NOINLINE ::protocol::Unit*
+Arena::CreateMaybeMessage< ::protocol::Unit >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::protocol::Unit >(arena);
 }
 template<> PROTOBUF_NOINLINE ::protocol::Player*
 Arena::CreateMaybeMessage< ::protocol::Player >(Arena* arena) {
