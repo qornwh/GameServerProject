@@ -7,10 +7,12 @@
 enum ObjectState
 {
     IDLE = 0,
-    MOVE = 1,
-    ATTACK = 2,
-    HITED = 3,
-    DIE = 4,
+    DIE = 1,
+    HITED = 2,
+    MOVE = 3,
+    ATTACK = 4,
+    SKILL1 = 5,
+    SKILL2 = 6,
 };
 
 struct FVector

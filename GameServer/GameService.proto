@@ -34,8 +34,18 @@ message Player {
     string name = 5;
 }
 
+message Monster {
+    uint32 type = 1;
+    uint32 hp = 2;
+    uint32 code = 3;
+    Position position = 4;
+    string name = 5;
+    uint32 state = 6;
+}
+
 message SLoad {
     repeated Player player = 1;
+    repeated Monster monster = 2;
 }
 
 message SInsertplayer {

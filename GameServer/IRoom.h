@@ -32,7 +32,7 @@ public:
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
             std::cout << "세션 추가 !!!" << std::endl;
-            sessionList.insert(session);
+            _sessionList.insert(session);
         }));
     }
 
@@ -43,7 +43,7 @@ public:
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
             std::cout << "세션 탈주 !!!" << std::endl;
-            sessionList.erase(session);
+            _sessionList.erase(session);
         }));
     }
 
@@ -51,7 +51,7 @@ public:
     {
         boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer]
         {
-            for (const auto session : sessionList)
+            for (const auto session : _sessionList)
             {
                 // 여기에 쓴다.
                 session->AsyncWrite(sendBuffer);
@@ -68,11 +68,11 @@ public:
     }
 
 protected:
-    set<T> sessionList;
+    set<T> _sessionList;
     int32 _id;
     uint32 _type;
 
-    int32 frameTime = 50; // 50ms, 20프레임
+    int32 _frameTime = 50; // 50ms, 20프레임
 
     boost::asio::strand<boost::asio::io_context::executor_type> _strand;
 };
@@ -103,7 +103,7 @@ public:
     {
         boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
         {
-            for (const auto session : sessionList)
+            for (const auto session : _sessionList)
             {
                 // 여기에 쓴다.
                 if (session->GetPlayer()->GetCode() != code)

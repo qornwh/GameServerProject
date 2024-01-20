@@ -146,33 +146,39 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
         if (GetService() != nullptr)
         {
             protocol::SLoad sendPkt;
-            for (auto& session : GetService()->GetSession())
-            {
-                GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
-
-                if (gameSession->GetSessionId() == _sessionId)
-                    continue;
-
-                if (gameSession->GetPlayer() != nullptr)
-                {
-                    boost::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
-                    // 설마 안지우지는 않겠지. pkt 소멸되면 메모리도 같이 날리겠지. 그냥 믿겠다!!!
-                    protocol::Player* player = sendPkt.add_player();
-                    player->set_name(info->GetName());
-                    player->set_code(info->GetCode());
-                    player->set_type(info->GetType());
-                    player->set_hp(info->GetHp());
-                    protocol::Position* position = new protocol::Position;
-                    position->set_x(info->GetPosition().X);
-                    position->set_y(info->GetPosition().Y);
-                    position->set_z(info->GetPosition().Z);
-                    position->set_yaw(info->GetPosition().Yaw);
-                    // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
-                    player->set_allocated_position(position);
-                }
-            }
-            SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
-            AsyncWrite(sendBuffer);
+            // 사실 for문 도중 새로 들어올 경우는 들어온 세션이 다 보내기 때문에 상관x
+            // 나갈 경우도 null체크와 shared_ptr걸어둔 상태라 count안줄어들어서 상관x
+            // 몬스터는 EnterSession에서 따로 처리한다.
+            // for (auto& session : GetService()->GetSession())
+            // {
+            //     if (session != nullptr)
+            //     {
+            //         GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+            //
+            //         if (gameSession->GetSessionId() == _sessionId)
+            //             continue;
+            //
+            //         if (gameSession->GetPlayer() != nullptr)
+            //         {
+            //             boost::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
+            //             // 설마 안지우지는 않겠지. pkt 소멸되면 메모리도 같이 날리겠지. 그냥 믿겠다!!!
+            //             protocol::Player* player = sendPkt.add_player();
+            //             player->set_name(info->GetName());
+            //             player->set_code(info->GetCode());
+            //             player->set_type(info->GetType());
+            //             player->set_hp(info->GetHp());
+            //             protocol::Position* position = new protocol::Position;
+            //             position->set_x(info->GetPosition().X);
+            //             position->set_y(info->GetPosition().Y);
+            //             position->set_z(info->GetPosition().Z);
+            //             position->set_yaw(info->GetPosition().Yaw);
+            //             // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
+            //             player->set_allocated_position(position);
+            //         }
+            //     }
+            // }
+            // SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
+            // AsyncWrite(sendBuffer);
         }
     }
 }
