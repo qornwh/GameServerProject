@@ -99,7 +99,7 @@ private:
     int32 _startX;
     int32 _startZ;
     int32 _targetUUid;
-    int32 _speed = 5;
+    int32 _speed = 3;
 
     // 이전 위치
     FVector _prePosition{0, 0, 0, 0};

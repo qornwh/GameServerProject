@@ -35,11 +35,11 @@ namespace GameUtils
     class MathUtils
     {
     public:
-        static float GetSin(float point, float yaw, float distance)
+        static float GetSin(float yaw, float distance)
         {
             return distance * sinf(yaw / 3.14);
         }
-        static float GetCos(float point, float yaw, float distance)
+        static float GetCos(float yaw, float distance)
         {
             return distance * cosf(yaw / 3.14);
         }

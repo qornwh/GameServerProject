@@ -144,7 +144,6 @@ void GameRoom::Task()
             {
                 if (IsUpdate)
                 {
-                    info->UpdateYaw();
                     info->Move();
                     _gameMapInfo->GetMonsterMapInfo()->InSetRect(info->GetPosition().X, info->GetPosition().Z);
                     protocol::SMove* childPkt = pkt.add_move();

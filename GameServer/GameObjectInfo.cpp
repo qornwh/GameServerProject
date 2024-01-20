@@ -68,8 +68,8 @@ void GameMosterInfo::Move()
     }
     // 기본 거리 5
 
-    _position.X = GameUtils::MathUtils::GetCos(_position.X, _position.Yaw, _speed);
-    _position.Z = GameUtils::MathUtils::GetSin(_position.Z, _position.Yaw, _speed);
+    _position.X += GameUtils::MathUtils::GetSin(_position.Yaw, _speed);
+    _position.Z += GameUtils::MathUtils::GetCos(_position.Yaw, _speed);
 }
 
 void GameMosterInfo::TargetMove(int32 x, int32 z)
@@ -78,7 +78,7 @@ void GameMosterInfo::TargetMove(int32 x, int32 z)
 
 void GameMosterInfo::UpdateYaw()
 {
-    _position.Yaw = genYaw(rng) * 45;
+    _position.Yaw = genYaw(rng);
 }
 
 GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
