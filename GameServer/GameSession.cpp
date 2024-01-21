@@ -80,6 +80,11 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
         break;
     case protocol::MessageCode::S_PLAYERDATA:
         break;
+    case protocol::MessageCode::C_PLAYERATTACK:
+        {
+            AttackHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+        }
+        break;
     }
 }
 
@@ -196,6 +201,20 @@ void GameSession::ChatHandler(const boost::asio::mutable_buffer& buffer, PacketH
         if (GRoomManger->getRoom(_roomId) != nullptr)
         {
             GRoomManger->getRoom(_roomId)->BroadCast(sendBuffer);
+        }
+    }
+}
+
+void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+{
+    protocol::CPlayerAttack pkt;
+    if (GRoomManger->getRoom(GetRoomId()) != nullptr)
+    {
+        if (GamePacketHandler::ParsePacketHandler(pkt, buffer, header->size - offset, offset))
+        {
+            int32 SkillCode = pkt.skill_code();
+            GetPlayer()->SetObjecteState(static_cast<ObjectState>(SkillCode));
+            GRoomManger->getRoom(GetRoomId())->AttackSession(static_pointer_cast<GameSession>(shared_from_this()));
         }
     }
 }

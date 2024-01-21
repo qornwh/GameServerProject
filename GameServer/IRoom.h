@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <queue>
 #include <set>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
@@ -95,8 +96,8 @@ public:
     }
 
     void EnterSession(GameSessionRef session) override;
-
-    void OutSession(boost::shared_ptr<GameSession> session) override;
+    void OutSession(GameSessionRef session) override;
+    void AttackSession(GameSessionRef session);
 
     void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
     {
@@ -126,17 +127,14 @@ private:
     boost::asio::steady_timer _timer;
     boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
     boost::asio::chrono::milliseconds _timerDelay = boost::asio::chrono::milliseconds(100);
-
-    boost::shared_ptr<class GameMapInfo> _gameMapInfo;
+    boost::random::mt19937_64 rng;
 
     int32 _monsterCount = -1;
     int32 _bosMonsterCount = -1;
-
-    boost::random::mt19937_64 rng;
-
+    queue<GameObjectInfoRef> attackQueue;
+    
+    boost::shared_ptr<class GameMapInfo> _gameMapInfo;
     unordered_map<int32, GameMosterInfoRef> _monsterMap;
-
     Atomic<bool> _isTask{false};
-
     GameUtils::TickCounter _tickCounter{10};
 };

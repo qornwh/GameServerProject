@@ -82,7 +82,7 @@ void GameRoom::EnterSession(GameSessionRef session)
     }
 }
 
-void GameRoom::OutSession(boost::shared_ptr<GameSession> session)
+void GameRoom::OutSession(GameSessionRef session)
 {
     IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::OutSession(session);
     session->SetRoomId(-1);
@@ -92,6 +92,14 @@ void GameRoom::OutSession(boost::shared_ptr<GameSession> session)
 
     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_CLOSEPLAYER);
     BroadCastAnother(sendBuffer, session->GetPlayer()->GetCode());
+}
+
+void GameRoom::AttackSession(GameSessionRef session)
+{
+    boost::asio::post(boost::asio::bind_executor(_gameStrand, [this, session]
+    {
+        attackQueue.push(session->GetPlayer());
+    }));
 }
 
 void GameRoom::StartGameRoom()
@@ -182,6 +190,9 @@ void GameRoom::Task()
                 }
                 break;
             }
+
+            // 공격 범위 필요 !!!
+            // attackQueue
         }
     }
     if (pkt.unit_state_size() > 0)

@@ -14,6 +14,7 @@ public:
     void LoginHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void MoveHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void ChatHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
+    void AttackHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void HandlePacket(const boost::asio::mutable_buffer& buffer, int32 offset, PacketHeader* header);
     int32 OnRecv(BYTE* buffer, int32 len) override;
     void CreatePlayerInfo(int32 type, int32 hp);
