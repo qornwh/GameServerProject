@@ -124,7 +124,7 @@ void GameRoom::Tick()
 void GameRoom::Task()
 {
     _isTask.exchange(true);
-    protocol::SMoves pkt;
+    protocol::SUnitStates pkt;
     const MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
     const MapInfoRef monsterMap = _gameMapInfo->GetMonsterMapInfo();
 
@@ -141,13 +141,14 @@ void GameRoom::Task()
             GameMosterInfoRef info = it.second;
             switch (info->GetObjectState())
             {
+            case ObjectState::IDLE:
             case ObjectState::MOVE:
                 {
                     if (IsUpdate)
                     {
                         info->Move();
                         monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Z);
-                        protocol::SMove* childPkt = pkt.add_move();
+                        protocol::UnitState* childPkt = pkt.add_unit_state();
                         protocol::Position* position = new protocol::Position();
                         childPkt->set_code(info->GetCode());
                         position->set_x(info->GetPosition().X);
@@ -156,9 +157,18 @@ void GameRoom::Task()
                         position->set_yaw(info->GetPosition().Yaw);
                         childPkt->set_allocated_position(position);
                         childPkt->set_is_monster(true);
+                        childPkt->set_state(info->GetObjectState());
                     }
                     info->updatePrePosition();
                     // 유저 공격시 모스터 피격 확인
+                }
+                break;
+            case ObjectState::ATTACK:
+                {
+                }
+                break;
+            case ObjectState::HITED:
+                {
                 }
                 break;
             case ObjectState::DIE:
@@ -174,9 +184,9 @@ void GameRoom::Task()
             }
         }
     }
-    if (pkt.move_size() > 0)
+    if (pkt.unit_state_size() > 0)
     {
-        SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_MOVES);
+        SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_UNITSTATES);
         BroadCast(sendBuffer);
     }
     _isTask.exchange(false);

@@ -10,7 +10,10 @@ enum MessageCode {
     S_CHAT = 4; // 채팅
     S_PLAYERDATA = 5; // 내 정보(추가) 
     S_CLOSEPLAYER = 6; // 유저 종료
-    S_MOVES = 7; // 여러 유닛(유저, 몬스터) 이동
+    S_UNITSTATES = 7; // 여러 유닛(유저, 몬스터) 상태
+    C_PLAYERATTACK = 8; // 유저 공격
+    S_UNITATTACK = 9; // 유닛(유저, 몬스터) 공격
+    S_UNITDEMAGE = 10; // 유닛(유저, 몬스터) 히트, 데미지
 }
 
 message Login {
@@ -72,6 +75,40 @@ message SClosePlayer {
     uint32 code = 1;
 }
 
-message SMoves {
-    repeated SMove move = 1;
+message UnitState {
+    uint32 code = 1;
+    Position position = 2;
+    int32 state = 3;
+    int32 demage = 4;
+    bool is_monster = 10;
+}
+
+message SUnitStates {
+    repeated UnitState unit_state = 1;
+}
+
+message Attack {
+    int32 code = 1;
+    int32 skill_code = 2;
+    bool is_monster = 3;
+}
+
+message CPlayerAttack {
+    int32 code = 1;
+    int32 skill_code = 2;
+}
+
+message SUnitAttack {
+    repeated Attack attack = 1;
+}
+
+// hit
+message Demage {
+    int32 code = 1;
+    int32 demage = 2;
+    bool is_monster = 3;
+}
+
+message SUnitDemage {
+    Demage demage = 1;
 }
