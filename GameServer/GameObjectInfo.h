@@ -75,7 +75,7 @@ public:
     // 타겟 이동
     // 공격 (시간) - tict필요
     // 스킬 (시간) - tict필요
-    GameMosterInfo(int32 uuid, int32 type, int32 hp);
+    GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 roomUpdateTick);
     ~GameMosterInfo();
 
     void SetStartPosition(int32 x, int32 z);
@@ -86,20 +86,20 @@ public:
     int32 GetTarget() { return _targetUUid; }
 
     void Move();
+    void updatePrePosition();
     void TargetMove(int32 x, int32 z);
 
     void UpdateYaw();
-
-    // room 언제보낼찌 500ms 카운트 변수
-    // 10프레임 이거에 대한 카운트 변수
-    // 몬스터 방향 전환 2초마다하면 카운트 변수 4절대갑 카운트 2개
-    // 공격 카운트 변수 왜 공격하는동안은 공격만보여줘야됨 
 
 private:
     int32 _startX;
     int32 _startZ;
     int32 _targetUUid;
-    int32 _speed = 5;
+    float _speed = 5.f;
+
+    int32 _roomUpdateTick;
+    float _increaseX = 0;
+    float _increaseZ = 0;
 
     // 이전 위치
     FVector _prePosition{0, 0, 0, 0};
@@ -107,6 +107,8 @@ private:
     boost::random::uniform_int_distribution<> genYaw;
 
     GameUtils::TickCounter _YawCounter{4};
+    GameUtils::TickCounter _HitCounter{10};
+    GameUtils::TickCounter _AttackCounter{10};
 };
 
 class GamePlayerInfo : public GameObjectInfo

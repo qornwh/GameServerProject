@@ -124,8 +124,9 @@ void GameRoom::Tick()
 void GameRoom::Task()
 {
     _isTask.exchange(true);
-    MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
-    Rect& rect = _gameMapInfo->GetMonsterMapInfo()->GetRect();
+    protocol::SMoves pkt;
+    const MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
+    const MapInfoRef monsterMap = _gameMapInfo->GetMonsterMapInfo();
 
     bool IsUpdate = false;
     if (_tickCounter.GetTick() == 0)
@@ -133,37 +134,43 @@ void GameRoom::Task()
         IsUpdate = true;
     }
 
-    protocol::SMoves pkt;
     if (mapType == MapType::MONSTER)
     {
         for (auto& it : _monsterMap)
         {
-            int32 uuid = it.first;
             GameMosterInfoRef info = it.second;
-            if (info->GetObjectState() != ObjectState::DIE)
+            switch (info->GetObjectState())
             {
-                if (IsUpdate)
+            case ObjectState::MOVE:
                 {
-                    info->Move();
-                    _gameMapInfo->GetMonsterMapInfo()->InSetRect(info->GetPosition().X, info->GetPosition().Z);
-                    protocol::SMove* childPkt = pkt.add_move();
-                    protocol::Position* position = new protocol::Position();
-                    childPkt->set_code(info->GetCode());
-                    position->set_x(info->GetPosition().X);
-                    position->set_y(info->GetPosition().Y);
-                    position->set_z(info->GetPosition().Z);
-                    position->set_yaw(info->GetPosition().Yaw);
-                    childPkt->set_allocated_position(position);
-                    childPkt->set_is_monster(true);
+                    if (IsUpdate)
+                    {
+                        info->Move();
+                        monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Z);
+                        protocol::SMove* childPkt = pkt.add_move();
+                        protocol::Position* position = new protocol::Position();
+                        childPkt->set_code(info->GetCode());
+                        position->set_x(info->GetPosition().X);
+                        position->set_y(info->GetPosition().Y);
+                        position->set_z(info->GetPosition().Z);
+                        position->set_yaw(info->GetPosition().Yaw);
+                        childPkt->set_allocated_position(position);
+                        childPkt->set_is_monster(true);
+                    }
+                    info->updatePrePosition();
+                    // 유저 공격시 모스터 피격 확인
                 }
-            }
-            else
-            {
-                if (IsUpdate)
+                break;
+            case ObjectState::DIE:
                 {
-                    // 몬스터 리스폰 설정만 해둠
-                    info->SetObjecteState(ObjectState::IDLE);
+                    if (IsUpdate)
+                    {
+                        // 몬스터 리스폰 설정만 해둠
+                        info->SetObjecteState(ObjectState::IDLE);
+                        // 이동 생각
+                    }
                 }
+                break;
             }
         }
     }
@@ -225,7 +232,7 @@ void GameRoom::InitMonsters()
     {
         for (int32 i = 0; i < _monsterCount; i++)
         {
-            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100);
+            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100, _tickCounter.GetTickValue());
             info->SetStartPosition(genX(rng), genY(rng));
 
             _monsterMap[i] = info;

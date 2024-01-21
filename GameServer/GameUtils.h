@@ -27,6 +27,11 @@ namespace GameUtils
             return _tick;
         }
 
+        int32 GetTickValue()
+        {
+            return _value;
+        }
+
     private:
         int32 _value;
         int32 _tick = 0;
@@ -35,12 +40,12 @@ namespace GameUtils
     class MathUtils
     {
     public:
-        static float GetSin(float yaw, float distance)
+        static float GetSin(float yaw, float distance = 1)
         {
             return distance * sinf(yaw * 3.14 / 180);
         }
 
-        static float GetCos(float yaw, float distance)
+        static float GetCos(float yaw, float distance = 1)
         {
             return distance * cosf(yaw * 3.14 / 180);
         }

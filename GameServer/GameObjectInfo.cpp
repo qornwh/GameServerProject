@@ -32,8 +32,8 @@ void GameObjectInfo::SetObjecteState(ObjectState state)
     _state = state;
 }
 
-GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp): GameObjectInfo(uuid, type, hp), _startX(0),
-                                                                  _startZ(0), _targetUUid(-1), genYaw(0, 360)
+GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 roomUpdateTick): GameObjectInfo(uuid, type, hp), _startX(0),
+                                                                  _startZ(0), _targetUUid(-1), _roomUpdateTick(roomUpdateTick), genYaw(0, 360)
 {
 }
 
@@ -64,12 +64,18 @@ void GameMosterInfo::Move()
     _prePosition = _position;
     if (_YawCounter.Add() == 0)
     {
-        _position.Yaw = genYaw(rng);
+        UpdateYaw();
     }
+    
     // 기본 거리 5
+    _position.X += (_increaseX * _speed);
+    _position.Z += (_increaseZ * _speed);
+}
 
-    _position.X += GameUtils::MathUtils::GetSin(_position.Yaw, _speed);
-    _position.Z += GameUtils::MathUtils::GetCos(_position.Yaw, _speed);
+void GameMosterInfo::updatePrePosition()
+{
+    _prePosition.X += _increaseX;
+    _prePosition.Z += _increaseZ;
 }
 
 void GameMosterInfo::TargetMove(int32 x, int32 z)
@@ -78,7 +84,10 @@ void GameMosterInfo::TargetMove(int32 x, int32 z)
 
 void GameMosterInfo::UpdateYaw()
 {
+    // room 1 tick 당 이동거리 계산
     _position.Yaw = genYaw(rng);
+    _increaseX = GameUtils::MathUtils::GetSin(_position.Yaw) * (_speed / _roomUpdateTick);
+    _increaseZ = GameUtils::MathUtils::GetCos(_position.Yaw) * (_speed / _roomUpdateTick);
 }
 
 GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
