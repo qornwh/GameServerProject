@@ -2,6 +2,7 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
+#include "GameRoomManager.h"
 #include "GameUtils.h"
 #include "pch.h"
 
@@ -57,6 +58,9 @@ public:
     void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
 
+    void SetGameRoom(GameRoomRef gameRoom) { _gameRoomRef = gameRoom; }
+    GameRoomRef GetGameRoom() { return _gameRoomRef.lock(); }
+
 protected:
     std::string _name;
     int32 _uuid;
@@ -65,6 +69,8 @@ protected:
 
     FVector _position{0, 0, 0, 0};
     ObjectState _state = ObjectState::IDLE;
+
+    boost::weak_ptr<GameRoom> _gameRoomRef;
 };
 
 class GameMosterInfo : public GameObjectInfo
@@ -91,6 +97,13 @@ public:
 
     void UpdateYaw();
 
+    FVector& GetPrePosition() { return _prePosition; }
+    float GetRangeX() { return _increaseX; }
+    float GetRangeZ() { return _increaseZ; }
+
+    int32 AddAttackCounter(int count = 1);
+    int32 AddHitCounter(int count = 1);
+
 private:
     int32 _startX;
     int32 _startZ;
@@ -116,6 +129,10 @@ class GamePlayerInfo : public GameObjectInfo
 public:
     GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp);
     ~GamePlayerInfo();
+
+    vector<int32> Attack(GameMosterInfoRef target);
+    bool AttackRect(FVector& position, GameMosterInfoRef target);
+    bool AttackCircle(FVector& position, GameMosterInfoRef target);
 
     GameSessionRef GetGameSession() { return _gameSession.lock(); }
 

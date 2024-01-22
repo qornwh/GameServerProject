@@ -8,7 +8,6 @@ void GameRoom::EnterSession(GameSessionRef session)
 {
     IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::EnterSession(session);
     session->SetRoomId(_id);
-
     {
         protocol::SInsertplayer sendPkt;
         protocol::Player* player = new protocol::Player;
@@ -173,10 +172,12 @@ void GameRoom::Task()
                 break;
             case ObjectState::ATTACK:
                 {
+                    info->AddAttackCounter();
                 }
                 break;
             case ObjectState::HITED:
                 {
+                    info->AddAttackCounter();
                 }
                 break;
             case ObjectState::DIE:

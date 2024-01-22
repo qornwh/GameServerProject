@@ -228,6 +228,7 @@ PROTOBUF_CONSTEXPR CPlayerAttack::CPlayerAttack(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.code_)*/0
   , /*decltype(_impl_.skill_code_)*/0
+  , /*decltype(_impl_.target_code_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CPlayerAttackDefaultTypeInternal {
   PROTOBUF_CONSTEXPR CPlayerAttackDefaultTypeInternal()
@@ -412,6 +413,7 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::CPlayerAttack, _impl_.code_),
   PROTOBUF_FIELD_OFFSET(::protocol::CPlayerAttack, _impl_.skill_code_),
+  PROTOBUF_FIELD_OFFSET(::protocol::CPlayerAttack, _impl_.target_code_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::SUnitAttack, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -452,9 +454,9 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 103, -1, -1, sizeof(::protocol::SUnitStates)},
   { 110, -1, -1, sizeof(::protocol::Attack)},
   { 119, -1, -1, sizeof(::protocol::CPlayerAttack)},
-  { 127, -1, -1, sizeof(::protocol::SUnitAttack)},
-  { 134, -1, -1, sizeof(::protocol::Demage)},
-  { 143, -1, -1, sizeof(::protocol::SUnitDemage)},
+  { 128, -1, -1, sizeof(::protocol::SUnitAttack)},
+  { 135, -1, -1, sizeof(::protocol::Demage)},
+  { 144, -1, -1, sizeof(::protocol::SUnitDemage)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -501,21 +503,22 @@ const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARI
   "age\030\004 \001(\005\022\022\n\nis_monster\030\n \001(\010\"6\n\013SUnitSt"
   "ates\022\'\n\nunit_state\030\001 \003(\0132\023.protocol.Unit"
   "State\">\n\006Attack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_c"
-  "ode\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\"1\n\rCPlayer"
+  "ode\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\"F\n\rCPlayer"
   "Attack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005"
-  "\"/\n\013SUnitAttack\022 \n\006attack\030\001 \003(\0132\020.protoc"
-  "ol.Attack\":\n\006Demage\022\014\n\004code\030\001 \001(\005\022\016\n\006dem"
-  "age\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\"/\n\013SUnitDe"
-  "mage\022 \n\006demage\030\001 \001(\0132\020.protocol.Demage*\277"
-  "\001\n\013MessageCode\022\t\n\005LOGIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n"
-  "\016S_INSERTPLAYER\020\002\022\n\n\006S_MOVE\020\003\022\n\n\006S_CHAT\020"
-  "\004\022\020\n\014S_PLAYERDATA\020\005\022\021\n\rS_CLOSEPLAYER\020\006\022\020"
-  "\n\014S_UNITSTATES\020\007\022\022\n\016C_PLAYERATTACK\020\010\022\020\n\014"
-  "S_UNITATTACK\020\t\022\020\n\014S_UNITDEMAGE\020\nb\006proto3"
+  "\022\023\n\013target_code\030\003 \001(\005\"/\n\013SUnitAttack\022 \n\006"
+  "attack\030\001 \003(\0132\020.protocol.Attack\":\n\006Demage"
+  "\022\014\n\004code\030\001 \001(\005\022\016\n\006demage\030\002 \001(\005\022\022\n\nis_mon"
+  "ster\030\003 \001(\010\"/\n\013SUnitDemage\022 \n\006demage\030\001 \001("
+  "\0132\020.protocol.Demage*\277\001\n\013MessageCode\022\t\n\005L"
+  "OGIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_INSERTPLAYER\020\002\022\n"
+  "\n\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n\014S_PLAYERDATA\020\005"
+  "\022\021\n\rS_CLOSEPLAYER\020\006\022\020\n\014S_UNITSTATES\020\007\022\022\n"
+  "\016C_PLAYERATTACK\020\010\022\020\n\014S_UNITATTACK\020\t\022\020\n\014S"
+  "_UNITDEMAGE\020\nb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GameService_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GameService_2eproto = {
-    false, false, 1320, descriptor_table_protodef_GameService_2eproto,
+    false, false, 1341, descriptor_table_protodef_GameService_2eproto,
     "GameService.proto",
     &descriptor_table_GameService_2eproto_once, nullptr, 0, 18,
     schemas, file_default_instances, TableStruct_GameService_2eproto::offsets,
@@ -3906,12 +3909,13 @@ CPlayerAttack::CPlayerAttack(const CPlayerAttack& from)
   new (&_impl_) Impl_{
       decltype(_impl_.code_){}
     , decltype(_impl_.skill_code_){}
+    , decltype(_impl_.target_code_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&_impl_.code_, &from._impl_.code_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.skill_code_) -
-    reinterpret_cast<char*>(&_impl_.code_)) + sizeof(_impl_.skill_code_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.target_code_) -
+    reinterpret_cast<char*>(&_impl_.code_)) + sizeof(_impl_.target_code_));
   // @@protoc_insertion_point(copy_constructor:protocol.CPlayerAttack)
 }
 
@@ -3922,6 +3926,7 @@ inline void CPlayerAttack::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.code_){0}
     , decltype(_impl_.skill_code_){0}
+    , decltype(_impl_.target_code_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -3950,8 +3955,8 @@ void CPlayerAttack::Clear() {
   (void) cached_has_bits;
 
   ::memset(&_impl_.code_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.skill_code_) -
-      reinterpret_cast<char*>(&_impl_.code_)) + sizeof(_impl_.skill_code_));
+      reinterpret_cast<char*>(&_impl_.target_code_) -
+      reinterpret_cast<char*>(&_impl_.code_)) + sizeof(_impl_.target_code_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3973,6 +3978,14 @@ const char* CPlayerAttack::_InternalParse(const char* ptr, ::_pbi::ParseContext*
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.skill_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 target_code = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.target_code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -4018,6 +4031,12 @@ uint8_t* CPlayerAttack::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_skill_code(), target);
   }
 
+  // int32 target_code = 3;
+  if (this->_internal_target_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_target_code(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4044,6 +4063,11 @@ size_t CPlayerAttack::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_skill_code());
   }
 
+  // int32 target_code = 3;
+  if (this->_internal_target_code() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_target_code());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -4068,6 +4092,9 @@ void CPlayerAttack::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::
   if (from._internal_skill_code() != 0) {
     _this->_internal_set_skill_code(from._internal_skill_code());
   }
+  if (from._internal_target_code() != 0) {
+    _this->_internal_set_target_code(from._internal_target_code());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -4086,8 +4113,8 @@ void CPlayerAttack::InternalSwap(CPlayerAttack* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(CPlayerAttack, _impl_.skill_code_)
-      + sizeof(CPlayerAttack::_impl_.skill_code_)
+      PROTOBUF_FIELD_OFFSET(CPlayerAttack, _impl_.target_code_)
+      + sizeof(CPlayerAttack::_impl_.target_code_)
       - PROTOBUF_FIELD_OFFSET(CPlayerAttack, _impl_.code_)>(
           reinterpret_cast<char*>(&_impl_.code_),
           reinterpret_cast<char*>(&other->_impl_.code_));

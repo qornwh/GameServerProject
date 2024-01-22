@@ -2690,6 +2690,7 @@ class CPlayerAttack final :
   enum : int {
     kCodeFieldNumber = 1,
     kSkillCodeFieldNumber = 2,
+    kTargetCodeFieldNumber = 3,
   };
   // int32 code = 1;
   void clear_code();
@@ -2709,6 +2710,15 @@ class CPlayerAttack final :
   void _internal_set_skill_code(int32_t value);
   public:
 
+  // int32 target_code = 3;
+  void clear_target_code();
+  int32_t target_code() const;
+  void set_target_code(int32_t value);
+  private:
+  int32_t _internal_target_code() const;
+  void _internal_set_target_code(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:protocol.CPlayerAttack)
  private:
   class _Internal;
@@ -2719,6 +2729,7 @@ class CPlayerAttack final :
   struct Impl_ {
     int32_t code_;
     int32_t skill_code_;
+    int32_t target_code_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4653,6 +4664,26 @@ inline void CPlayerAttack::_internal_set_skill_code(int32_t value) {
 inline void CPlayerAttack::set_skill_code(int32_t value) {
   _internal_set_skill_code(value);
   // @@protoc_insertion_point(field_set:protocol.CPlayerAttack.skill_code)
+}
+
+// int32 target_code = 3;
+inline void CPlayerAttack::clear_target_code() {
+  _impl_.target_code_ = 0;
+}
+inline int32_t CPlayerAttack::_internal_target_code() const {
+  return _impl_.target_code_;
+}
+inline int32_t CPlayerAttack::target_code() const {
+  // @@protoc_insertion_point(field_get:protocol.CPlayerAttack.target_code)
+  return _internal_target_code();
+}
+inline void CPlayerAttack::_internal_set_target_code(int32_t value) {
+  
+  _impl_.target_code_ = value;
+}
+inline void CPlayerAttack::set_target_code(int32_t value) {
+  _internal_set_target_code(value);
+  // @@protoc_insertion_point(field_set:protocol.CPlayerAttack.target_code)
 }
 
 // -------------------------------------------------------------------
