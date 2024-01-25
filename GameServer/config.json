@@ -1,0 +1,68 @@
+{
+  "units": {
+    "players": [
+      {
+        "type": 0,
+        "skills": [
+          {
+            "code": 0,
+            "target": true,
+            "type": 0,
+            "width": 1,
+            "height": 2
+          },
+          {
+            "code": 1,
+            "target": false,
+            "type": 0,
+            "width": 3,
+            "height": 3
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "skills": [
+          {
+            "code": 0,
+            "target": true,
+            "type": 1,
+            "radius": 5
+          },
+          {
+            "code": 1,
+            "target": false,
+            "type": 1,
+            "radius": 5
+          }
+        ]
+      }
+    ],
+    "monsters": [
+      {
+        "type": 0,
+        "skills": [
+          {
+            "code": 0,
+            "target": true,
+            "type": 0,
+            "width": 1,
+            "height": 2
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "skills":[
+          {
+            "code": 0,
+            "target": true,
+            "type": 0,
+            "width": 1,
+            "height": 2
+          }
+        ]
+      }
+    ]
+  }
+}

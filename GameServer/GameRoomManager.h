@@ -18,13 +18,11 @@ public:
     void CreateRoom(boost::asio::io_context& io_context, int32 id);
     void EreaseRoom(int32 id);
     GameRoomRef getRoom(int32 id);
-
     void ClearRoom();
 
 private:
     Atomic<int32> _id{0};
     unordered_map<int32, GameRoomRef> _roomMap;
-    
 };
 
 extern shared_ptr<GameRoomManager> GBSRoomManger;

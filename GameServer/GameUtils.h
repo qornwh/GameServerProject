@@ -1,10 +1,29 @@
 ﻿#pragma once
+#include <boost/json.hpp>
+
 #include "pch.h"
 
 // 일단 잡다한 클래스 함수 여기에 넣어둔다.
 
 namespace GameUtils
 {
+    class JsonParser
+    {
+    public:
+        static boost::json::value GetStrParser(string& jsonStr)
+        {
+            return boost::json::parse(jsonStr);
+        }
+
+        static boost::json::value Parser(string key, const boost::json::value& json)
+        {
+            // 그냥 바로 크래시 낸다 !!!
+            assert(!json.at(key).is_null());
+
+            return json.at(key);
+        }
+    };
+
     class TickCounter
     {
     public:

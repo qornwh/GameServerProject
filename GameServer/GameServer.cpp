@@ -1,6 +1,7 @@
 #include <boost/make_shared.hpp>
 
 #include "GameGlobal.h"
+#include "GameInit.h"
 #include "GameRoomManager.h"
 #include "pch.h"
 #include "GameSerivce.h"
@@ -13,6 +14,8 @@ int main()
     boost::asio::io_context io_context;
 
     uint16 port = 12128;
+
+    GameInit();
 
     // 일반몹 맵 = 0
     GRoomManger->CreateRoom(io_context, 0);

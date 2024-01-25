@@ -141,6 +141,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;libprotobufd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\boost\boost_1_83_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>C:\vcpkg\installed\x64-windows\tools\protobuf\protoc.exe -I=./ --cpp_out=./ ./GameService.proto</Command>
@@ -163,6 +164,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;libprotobuf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\boost\boost_1_83_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>C:\vcpkg\installed\x64-windows\tools\protobuf\protoc.exe -I=./ --cpp_out=./ ./GameService.proto</Command>
@@ -171,9 +173,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GameGlobal.h" />
+    <ClInclude Include="GameInit.h" />
     <ClInclude Include="GameMapInfo.h" />
     <ClInclude Include="GameObjectInfo.h" />
     <ClInclude Include="GameRoomManager.h" />
+    <ClInclude Include="GameSkill.h" />
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="IRoom.h" />
     <ClInclude Include="GamePacketHandler.h" />
@@ -183,10 +187,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameGlobal.cpp" />
+    <ClCompile Include="GameInit.cpp" />
     <ClCompile Include="GameMapInfo.cpp" />
     <ClCompile Include="GameObjectInfo.cpp" />
     <ClCompile Include="GameRoomManager.cpp" />
     <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="GameSkill.cpp" />
     <ClCompile Include="GameUtils.cpp" />
     <ClCompile Include="IRoom.cpp" />
     <ClCompile Include="pch.cpp" />
@@ -194,6 +200,7 @@
     <ClCompile Include="GameSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config.json" />
     <Content Include="GameService.proto" />
     <ClInclude Include="GameService.pb.h" />
     <ClCompile Include="GameService.pb.cc" />

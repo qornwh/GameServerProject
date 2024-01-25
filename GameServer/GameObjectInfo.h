@@ -139,4 +139,6 @@ public:
 private:
     // 혹시나 해서 들고 있는다.
     boost::weak_ptr<GameSession> _gameSession;
+
+    // boost::json::value& _skillJson;
 };

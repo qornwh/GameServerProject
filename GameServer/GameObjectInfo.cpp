@@ -96,12 +96,12 @@ void GameMosterInfo::UpdateYaw()
 
 int32 GameMosterInfo::AddAttackCounter(int count)
 {
-    _AttackCounter.Add(count);
+    return _AttackCounter.Add(count);
 }
 
 int32 GameMosterInfo::AddHitCounter(int count)
 {
-    _HitCounter.Add(count);
+    return _HitCounter.Add(count);
 }
 
 GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
