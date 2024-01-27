@@ -97,6 +97,7 @@ message CPlayerAttack {
     int32 code = 1;
     int32 skill_code = 2;
     int32 target_code = 3;
+    Position position = 4;
 }
 
 message SUnitAttack {

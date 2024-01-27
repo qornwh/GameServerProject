@@ -32,7 +32,7 @@ public:
         SetSkill(playerJson, false);
         SetSkill(monsterJson, true);
 
-        cout << "skill !!!" << endl;
+        cout << "skill setting !!!" << endl;
     }
 
     void SetSkill(boost::json::value& unitJson, bool isMonster)
@@ -55,17 +55,17 @@ public:
                     int32 width = GameUtils::JsonParser::Parser("width", skill).as_int64();
                     int32 height = GameUtils::JsonParser::Parser("height", skill).as_int64();
                     if (!isMonster)
-                        GSkill->GetPlayerSkill()[skillCode].AddSkill(skillCode, isRectType, target, width, height);
+                        GSkill->GetPlayerSkill()[type].AddSkill(skillCode, isRectType, target, width, height);
                     else
-                        GSkill->GetMonsterSkill()[skillCode].AddSkill(skillCode, isRectType, target, width, height);
+                        GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, width, height);
                 }
                 else
                 {
                     int32 radius = GameUtils::JsonParser::Parser("radius", skill).as_int64();
                     if (!isMonster)
-                        GSkill->GetPlayerSkill()[skillCode].AddSkill(skillCode, isRectType, target, radius);
+                        GSkill->GetPlayerSkill()[type].AddSkill(skillCode, isRectType, target, radius);
                     else
-                        GSkill->GetMonsterSkill()[skillCode].AddSkill(skillCode, isRectType, target, radius);
+                        GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, radius);
                 }
             }
         }

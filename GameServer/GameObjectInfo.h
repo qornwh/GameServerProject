@@ -19,6 +19,13 @@ enum ObjectState
     SKILL2 = 6,
 };
 
+enum GameObjectType
+{
+    PLAYER = 0,
+    MOMSTER = 1,
+    OBJECT = 2,
+};
+
 struct FVector
 {
     FVector(float X, float Y, float Z, float Yaw) : X(X), Y(Y), Z(Z), Yaw(Yaw)
@@ -54,6 +61,7 @@ public:
     FVector& GetPosition() { return _position; }
 
     void SetName(const string& name);
+    void TakeDemage(int32 Demage);
 
     void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
@@ -89,7 +97,7 @@ public:
     void GetStartPosition(int32& x, int32& z);
 
     void SetTarget(int32 uuid);
-    int32 GetTarget() { return _targetUUid; }
+    int32 GetTarget() { return _targetCode; }
 
     void Move();
     void updatePrePosition();
@@ -104,11 +112,13 @@ public:
     int32 AddAttackCounter(int count = 1);
     int32 AddHitCounter(int count = 1);
 
+    void IdlePosition();
+
 private:
     int32 _startX;
     int32 _startZ;
-    int32 _targetUUid;
-    float _speed = 5.f;
+    int32 _targetCode;
+    float _speed = 3.f;
 
     int32 _roomUpdateTick;
     float _increaseX = 0;
@@ -130,15 +140,19 @@ public:
     GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp);
     ~GamePlayerInfo();
 
-    vector<int32> Attack(GameMosterInfoRef target);
+    void Attack(GameMosterInfoRef target, vector<int32>& attackList);
     bool AttackRect(FVector& position, GameMosterInfoRef target);
     bool AttackCircle(FVector& position, GameMosterInfoRef target);
 
     GameSessionRef GetGameSession() { return _gameSession.lock(); }
 
+    void SetTarget(int32 uuid);
+    int32 GetTarget() { return _targetCode; }
+
 private:
     // 혹시나 해서 들고 있는다.
     boost::weak_ptr<GameSession> _gameSession;
+    int32 _targetCode;
 
     // boost::json::value& _skillJson;
 };

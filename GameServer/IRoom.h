@@ -124,6 +124,12 @@ public:
     void AttackMonster();
 
     unordered_map<int32, GameMosterInfoRef> GetMonsterMap() { return _monsterMap; }
+    GameMosterInfoRef GetMonster(int32 Code)
+    {
+        if (_monsterMap.find(Code) != _monsterMap.end())
+            return _monsterMap[Code];
+        return nullptr;
+    }
 
 private:
     boost::asio::steady_timer _timer;
@@ -133,7 +139,7 @@ private:
 
     int32 _monsterCount = -1;
     int32 _bosMonsterCount = -1;
-    queue<GameObjectInfoRef> attackQueue;
+    queue<GamePlayerInfoRef> attackQueue;
 
     boost::shared_ptr<class GameMapInfo> _gameMapInfo;
     unordered_map<int32, GameMosterInfoRef> _monsterMap;

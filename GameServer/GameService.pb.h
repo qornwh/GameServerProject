@@ -2688,10 +2688,29 @@ class CPlayerAttack final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kPositionFieldNumber = 4,
     kCodeFieldNumber = 1,
     kSkillCodeFieldNumber = 2,
     kTargetCodeFieldNumber = 3,
   };
+  // .protocol.Position position = 4;
+  bool has_position() const;
+  private:
+  bool _internal_has_position() const;
+  public:
+  void clear_position();
+  const ::protocol::Position& position() const;
+  PROTOBUF_NODISCARD ::protocol::Position* release_position();
+  ::protocol::Position* mutable_position();
+  void set_allocated_position(::protocol::Position* position);
+  private:
+  const ::protocol::Position& _internal_position() const;
+  ::protocol::Position* _internal_mutable_position();
+  public:
+  void unsafe_arena_set_allocated_position(
+      ::protocol::Position* position);
+  ::protocol::Position* unsafe_arena_release_position();
+
   // int32 code = 1;
   void clear_code();
   int32_t code() const;
@@ -2727,6 +2746,7 @@ class CPlayerAttack final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::protocol::Position* position_;
     int32_t code_;
     int32_t skill_code_;
     int32_t target_code_;
@@ -4684,6 +4704,96 @@ inline void CPlayerAttack::_internal_set_target_code(int32_t value) {
 inline void CPlayerAttack::set_target_code(int32_t value) {
   _internal_set_target_code(value);
   // @@protoc_insertion_point(field_set:protocol.CPlayerAttack.target_code)
+}
+
+// .protocol.Position position = 4;
+inline bool CPlayerAttack::_internal_has_position() const {
+  return this != internal_default_instance() && _impl_.position_ != nullptr;
+}
+inline bool CPlayerAttack::has_position() const {
+  return _internal_has_position();
+}
+inline void CPlayerAttack::clear_position() {
+  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
+    delete _impl_.position_;
+  }
+  _impl_.position_ = nullptr;
+}
+inline const ::protocol::Position& CPlayerAttack::_internal_position() const {
+  const ::protocol::Position* p = _impl_.position_;
+  return p != nullptr ? *p : reinterpret_cast<const ::protocol::Position&>(
+      ::protocol::_Position_default_instance_);
+}
+inline const ::protocol::Position& CPlayerAttack::position() const {
+  // @@protoc_insertion_point(field_get:protocol.CPlayerAttack.position)
+  return _internal_position();
+}
+inline void CPlayerAttack::unsafe_arena_set_allocated_position(
+    ::protocol::Position* position) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.position_);
+  }
+  _impl_.position_ = position;
+  if (position) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protocol.CPlayerAttack.position)
+}
+inline ::protocol::Position* CPlayerAttack::release_position() {
+  
+  ::protocol::Position* temp = _impl_.position_;
+  _impl_.position_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::protocol::Position* CPlayerAttack::unsafe_arena_release_position() {
+  // @@protoc_insertion_point(field_release:protocol.CPlayerAttack.position)
+  
+  ::protocol::Position* temp = _impl_.position_;
+  _impl_.position_ = nullptr;
+  return temp;
+}
+inline ::protocol::Position* CPlayerAttack::_internal_mutable_position() {
+  
+  if (_impl_.position_ == nullptr) {
+    auto* p = CreateMaybeMessage<::protocol::Position>(GetArenaForAllocation());
+    _impl_.position_ = p;
+  }
+  return _impl_.position_;
+}
+inline ::protocol::Position* CPlayerAttack::mutable_position() {
+  ::protocol::Position* _msg = _internal_mutable_position();
+  // @@protoc_insertion_point(field_mutable:protocol.CPlayerAttack.position)
+  return _msg;
+}
+inline void CPlayerAttack::set_allocated_position(::protocol::Position* position) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.position_;
+  }
+  if (position) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(position);
+    if (message_arena != submessage_arena) {
+      position = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, position, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.position_ = position;
+  // @@protoc_insertion_point(field_set_allocated:protocol.CPlayerAttack.position)
 }
 
 // -------------------------------------------------------------------

@@ -5,14 +5,14 @@
         "type": 0,
         "skills": [
           {
-            "code": 0,
+            "code": 4,
             "target": true,
             "type": 0,
-            "width": 1,
+            "width": 2,
             "height": 2
           },
           {
-            "code": 1,
+            "code": 5,
             "target": false,
             "type": 0,
             "width": 3,
@@ -24,13 +24,13 @@
         "type": 1,
         "skills": [
           {
-            "code": 0,
+            "code": 4,
             "target": true,
             "type": 1,
             "radius": 5
           },
           {
-            "code": 1,
+            "code": 5,
             "target": false,
             "type": 1,
             "radius": 5
@@ -43,10 +43,10 @@
         "type": 0,
         "skills": [
           {
-            "code": 0,
+            "code": 4,
             "target": true,
             "type": 0,
-            "width": 1,
+            "width": 2,
             "height": 2
           }
         ]
@@ -55,10 +55,10 @@
         "type": 1,
         "skills":[
           {
-            "code": 0,
+            "code": 4,
             "target": true,
             "type": 0,
-            "width": 1,
+            "width": 2,
             "height": 2
           }
         ]

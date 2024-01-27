@@ -213,8 +213,23 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
         if (GamePacketHandler::ParsePacketHandler(pkt, buffer, header->size - offset, offset))
         {
             int32 SkillCode = pkt.skill_code();
+            int32 TargetCode = pkt.target_code();
+            cout << "targetCode : " << TargetCode << " skillCode : " << SkillCode << endl;
+            
+            auto& position = pkt.position();
+            GetPlayer()->SetPosition(position.x(), position.y(), position.z());
             GetPlayer()->SetObjecteState(static_cast<ObjectState>(SkillCode));
+            GetPlayer()->SetTarget(TargetCode);
             GRoomManger->getRoom(GetRoomId())->AttackSession(static_pointer_cast<GameSession>(shared_from_this()));
+
+            protocol::SUnitAttack sendPkt;
+            protocol::Attack* attackPkt = sendPkt.add_attack();
+            attackPkt->set_code(GetPlayer()->GetCode());
+            attackPkt->set_is_monster(false);
+            attackPkt->set_skill_code(SkillCode);
+
+            SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_UNITATTACK);
+            GRoomManger->getRoom(GetRoomId())->BroadCastAnother(sendBuffer, GetPlayer()->GetCode());
         }
     }
 }

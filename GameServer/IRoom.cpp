@@ -141,6 +141,59 @@ void GameRoom::Task()
         IsUpdate = true;
     }
 
+    // _gameStrand에 넣었기 때문에 동시에 발생되는 문제는 없다 !!!
+    while (!attackQueue.empty())
+    {
+        GamePlayerInfoRef attackInfo = attackQueue.front();
+        attackQueue.pop();
+
+        int32 skillCode = attackInfo->GetObjectState();
+        int32 targetCode = attackInfo->GetTarget();
+        GameMosterInfoRef info = GetMonster(targetCode);
+        vector<int32> attackList;
+
+        if (targetCode < -1)
+        {
+            // 논타겟
+            attackInfo->Attack(nullptr, attackList);
+        }
+        else
+        {
+            // 타겟
+            if (info != nullptr)
+            {
+                attackInfo->Attack(info, attackList);
+            }
+        }
+
+        for (auto monsterCode : attackList)
+        {
+            GameMosterInfoRef info = GetMonster(monsterCode);
+            if (info != nullptr)
+            {
+                protocol::UnitState* childPkt = pkt.add_unit_state();
+                childPkt->set_is_monster(true);
+                childPkt->set_demage(10);
+
+                info->SetTarget(attackInfo->GetCode());
+                info->TakeDemage(10); // 공격력 설정 필요
+                cout << "공격 성공 : " << info->GetCode() << endl;
+                if (info->GetHp() > 0)
+                {
+                    // 메시지 작성필요
+                    info->SetObjecteState(ObjectState::HITED);
+                    childPkt->set_state(ObjectState::HITED);
+                }
+                else
+                {
+                    // 몬스터 사망처리 필요.
+                    info->SetObjecteState(ObjectState::DIE);
+                    childPkt->set_state(ObjectState::DIE);
+                }
+            }
+        }
+    }
+
     if (mapType == MapType::MONSTER)
     {
         for (auto& it : _monsterMap)
@@ -149,21 +202,26 @@ void GameRoom::Task()
             switch (info->GetObjectState())
             {
             case ObjectState::IDLE:
+                {
+                    info->SetObjecteState(ObjectState::MOVE);
+                    info->IdlePosition();
+                }
+                break;
             case ObjectState::MOVE:
                 {
                     if (IsUpdate)
                     {
+                        protocol::UnitState* childPkt = pkt.add_unit_state();
+                        childPkt->set_is_monster(true);
+                        protocol::Position* position = new protocol::Position();
                         info->Move();
                         monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Z);
-                        protocol::UnitState* childPkt = pkt.add_unit_state();
-                        protocol::Position* position = new protocol::Position();
                         childPkt->set_code(info->GetCode());
                         position->set_x(info->GetPosition().X);
                         position->set_y(info->GetPosition().Y);
                         position->set_z(info->GetPosition().Z);
                         position->set_yaw(info->GetPosition().Yaw);
                         childPkt->set_allocated_position(position);
-                        childPkt->set_is_monster(true);
                         childPkt->set_state(info->GetObjectState());
                     }
                     info->updatePrePosition();
@@ -177,7 +235,7 @@ void GameRoom::Task()
                 break;
             case ObjectState::HITED:
                 {
-                    info->AddAttackCounter();
+                    info->AddHitCounter();
                 }
                 break;
             case ObjectState::DIE:
@@ -191,9 +249,6 @@ void GameRoom::Task()
                 }
                 break;
             }
-
-            // 공격 범위 필요 !!!
-            // attackQueue
         }
     }
     if (pkt.unit_state_size() > 0)
@@ -256,6 +311,7 @@ void GameRoom::InitMonsters()
         {
             GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100, _tickCounter.GetTickValue());
             info->SetStartPosition(genX(rng), genY(rng));
+            info->SetObjecteState(ObjectState::MOVE);
 
             _monsterMap[i] = info;
         }

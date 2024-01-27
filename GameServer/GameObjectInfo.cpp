@@ -2,6 +2,7 @@
 
 #include "GameGlobal.h"
 #include "GameSession.h"
+#include "GameSkill.h"
 #include "IRoom.h"
 
 GameObjectInfo::GameObjectInfo(int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type), _hp(hp)
@@ -31,13 +32,20 @@ void GameObjectInfo::SetName(const string& name)
     _name = name;
 }
 
+void GameObjectInfo::TakeDemage(int32 Demage)
+{
+    _hp -= Demage;
+    if (_hp < 0)
+        _hp = 0;
+}
+
 void GameObjectInfo::SetObjecteState(ObjectState state)
 {
     _state = state;
 }
 
 GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 roomUpdateTick): GameObjectInfo(uuid, type, hp),
-    _startX(0), _startZ(0), _targetUUid(-1), _roomUpdateTick(roomUpdateTick), genYaw(0, 360)
+    _startX(0), _startZ(0), _targetCode(-1), _roomUpdateTick(roomUpdateTick), genYaw(0, 360)
 {
 }
 
@@ -60,7 +68,7 @@ void GameMosterInfo::GetStartPosition(int32& x, int32& z)
 
 void GameMosterInfo::SetTarget(int32 uuid)
 {
-    _targetUUid = uuid;
+    _targetCode = uuid;
 }
 
 void GameMosterInfo::Move()
@@ -96,12 +104,27 @@ void GameMosterInfo::UpdateYaw()
 
 int32 GameMosterInfo::AddAttackCounter(int count)
 {
-    return _AttackCounter.Add(count);
+    int32 value = _AttackCounter.Add(count);
+    if (value == 0)
+        SetObjecteState(ObjectState::MOVE);
+    return value;
 }
 
 int32 GameMosterInfo::AddHitCounter(int count)
 {
-    return _HitCounter.Add(count);
+    int32 value = _HitCounter.Add(count);
+    if (value == 0)
+        SetObjecteState(ObjectState::MOVE);
+    return value;
+}
+
+void GameMosterInfo::IdlePosition()
+{
+    _position.X = _prePosition.X;
+    _position.Y = _prePosition.Y;
+    _position.Z = _prePosition.Z;
+    _increaseX = 0;
+    _increaseZ = 0;
 }
 
 GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
@@ -115,19 +138,28 @@ GamePlayerInfo::~GamePlayerInfo()
     cout << "close player info" << endl;
 }
 
-vector<int32> GamePlayerInfo::Attack(GameMosterInfoRef target)
+void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
 {
-    vector<int32> attackList;
+    if (GetGameSession() == nullptr)
+        return;
 
-    if (GetGameSession())
-        return attackList;
-
-    if (target == nullptr)
+    int32 skillType = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._type;
+    if (target != nullptr)
     {
         // 타겟팅
-        if (AttackRect(target->GetPrePosition(), target))
+        if (skillType == Skill::RECT)
         {
-            attackList.push_back(target->GetCode());
+            if (AttackRect(target->GetPrePosition(), target))
+            {
+                attackList.push_back(target->GetCode());
+            }
+        }
+        else if (skillType == Skill::CIRCLE)
+        {
+            if (AttackCircle(target->GetPrePosition(), target))
+            {
+                attackList.push_back(target->GetCode());
+            }
         }
     }
     else
@@ -136,27 +168,37 @@ vector<int32> GamePlayerInfo::Attack(GameMosterInfoRef target)
         for (auto& it : gameRoom->GetMonsterMap())
         {
             // 논타겟
-            if (AttackRect(it.second->GetPrePosition(), it.second))
+            if (skillType == Skill::RECT)
             {
-                attackList.push_back(it.second->GetCode());
+                if (AttackRect(it.second->GetPrePosition(), it.second))
+                {
+                    attackList.push_back(it.second->GetCode());
+                }
+            }
+            else if (skillType == Skill::CIRCLE)
+            {
+                if (AttackCircle(it.second->GetPrePosition(), it.second))
+                {
+                    attackList.push_back(it.second->GetCode());
+                }
             }
         }
     }
-
-    return attackList;
 }
 
 bool GamePlayerInfo::AttackRect(FVector& position, GameMosterInfoRef target)
 {
-    int32 rangeX = 5;
-    int32 rangeZ = 10;
+    int32 rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width;
+    int32 rangeZ = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
 
     float targetX = min(abs(_position.X - position.X), abs(_position.X - (position.X + target->GetRangeX())));
     float targetZ = min(abs(_position.Z - position.Z), abs(_position.Z - (position.Z + target->GetRangeZ())));
 
-    if (0 < targetX && targetX < rangeX)
+    cout << "attackx : " << targetX << " playerx : " << _position.X << " monsterx : " << position.X  << endl;
+    cout << "attackz : " << targetZ << " playerx : " << _position.Z << " monsterx : " << position.Z  << endl;
+    if (targetX < rangeX)
     {
-        if (0 < targetZ && targetZ < rangeZ)
+        if (targetZ < rangeZ)
         {
             // 공격 성공
             return true;
@@ -168,16 +210,21 @@ bool GamePlayerInfo::AttackRect(FVector& position, GameMosterInfoRef target)
 
 bool GamePlayerInfo::AttackCircle(FVector& position, GameMosterInfoRef target)
 {
-    int32 radius = 5;
+    int32 radius = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._radius;
 
     float targetX = min(abs(_position.X - position.X), abs(_position.X - (position.X + target->GetRangeX())));
     float targetZ = min(abs(_position.Z - position.Z), abs(_position.Z - (position.Z + target->GetRangeZ())));
 
     float targetRadius = sqrtf(powf(targetX, 2) + powf(targetZ, 2));
 
-    if (radius > targetRadius)
+    if (targetRadius < radius)
         // 공격 성공
         return true;
 
     return false;
+}
+
+void GamePlayerInfo::SetTarget(int32 uuid)
+{
+    _targetCode = uuid;
 }

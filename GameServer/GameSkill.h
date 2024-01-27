@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include "Types.h"
 
-struct Skill
+class Skill
 {
+public:
     enum SkillType
     {
         RECT = 0,
@@ -11,6 +12,7 @@ struct Skill
 
     Skill(int32 type, bool target, int32 width, int32 heigth);
     Skill(int32 type, bool target, int32 radius);
+    Skill();
 
     SkillType _type;
     bool _target;
@@ -19,8 +21,9 @@ struct Skill
     int32 _radius;
 };
 
-struct UnitSkill
+class UnitSkill
 {
+public:
     // enum PlayerSkillType
     // {
     //     SWORD = 0,
