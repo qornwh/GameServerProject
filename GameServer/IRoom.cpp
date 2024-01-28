@@ -173,6 +173,7 @@ void GameRoom::Task()
                 {
                     // 메시지 작성필요
                     info->SetObjecteState(ObjectState::HITED);
+                    info->SetTarget(attackInfo->GetCode());
                 }
                 else
                 {
@@ -213,7 +214,6 @@ void GameRoom::Task()
                         monster->set_allocated_unit(unit);
                         childPkt->set_allocated_monster(monster);
                     }
-                    cout << "IDLE 멈춤 멈ㅊㅁ !!1" << endl;
                 }
                 break;
             case ObjectState::MOVE:
@@ -268,7 +268,6 @@ void GameRoom::Task()
                         monster->set_allocated_unit(unit);
                         childPkt->set_allocated_monster(monster);
                     }
-                    cout << " 멈춤 멈ㅊㅁ !!1" << endl;
                 }
                 break;
             case ObjectState::DIE:
@@ -287,7 +286,6 @@ void GameRoom::Task()
                         monster->set_allocated_unit(unit);
                         childPkt->set_allocated_monster(monster);
                     }
-                    cout << "사망사망 !!1" << endl;
                 }
                 break;
             }

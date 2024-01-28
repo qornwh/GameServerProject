@@ -137,7 +137,7 @@ private:
     GameUtils::TickCounter _MoveCounter{10};
     GameUtils::TickCounter _IdleCounter{3};
     GameUtils::TickCounter _HitCounter{3};
-    GameUtils::TickCounter _DieCounter{10};
+    GameUtils::TickCounter _DieCounter{30};
     GameUtils::TickCounter _AttackCounter{10};
 };
 
