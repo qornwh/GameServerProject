@@ -89,11 +89,11 @@ public:
     // 타겟 이동
     // 공격 (시간) - tict필요
     // 스킬 (시간) - tict필요
-    GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 roomUpdateTick);
+    GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ);
     ~GameMosterInfo();
 
     void SetObjecteState(ObjectState state) override;
-    
+
     void SetStartPosition(int32 x, int32 z);
     void GetStartPosition(int32& x, int32& z);
 
@@ -124,7 +124,6 @@ private:
     int32 _targetCode;
     float _speed = 3.f;
 
-    int32 _roomUpdateTick;
     float _increaseX = 0;
     float _increaseZ = 0;
 

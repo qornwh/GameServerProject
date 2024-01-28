@@ -351,8 +351,10 @@ void GameRoom::InitMonsters()
     {
         for (int32 i = 0; i < _monsterCount; i++)
         {
-            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100, _tickCounter.GetTickValue());
-            info->SetStartPosition(genX(rng), genY(rng));
+            int32 startX = genX(rng);
+            int32 startZ = genY(rng);
+            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100, startX, startZ);
+            info->SetStartPosition(startX, startZ);
             info->SetObjecteState(ObjectState::MOVE);
 
             _monsterMap[i] = info;

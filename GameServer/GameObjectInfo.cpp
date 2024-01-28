@@ -44,8 +44,9 @@ void GameObjectInfo::SetObjecteState(ObjectState state)
     _state = state;
 }
 
-GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 roomUpdateTick): GameObjectInfo(uuid, type, hp),
-    _startX(0), _startZ(0), _targetCode(-1), _roomUpdateTick(roomUpdateTick), genYaw(0, 360)
+GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ):
+    GameObjectInfo(uuid, type, hp),
+    _startX(startX), _startZ(startZ), _targetCode(-1), genYaw(0, 360)
 {
 }
 
@@ -56,7 +57,7 @@ GameMosterInfo::~GameMosterInfo()
 void GameMosterInfo::SetObjecteState(ObjectState state)
 {
     GameObjectInfo::SetObjecteState(state);
-    
+
     switch (_state)
     {
     case ObjectState::IDLE:
@@ -121,8 +122,8 @@ void GameMosterInfo::UpdateYaw()
 {
     // room 1 tick 당 이동거리 계산
     _position.Yaw = genYaw(rng);
-    _increaseX = GameUtils::MathUtils::GetSin(_position.Yaw) * (_speed / _roomUpdateTick);
-    _increaseZ = GameUtils::MathUtils::GetCos(_position.Yaw) * (_speed / _roomUpdateTick);
+    _increaseX = GameUtils::MathUtils::GetSin(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
+    _increaseZ = GameUtils::MathUtils::GetCos(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
 }
 
 int32 GameMosterInfo::AddAttackCounter(int count)
