@@ -135,12 +135,6 @@ void GameRoom::Task()
     const MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
     const MapInfoRef monsterMap = _gameMapInfo->GetMonsterMapInfo();
 
-    bool IsUpdate = false;
-    if (_tickCounter.GetTick() == 0)
-    {
-        IsUpdate = true;
-    }
-
     // _gameStrand에 넣었기 때문에 동시에 발생되는 문제는 없다 !!!
     while (!attackQueue.empty())
     {
@@ -171,24 +165,19 @@ void GameRoom::Task()
             GameMosterInfoRef info = GetMonster(monsterCode);
             if (info != nullptr)
             {
-                protocol::UnitState* childPkt = pkt.add_unit_state();
-                childPkt->set_is_monster(true);
-                childPkt->set_demage(10);
-
                 info->SetTarget(attackInfo->GetCode());
-                info->TakeDemage(10); // 공격력 설정 필요
+                info->TakeDemage(100); // 공격력 설정 필요
                 cout << "공격 성공 : " << info->GetCode() << endl;
+                info->IdlePosition();
                 if (info->GetHp() > 0)
                 {
                     // 메시지 작성필요
                     info->SetObjecteState(ObjectState::HITED);
-                    childPkt->set_state(ObjectState::HITED);
                 }
                 else
                 {
                     // 몬스터 사망처리 필요.
                     info->SetObjecteState(ObjectState::DIE);
-                    childPkt->set_state(ObjectState::DIE);
                 }
             }
         }
@@ -203,20 +192,33 @@ void GameRoom::Task()
             {
             case ObjectState::IDLE:
                 {
-                    info->SetObjecteState(ObjectState::MOVE);
-                    info->IdlePosition();
+                    if (info->AddIdleCounter() == 0)
+                    {
+                        info->IdlePosition();
+                        protocol::UnitState* childPkt = pkt.add_unit_state();
+                        childPkt->set_is_monster(true);
+                        childPkt->set_state(info->GetObjectState());
+                        childPkt->set_code(info->GetCode());
+                        protocol::Position* position = new protocol::Position();
+                        position->set_x(info->GetPosition().X);
+                        position->set_y(info->GetPosition().Y);
+                        position->set_z(info->GetPosition().Z);
+                        position->set_yaw(info->GetPosition().Yaw);
+                        childPkt->set_allocated_position(position);
+                    }
+                    cout << "IDLE 멈춤 멈ㅊㅁ !!1" << endl;
                 }
                 break;
             case ObjectState::MOVE:
                 {
-                    if (IsUpdate)
+                    if (info->AddMoveCounter() == 0)
                     {
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
+                        childPkt->set_code(info->GetCode());
                         protocol::Position* position = new protocol::Position();
                         info->Move();
                         monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Z);
-                        childPkt->set_code(info->GetCode());
                         position->set_x(info->GetPosition().X);
                         position->set_y(info->GetPosition().Y);
                         position->set_z(info->GetPosition().Z);
@@ -230,22 +232,44 @@ void GameRoom::Task()
                 break;
             case ObjectState::ATTACK:
                 {
-                    info->AddAttackCounter();
+                    if (info->AddAttackCounter() == 0)
+                    {
+                    }
                 }
                 break;
             case ObjectState::HITED:
                 {
-                    info->AddHitCounter();
+                    if (info->AddHitCounter() == 0)
+                    {
+                        // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
+                        protocol::UnitState* childPkt = pkt.add_unit_state();
+                        childPkt->set_is_monster(true);
+                        childPkt->set_demage(100);
+                        childPkt->set_state(ObjectState::HITED);
+                        childPkt->set_code(info->GetCode());
+                        protocol::Position* position = new protocol::Position();
+                        position->set_x(info->GetPosition().X);
+                        position->set_y(info->GetPosition().Y);
+                        position->set_z(info->GetPosition().Z);
+                        position->set_yaw(info->GetPosition().Yaw);
+                        childPkt->set_allocated_position(position);
+                    }
+                    cout << " 멈춤 멈ㅊㅁ !!1" << endl;
                 }
                 break;
             case ObjectState::DIE:
                 {
-                    if (IsUpdate)
+                    // 리스폰 필요
+                    // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
+                    if (info->AddDieCounter() == 0)
                     {
-                        // 몬스터 리스폰 설정만 해둠
-                        info->SetObjecteState(ObjectState::IDLE);
-                        // 이동 생각
+                        protocol::UnitState* childPkt = pkt.add_unit_state();
+                        childPkt->set_is_monster(true);
+                        childPkt->set_demage(10);
+                        childPkt->set_state(ObjectState::DIE);
+                        childPkt->set_code(info->GetCode());
                     }
+                    cout << "사망사망 !!1" << endl;
                 }
                 break;
             }
@@ -269,8 +293,10 @@ void GameRoom::Task()
     // 순서
     // 케이스 1
     // 몬스터 일정 시간만다 이동 (방향전환도 함께)
+    // - 일단 완
     // 케이스 2
     // 플레이어의 공격명령(이때 현재 좌표도 함께 받음)을 받고 현재몬스터들의 좌표에 공격범위에 있으면 몬스터 Hit처리후 클라에게 메시지 전달
+    // - 처리중
     // 케이스 3
     // 공격받은 몬스터들은 플레이어 쪽으로 이동 (방향전환 함께)
     // 케이스 4
@@ -285,7 +311,7 @@ void GameRoom::CreateMapInfo(int32 type)
         // 일반 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(22, 15, 0, 0, MapType::MONSTER);
-        _monsterCount = 10;
+        _monsterCount = 1;
     }
     else if (type == 1)
     {

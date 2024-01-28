@@ -53,6 +53,29 @@ GameMosterInfo::~GameMosterInfo()
 {
 }
 
+void GameMosterInfo::SetObjecteState(ObjectState state)
+{
+    GameObjectInfo::SetObjecteState(state);
+    
+    switch (_state)
+    {
+    case ObjectState::IDLE:
+        break;
+    case ObjectState::DIE:
+        _DieCounter.ResetTic();
+        break;
+    case ObjectState::HITED:
+        _HitCounter.ResetTic();
+        break;
+    case ObjectState::MOVE:
+        _MoveCounter.ResetTic();
+        break;
+    case ObjectState::ATTACK:
+        _AttackCounter.ResetTic();
+        break;
+    }
+}
+
 void GameMosterInfo::SetStartPosition(int32 x, int32 z)
 {
     UpdateYaw();
@@ -105,7 +128,15 @@ void GameMosterInfo::UpdateYaw()
 int32 GameMosterInfo::AddAttackCounter(int count)
 {
     int32 value = _AttackCounter.Add(count);
-    if (value == 0)
+    if (value == _AttackCounter.GetTickValue() - 1)
+        SetObjecteState(ObjectState::MOVE);
+    return value;
+}
+
+int32 GameMosterInfo::AddIdleCounter(int count)
+{
+    int32 value = _IdleCounter.Add(count);
+    if (value == _IdleCounter.GetTickValue() - 1)
         SetObjecteState(ObjectState::MOVE);
     return value;
 }
@@ -113,8 +144,29 @@ int32 GameMosterInfo::AddAttackCounter(int count)
 int32 GameMosterInfo::AddHitCounter(int count)
 {
     int32 value = _HitCounter.Add(count);
-    if (value == 0)
+    if (value == _HitCounter.GetTickValue() - 1)
         SetObjecteState(ObjectState::MOVE);
+    return value;
+}
+
+int32 GameMosterInfo::AddMoveCounter(int count)
+{
+    return _MoveCounter.Add(count);
+}
+
+int32 GameMosterInfo::AddDieCounter(int count)
+{
+    int32 value = _DieCounter.Add(count);
+    if (value == _DieCounter.GetTickValue() - 1)
+    {
+        _position.X = _startX;
+        _position.Z = _startZ;
+        _prePosition.X = _startX;
+        _prePosition.Z = _startZ;
+        _increaseX = 0;
+        _increaseZ = 0;
+        SetObjecteState(ObjectState::IDLE);
+    }
     return value;
 }
 
@@ -194,8 +246,8 @@ bool GamePlayerInfo::AttackRect(FVector& position, GameMosterInfoRef target)
     float targetX = min(abs(_position.X - position.X), abs(_position.X - (position.X + target->GetRangeX())));
     float targetZ = min(abs(_position.Z - position.Z), abs(_position.Z - (position.Z + target->GetRangeZ())));
 
-    cout << "attackx : " << targetX << " playerx : " << _position.X << " monsterx : " << position.X  << endl;
-    cout << "attackz : " << targetZ << " playerx : " << _position.Z << " monsterx : " << position.Z  << endl;
+    // cout << "attackx : " << targetX << " playerx : " << _position.X << " monsterx : " << position.X << endl;
+    // cout << "attackz : " << targetZ << " playerx : " << _position.Z << " monsterx : " << position.Z << endl;
     if (targetX < rangeX)
     {
         if (targetZ < rangeZ)

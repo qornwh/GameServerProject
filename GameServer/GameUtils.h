@@ -51,6 +51,11 @@ namespace GameUtils
             return _value;
         }
 
+        void ResetTic(int32 value = -1)
+        {
+            _tick = value;
+        }
+
     private:
         int32 _value;
         int32 _tick = 0;

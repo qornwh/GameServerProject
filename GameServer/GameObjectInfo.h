@@ -63,7 +63,7 @@ public:
     void SetName(const string& name);
     void TakeDemage(int32 Demage);
 
-    void SetObjecteState(ObjectState state);
+    virtual void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
 
     void SetGameRoom(GameRoomRef gameRoom) { _gameRoomRef = gameRoom; }
@@ -92,8 +92,9 @@ public:
     GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 roomUpdateTick);
     ~GameMosterInfo();
 
+    void SetObjecteState(ObjectState state) override;
+    
     void SetStartPosition(int32 x, int32 z);
-
     void GetStartPosition(int32& x, int32& z);
 
     void SetTarget(int32 uuid);
@@ -110,7 +111,10 @@ public:
     float GetRangeZ() { return _increaseZ; }
 
     int32 AddAttackCounter(int count = 1);
+    int32 AddIdleCounter(int count = 1);
     int32 AddHitCounter(int count = 1);
+    int32 AddMoveCounter(int count = 1);
+    int32 AddDieCounter(int count = 1);
 
     void IdlePosition();
 
@@ -130,7 +134,10 @@ private:
     boost::random::uniform_int_distribution<> genYaw;
 
     GameUtils::TickCounter _YawCounter{4};
-    GameUtils::TickCounter _HitCounter{10};
+    GameUtils::TickCounter _MoveCounter{10};
+    GameUtils::TickCounter _IdleCounter{3};
+    GameUtils::TickCounter _HitCounter{3};
+    GameUtils::TickCounter _DieCounter{10};
     GameUtils::TickCounter _AttackCounter{10};
 };
 
