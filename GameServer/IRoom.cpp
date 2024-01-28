@@ -197,14 +197,21 @@ void GameRoom::Task()
                         info->IdlePosition();
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
-                        childPkt->set_state(info->GetObjectState());
-                        childPkt->set_code(info->GetCode());
+                        protocol::Monster* monster = new protocol::Monster();
+                        monster->set_state(info->GetObjectState());
+                        protocol::Unit* unit = new protocol::Unit();
+                        unit->set_code(info->GetCode());
+                        unit->set_hp(info->GetHp());
+                        unit->set_type(info->GetType());
+                        unit->set_name(info->GetName());
                         protocol::Position* position = new protocol::Position();
                         position->set_x(info->GetPosition().X);
                         position->set_y(info->GetPosition().Y);
                         position->set_z(info->GetPosition().Z);
                         position->set_yaw(info->GetPosition().Yaw);
-                        childPkt->set_allocated_position(position);
+                        unit->set_allocated_position(position);
+                        monster->set_allocated_unit(unit);
+                        childPkt->set_allocated_monster(monster);
                     }
                     cout << "IDLE 멈춤 멈ㅊㅁ !!1" << endl;
                 }
@@ -215,7 +222,10 @@ void GameRoom::Task()
                     {
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
-                        childPkt->set_code(info->GetCode());
+                        protocol::Monster* monster = new protocol::Monster();
+                        monster->set_state(info->GetObjectState());
+                        protocol::Unit* unit = new protocol::Unit();
+                        unit->set_code(info->GetCode());
                         protocol::Position* position = new protocol::Position();
                         info->Move();
                         monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Z);
@@ -223,11 +233,11 @@ void GameRoom::Task()
                         position->set_y(info->GetPosition().Y);
                         position->set_z(info->GetPosition().Z);
                         position->set_yaw(info->GetPosition().Yaw);
-                        childPkt->set_allocated_position(position);
-                        childPkt->set_state(info->GetObjectState());
+                        unit->set_allocated_position(position);
+                        monster->set_allocated_unit(unit);
+                        childPkt->set_allocated_monster(monster);
                     }
                     info->updatePrePosition();
-                    // 유저 공격시 모스터 피격 확인
                 }
                 break;
             case ObjectState::ATTACK:
@@ -245,14 +255,18 @@ void GameRoom::Task()
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
                         childPkt->set_demage(100);
-                        childPkt->set_state(ObjectState::HITED);
-                        childPkt->set_code(info->GetCode());
+                        protocol::Monster* monster = new protocol::Monster();
+                        monster->set_state(info->GetObjectState());
+                        protocol::Unit* unit = new protocol::Unit();
+                        unit->set_code(info->GetCode());
                         protocol::Position* position = new protocol::Position();
                         position->set_x(info->GetPosition().X);
                         position->set_y(info->GetPosition().Y);
                         position->set_z(info->GetPosition().Z);
                         position->set_yaw(info->GetPosition().Yaw);
-                        childPkt->set_allocated_position(position);
+                        unit->set_allocated_position(position);
+                        monster->set_allocated_unit(unit);
+                        childPkt->set_allocated_monster(monster);
                     }
                     cout << " 멈춤 멈ㅊㅁ !!1" << endl;
                 }
@@ -266,8 +280,12 @@ void GameRoom::Task()
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
                         childPkt->set_demage(10);
-                        childPkt->set_state(ObjectState::DIE);
-                        childPkt->set_code(info->GetCode());
+                        protocol::Monster* monster = new protocol::Monster();
+                        protocol::Unit* unit = new protocol::Unit();
+                        monster->set_state(ObjectState::DIE);
+                        unit->set_code(info->GetCode());
+                        monster->set_allocated_unit(unit);
+                        childPkt->set_allocated_monster(monster);
                     }
                     cout << "사망사망 !!1" << endl;
                 }

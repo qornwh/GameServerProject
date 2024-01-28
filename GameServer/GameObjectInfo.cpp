@@ -165,6 +165,7 @@ int32 GameMosterInfo::AddDieCounter(int count)
         _prePosition.Z = _startZ;
         _increaseX = 0;
         _increaseZ = 0;
+        _hp = 100;
         SetObjecteState(ObjectState::IDLE);
     }
     return value;
