@@ -2160,47 +2160,27 @@ class UnitState final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPositionFieldNumber = 2,
-    kCodeFieldNumber = 1,
-    kStateFieldNumber = 3,
+    kMonsterFieldNumber = 1,
     kDemageFieldNumber = 4,
     kIsMonsterFieldNumber = 10,
   };
-  // .protocol.Position position = 2;
-  bool has_position() const;
+  // .protocol.Monster monster = 1;
+  bool has_monster() const;
   private:
-  bool _internal_has_position() const;
+  bool _internal_has_monster() const;
   public:
-  void clear_position();
-  const ::protocol::Position& position() const;
-  PROTOBUF_NODISCARD ::protocol::Position* release_position();
-  ::protocol::Position* mutable_position();
-  void set_allocated_position(::protocol::Position* position);
+  void clear_monster();
+  const ::protocol::Monster& monster() const;
+  PROTOBUF_NODISCARD ::protocol::Monster* release_monster();
+  ::protocol::Monster* mutable_monster();
+  void set_allocated_monster(::protocol::Monster* monster);
   private:
-  const ::protocol::Position& _internal_position() const;
-  ::protocol::Position* _internal_mutable_position();
+  const ::protocol::Monster& _internal_monster() const;
+  ::protocol::Monster* _internal_mutable_monster();
   public:
-  void unsafe_arena_set_allocated_position(
-      ::protocol::Position* position);
-  ::protocol::Position* unsafe_arena_release_position();
-
-  // uint32 code = 1;
-  void clear_code();
-  uint32_t code() const;
-  void set_code(uint32_t value);
-  private:
-  uint32_t _internal_code() const;
-  void _internal_set_code(uint32_t value);
-  public:
-
-  // int32 state = 3;
-  void clear_state();
-  int32_t state() const;
-  void set_state(int32_t value);
-  private:
-  int32_t _internal_state() const;
-  void _internal_set_state(int32_t value);
-  public:
+  void unsafe_arena_set_allocated_monster(
+      ::protocol::Monster* monster);
+  ::protocol::Monster* unsafe_arena_release_monster();
 
   // int32 demage = 4;
   void clear_demage();
@@ -2228,9 +2208,7 @@ class UnitState final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::protocol::Position* position_;
-    uint32_t code_;
-    int32_t state_;
+    ::protocol::Monster* monster_;
     int32_t demage_;
     bool is_monster_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2522,13 +2500,13 @@ class Attack final :
     kSkillCodeFieldNumber = 2,
     kIsMonsterFieldNumber = 3,
   };
-  // int32 code = 1;
+  // uint32 code = 1;
   void clear_code();
-  int32_t code() const;
-  void set_code(int32_t value);
+  uint32_t code() const;
+  void set_code(uint32_t value);
   private:
-  int32_t _internal_code() const;
-  void _internal_set_code(int32_t value);
+  uint32_t _internal_code() const;
+  void _internal_set_code(uint32_t value);
   public:
 
   // int32 skill_code = 2;
@@ -2557,7 +2535,7 @@ class Attack final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    int32_t code_;
+    uint32_t code_;
     int32_t skill_code_;
     bool is_monster_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2711,13 +2689,13 @@ class CPlayerAttack final :
       ::protocol::Position* position);
   ::protocol::Position* unsafe_arena_release_position();
 
-  // int32 code = 1;
+  // uint32 code = 1;
   void clear_code();
-  int32_t code() const;
-  void set_code(int32_t value);
+  uint32_t code() const;
+  void set_code(uint32_t value);
   private:
-  int32_t _internal_code() const;
-  void _internal_set_code(int32_t value);
+  uint32_t _internal_code() const;
+  void _internal_set_code(uint32_t value);
   public:
 
   // int32 skill_code = 2;
@@ -2747,7 +2725,7 @@ class CPlayerAttack final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::protocol::Position* position_;
-    int32_t code_;
+    uint32_t code_;
     int32_t skill_code_;
     int32_t target_code_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -4364,65 +4342,45 @@ inline void SClosePlayer::set_code(uint32_t value) {
 
 // UnitState
 
-// uint32 code = 1;
-inline void UnitState::clear_code() {
-  _impl_.code_ = 0u;
+// .protocol.Monster monster = 1;
+inline bool UnitState::_internal_has_monster() const {
+  return this != internal_default_instance() && _impl_.monster_ != nullptr;
 }
-inline uint32_t UnitState::_internal_code() const {
-  return _impl_.code_;
+inline bool UnitState::has_monster() const {
+  return _internal_has_monster();
 }
-inline uint32_t UnitState::code() const {
-  // @@protoc_insertion_point(field_get:protocol.UnitState.code)
-  return _internal_code();
-}
-inline void UnitState::_internal_set_code(uint32_t value) {
-  
-  _impl_.code_ = value;
-}
-inline void UnitState::set_code(uint32_t value) {
-  _internal_set_code(value);
-  // @@protoc_insertion_point(field_set:protocol.UnitState.code)
-}
-
-// .protocol.Position position = 2;
-inline bool UnitState::_internal_has_position() const {
-  return this != internal_default_instance() && _impl_.position_ != nullptr;
-}
-inline bool UnitState::has_position() const {
-  return _internal_has_position();
-}
-inline void UnitState::clear_position() {
-  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
-    delete _impl_.position_;
+inline void UnitState::clear_monster() {
+  if (GetArenaForAllocation() == nullptr && _impl_.monster_ != nullptr) {
+    delete _impl_.monster_;
   }
-  _impl_.position_ = nullptr;
+  _impl_.monster_ = nullptr;
 }
-inline const ::protocol::Position& UnitState::_internal_position() const {
-  const ::protocol::Position* p = _impl_.position_;
-  return p != nullptr ? *p : reinterpret_cast<const ::protocol::Position&>(
-      ::protocol::_Position_default_instance_);
+inline const ::protocol::Monster& UnitState::_internal_monster() const {
+  const ::protocol::Monster* p = _impl_.monster_;
+  return p != nullptr ? *p : reinterpret_cast<const ::protocol::Monster&>(
+      ::protocol::_Monster_default_instance_);
 }
-inline const ::protocol::Position& UnitState::position() const {
-  // @@protoc_insertion_point(field_get:protocol.UnitState.position)
-  return _internal_position();
+inline const ::protocol::Monster& UnitState::monster() const {
+  // @@protoc_insertion_point(field_get:protocol.UnitState.monster)
+  return _internal_monster();
 }
-inline void UnitState::unsafe_arena_set_allocated_position(
-    ::protocol::Position* position) {
+inline void UnitState::unsafe_arena_set_allocated_monster(
+    ::protocol::Monster* monster) {
   if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.position_);
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.monster_);
   }
-  _impl_.position_ = position;
-  if (position) {
+  _impl_.monster_ = monster;
+  if (monster) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protocol.UnitState.position)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protocol.UnitState.monster)
 }
-inline ::protocol::Position* UnitState::release_position() {
+inline ::protocol::Monster* UnitState::release_monster() {
   
-  ::protocol::Position* temp = _impl_.position_;
-  _impl_.position_ = nullptr;
+  ::protocol::Monster* temp = _impl_.monster_;
+  _impl_.monster_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
   temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
@@ -4434,64 +4392,44 @@ inline ::protocol::Position* UnitState::release_position() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::protocol::Position* UnitState::unsafe_arena_release_position() {
-  // @@protoc_insertion_point(field_release:protocol.UnitState.position)
+inline ::protocol::Monster* UnitState::unsafe_arena_release_monster() {
+  // @@protoc_insertion_point(field_release:protocol.UnitState.monster)
   
-  ::protocol::Position* temp = _impl_.position_;
-  _impl_.position_ = nullptr;
+  ::protocol::Monster* temp = _impl_.monster_;
+  _impl_.monster_ = nullptr;
   return temp;
 }
-inline ::protocol::Position* UnitState::_internal_mutable_position() {
+inline ::protocol::Monster* UnitState::_internal_mutable_monster() {
   
-  if (_impl_.position_ == nullptr) {
-    auto* p = CreateMaybeMessage<::protocol::Position>(GetArenaForAllocation());
-    _impl_.position_ = p;
+  if (_impl_.monster_ == nullptr) {
+    auto* p = CreateMaybeMessage<::protocol::Monster>(GetArenaForAllocation());
+    _impl_.monster_ = p;
   }
-  return _impl_.position_;
+  return _impl_.monster_;
 }
-inline ::protocol::Position* UnitState::mutable_position() {
-  ::protocol::Position* _msg = _internal_mutable_position();
-  // @@protoc_insertion_point(field_mutable:protocol.UnitState.position)
+inline ::protocol::Monster* UnitState::mutable_monster() {
+  ::protocol::Monster* _msg = _internal_mutable_monster();
+  // @@protoc_insertion_point(field_mutable:protocol.UnitState.monster)
   return _msg;
 }
-inline void UnitState::set_allocated_position(::protocol::Position* position) {
+inline void UnitState::set_allocated_monster(::protocol::Monster* monster) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
-    delete _impl_.position_;
+    delete _impl_.monster_;
   }
-  if (position) {
+  if (monster) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(position);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(monster);
     if (message_arena != submessage_arena) {
-      position = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, position, submessage_arena);
+      monster = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, monster, submessage_arena);
     }
     
   } else {
     
   }
-  _impl_.position_ = position;
-  // @@protoc_insertion_point(field_set_allocated:protocol.UnitState.position)
-}
-
-// int32 state = 3;
-inline void UnitState::clear_state() {
-  _impl_.state_ = 0;
-}
-inline int32_t UnitState::_internal_state() const {
-  return _impl_.state_;
-}
-inline int32_t UnitState::state() const {
-  // @@protoc_insertion_point(field_get:protocol.UnitState.state)
-  return _internal_state();
-}
-inline void UnitState::_internal_set_state(int32_t value) {
-  
-  _impl_.state_ = value;
-}
-inline void UnitState::set_state(int32_t value) {
-  _internal_set_state(value);
-  // @@protoc_insertion_point(field_set:protocol.UnitState.state)
+  _impl_.monster_ = monster;
+  // @@protoc_insertion_point(field_set_allocated:protocol.UnitState.monster)
 }
 
 // int32 demage = 4;
@@ -4582,22 +4520,22 @@ SUnitStates::unit_state() const {
 
 // Attack
 
-// int32 code = 1;
+// uint32 code = 1;
 inline void Attack::clear_code() {
-  _impl_.code_ = 0;
+  _impl_.code_ = 0u;
 }
-inline int32_t Attack::_internal_code() const {
+inline uint32_t Attack::_internal_code() const {
   return _impl_.code_;
 }
-inline int32_t Attack::code() const {
+inline uint32_t Attack::code() const {
   // @@protoc_insertion_point(field_get:protocol.Attack.code)
   return _internal_code();
 }
-inline void Attack::_internal_set_code(int32_t value) {
+inline void Attack::_internal_set_code(uint32_t value) {
   
   _impl_.code_ = value;
 }
-inline void Attack::set_code(int32_t value) {
+inline void Attack::set_code(uint32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.Attack.code)
 }
@@ -4646,22 +4584,22 @@ inline void Attack::set_is_monster(bool value) {
 
 // CPlayerAttack
 
-// int32 code = 1;
+// uint32 code = 1;
 inline void CPlayerAttack::clear_code() {
-  _impl_.code_ = 0;
+  _impl_.code_ = 0u;
 }
-inline int32_t CPlayerAttack::_internal_code() const {
+inline uint32_t CPlayerAttack::_internal_code() const {
   return _impl_.code_;
 }
-inline int32_t CPlayerAttack::code() const {
+inline uint32_t CPlayerAttack::code() const {
   // @@protoc_insertion_point(field_get:protocol.CPlayerAttack.code)
   return _internal_code();
 }
-inline void CPlayerAttack::_internal_set_code(int32_t value) {
+inline void CPlayerAttack::_internal_set_code(uint32_t value) {
   
   _impl_.code_ = value;
 }
-inline void CPlayerAttack::set_code(int32_t value) {
+inline void CPlayerAttack::set_code(uint32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.CPlayerAttack.code)
 }

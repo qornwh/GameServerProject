@@ -76,9 +76,7 @@ message SClosePlayer {
 }
 
 message UnitState {
-    uint32 code = 1;
-    Position position = 2;
-    int32 state = 3;
+    Monster monster = 1;
     int32 demage = 4;
     bool is_monster = 10;
 }
@@ -88,13 +86,13 @@ message SUnitStates {
 }
 
 message Attack {
-    int32 code = 1;
+    uint32 code = 1;
     int32 skill_code = 2;
     bool is_monster = 3;
 }
 
 message CPlayerAttack {
-    int32 code = 1;
+    uint32 code = 1;
     int32 skill_code = 2;
     int32 target_code = 3;
     Position position = 4;
