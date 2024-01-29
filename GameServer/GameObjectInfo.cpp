@@ -103,7 +103,7 @@ void GameMosterInfo::Move()
         UpdateYaw();
     }
 
-    // 기본 거리 5
+    // 기본 거리 3
     _position.X += (_increaseX * _speed);
     _position.Z += (_increaseZ * _speed);
 }
@@ -114,14 +114,52 @@ void GameMosterInfo::updatePrePosition()
     _prePosition.Z += _increaseZ;
 }
 
-void GameMosterInfo::TargetMove(int32 x, int32 z)
+void GameMosterInfo::MoveTarget(FVector targetPosition)
 {
+    float theta = GameUtils::MathUtils::CalculateAngle(_position.Z, _position.X, targetPosition.Z, targetPosition.X);
+    UpdateYaw(theta);
+
+    if (CheckAttackTarget(targetPosition))
+    {
+        // 여기서만 바로 공격
+        SetObjecteState(ObjectState::ATTACK);
+    }
+    else
+    {
+        // 타겟지점 이동
+        _prePosition = _position;
+
+        // 기본 거리 3
+        _position.X += (_increaseX * _speed);
+        _position.Z += (_increaseZ * _speed);
+    }
+}
+
+bool GameMosterInfo::CheckAttackTarget(FVector targetPosition)
+{
+    // 스킬 범위 지정
+    float radius = 2.f;
+    float dist = sqrt(pow(_position.X - targetPosition.X, 2) + pow(_position.Z - targetPosition.Z, 2));
+
+    if (radius >= dist)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void GameMosterInfo::UpdateYaw()
 {
     // room 1 tick 당 이동거리 계산
     _position.Yaw = genYaw(rng);
+    _increaseX = GameUtils::MathUtils::GetSin(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
+    _increaseZ = GameUtils::MathUtils::GetCos(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
+}
+
+void GameMosterInfo::UpdateYaw(float theta)
+{
+    _position.Yaw = theta;
     _increaseX = GameUtils::MathUtils::GetSin(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
     _increaseZ = GameUtils::MathUtils::GetCos(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
 }
@@ -167,6 +205,7 @@ int32 GameMosterInfo::AddDieCounter(int count)
         _increaseX = 0;
         _increaseZ = 0;
         _hp = 100;
+        _targetCode = -1;
         SetObjecteState(ObjectState::IDLE);
     }
     return value;
@@ -240,7 +279,7 @@ void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
     }
 }
 
-bool GamePlayerInfo::AttackRect(FVector& position, GameMosterInfoRef target)
+bool GamePlayerInfo::AttackRect(FVector position, GameMosterInfoRef target)
 {
     int32 rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width;
     int32 rangeZ = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
@@ -262,7 +301,7 @@ bool GamePlayerInfo::AttackRect(FVector& position, GameMosterInfoRef target)
     return false;
 }
 
-bool GamePlayerInfo::AttackCircle(FVector& position, GameMosterInfoRef target)
+bool GamePlayerInfo::AttackCircle(FVector position, GameMosterInfoRef target)
 {
     int32 radius = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._radius;
 

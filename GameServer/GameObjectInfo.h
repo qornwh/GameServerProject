@@ -102,9 +102,11 @@ public:
 
     void Move();
     void updatePrePosition();
-    void TargetMove(int32 x, int32 z);
+    void MoveTarget(FVector targetPosition);
+    bool CheckAttackTarget(FVector targetPosition);
 
     void UpdateYaw();
+    void UpdateYaw(float theta);
 
     FVector& GetPrePosition() { return _prePosition; }
     float GetRangeX() { return _increaseX; }
@@ -147,8 +149,8 @@ public:
     ~GamePlayerInfo();
 
     void Attack(GameMosterInfoRef target, vector<int32>& attackList);
-    bool AttackRect(FVector& position, GameMosterInfoRef target);
-    bool AttackCircle(FVector& position, GameMosterInfoRef target);
+    bool AttackRect(FVector position, GameMosterInfoRef target);
+    bool AttackCircle(FVector position, GameMosterInfoRef target);
 
     GameSessionRef GetGameSession() { return _gameSession.lock(); }
 

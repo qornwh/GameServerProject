@@ -143,6 +143,7 @@ private:
 
     boost::shared_ptr<class GameMapInfo> _gameMapInfo;
     unordered_map<int32, GameMosterInfoRef> _monsterMap;
+    unordered_map<int32, GamePlayerInfoRef> _playerMap;
     Atomic<bool> _isTask{false};
     GameUtils::TickCounter _tickCounter{10};
 };

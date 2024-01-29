@@ -6,6 +6,7 @@
 
 void GameRoom::EnterSession(GameSessionRef session)
 {
+    _playerMap.emplace(session->GetPlayer()->GetCode(), session->GetPlayer());
     IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::EnterSession(session);
     session->SetRoomId(_id);
     {
@@ -83,6 +84,8 @@ void GameRoom::EnterSession(GameSessionRef session)
 
 void GameRoom::OutSession(GameSessionRef session)
 {
+    // playerInfo 레퍼런스카운트 미리 제거해둔다.
+    _playerMap.erase(session->GetPlayer()->GetCode());
     IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::OutSession(session);
     session->SetRoomId(-1);
 
@@ -160,13 +163,14 @@ void GameRoom::Task()
             }
         }
 
+        // 공격 판정된 몬스터 리스트들
         for (auto monsterCode : attackList)
         {
             GameMosterInfoRef info = GetMonster(monsterCode);
             if (info != nullptr)
             {
                 info->SetTarget(attackInfo->GetCode());
-                info->TakeDemage(100); // 공격력 설정 필요
+                info->TakeDemage(10); // 공격력 설정 필요
                 cout << "공격 성공 : " << info->GetCode() << endl;
                 info->IdlePosition();
                 if (info->GetHp() > 0)
@@ -189,6 +193,7 @@ void GameRoom::Task()
         for (auto& it : _monsterMap)
         {
             GameMosterInfoRef info = it.second;
+
             switch (info->GetObjectState())
             {
             case ObjectState::IDLE:
@@ -227,7 +232,14 @@ void GameRoom::Task()
                         protocol::Unit* unit = new protocol::Unit();
                         unit->set_code(info->GetCode());
                         protocol::Position* position = new protocol::Position();
-                        info->Move();
+                        if (info->GetTarget() >= 0 && _playerMap.find(info->GetTarget()) != _playerMap.end())
+                        {
+                            info->MoveTarget(_playerMap[info->GetTarget()]->GetPosition());
+                        }
+                        else
+                        {
+                            info->Move();
+                        }
                         monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Z);
                         position->set_x(info->GetPosition().X);
                         position->set_y(info->GetPosition().Y);
@@ -244,6 +256,15 @@ void GameRoom::Task()
                 {
                     if (info->AddAttackCounter() == 0)
                     {
+                        protocol::UnitState* childPkt = pkt.add_unit_state();
+                        childPkt->set_is_monster(true);
+                        childPkt->set_demage(10);
+                        protocol::Monster* monster = new protocol::Monster();
+                        monster->set_state(info->GetObjectState());
+                        protocol::Unit* unit = new protocol::Unit();
+                        unit->set_code(info->GetCode());
+                        monster->set_allocated_unit(unit);
+                        childPkt->set_allocated_monster(monster);
                     }
                 }
                 break;
@@ -254,7 +275,7 @@ void GameRoom::Task()
                         // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
-                        childPkt->set_demage(100);
+                        childPkt->set_demage(10);
                         protocol::Monster* monster = new protocol::Monster();
                         monster->set_state(info->GetObjectState());
                         protocol::Unit* unit = new protocol::Unit();
