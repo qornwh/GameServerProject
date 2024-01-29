@@ -32,7 +32,7 @@ message Position {
 message Unit {
     uint32 type = 1;
     uint32 hp = 2;
-    uint32 code = 3;
+    int32 code = 3;
     Position position = 4;
     string name = 5;
 }
@@ -56,14 +56,14 @@ message SInsertplayer {
 }
 
 message SMove {
-    uint32 code = 1;
+    int32 code = 1;
     Position position = 2;
     bool is_monster = 3;
 }
 
 message SChat {
     uint32 type = 1;
-    uint32 code = 2;
+    int32 code = 2;
     string text = 5;
 }
 
@@ -72,7 +72,7 @@ message SPlayerData {
 }
 
 message SClosePlayer {
-    uint32 code = 1;
+    int32 code = 1;
 }
 
 message UnitState {
@@ -86,13 +86,13 @@ message SUnitStates {
 }
 
 message Attack {
-    uint32 code = 1;
+    int32 code = 1;
     int32 skill_code = 2;
     bool is_monster = 3;
 }
 
 message CPlayerAttack {
-    uint32 code = 1;
+    int32 code = 1;
     int32 skill_code = 2;
     int32 target_code = 3;
     Position position = 4;

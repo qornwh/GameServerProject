@@ -692,13 +692,13 @@ class Unit final :
   void _internal_set_hp(uint32_t value);
   public:
 
-  // uint32 code = 3;
+  // int32 code = 3;
   void clear_code();
-  uint32_t code() const;
-  void set_code(uint32_t value);
+  int32_t code() const;
+  void set_code(int32_t value);
   private:
-  uint32_t _internal_code() const;
-  void _internal_set_code(uint32_t value);
+  int32_t _internal_code() const;
+  void _internal_set_code(int32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:protocol.Unit)
@@ -713,7 +713,7 @@ class Unit final :
     ::protocol::Position* position_;
     uint32_t type_;
     uint32_t hp_;
-    uint32_t code_;
+    int32_t code_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1523,13 +1523,13 @@ class SMove final :
       ::protocol::Position* position);
   ::protocol::Position* unsafe_arena_release_position();
 
-  // uint32 code = 1;
+  // int32 code = 1;
   void clear_code();
-  uint32_t code() const;
-  void set_code(uint32_t value);
+  int32_t code() const;
+  void set_code(int32_t value);
   private:
-  uint32_t _internal_code() const;
-  void _internal_set_code(uint32_t value);
+  int32_t _internal_code() const;
+  void _internal_set_code(int32_t value);
   public:
 
   // bool is_monster = 3;
@@ -1550,7 +1550,7 @@ class SMove final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::protocol::Position* position_;
-    uint32_t code_;
+    int32_t code_;
     bool is_monster_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -1707,13 +1707,13 @@ class SChat final :
   void _internal_set_type(uint32_t value);
   public:
 
-  // uint32 code = 2;
+  // int32 code = 2;
   void clear_code();
-  uint32_t code() const;
-  void set_code(uint32_t value);
+  int32_t code() const;
+  void set_code(int32_t value);
   private:
-  uint32_t _internal_code() const;
-  void _internal_set_code(uint32_t value);
+  int32_t _internal_code() const;
+  void _internal_set_code(int32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:protocol.SChat)
@@ -1726,7 +1726,7 @@ class SChat final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr text_;
     uint32_t type_;
-    uint32_t code_;
+    int32_t code_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2014,13 +2014,13 @@ class SClosePlayer final :
   enum : int {
     kCodeFieldNumber = 1,
   };
-  // uint32 code = 1;
+  // int32 code = 1;
   void clear_code();
-  uint32_t code() const;
-  void set_code(uint32_t value);
+  int32_t code() const;
+  void set_code(int32_t value);
   private:
-  uint32_t _internal_code() const;
-  void _internal_set_code(uint32_t value);
+  int32_t _internal_code() const;
+  void _internal_set_code(int32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:protocol.SClosePlayer)
@@ -2031,7 +2031,7 @@ class SClosePlayer final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t code_;
+    int32_t code_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2500,13 +2500,13 @@ class Attack final :
     kSkillCodeFieldNumber = 2,
     kIsMonsterFieldNumber = 3,
   };
-  // uint32 code = 1;
+  // int32 code = 1;
   void clear_code();
-  uint32_t code() const;
-  void set_code(uint32_t value);
+  int32_t code() const;
+  void set_code(int32_t value);
   private:
-  uint32_t _internal_code() const;
-  void _internal_set_code(uint32_t value);
+  int32_t _internal_code() const;
+  void _internal_set_code(int32_t value);
   public:
 
   // int32 skill_code = 2;
@@ -2535,7 +2535,7 @@ class Attack final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    uint32_t code_;
+    int32_t code_;
     int32_t skill_code_;
     bool is_monster_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2689,13 +2689,13 @@ class CPlayerAttack final :
       ::protocol::Position* position);
   ::protocol::Position* unsafe_arena_release_position();
 
-  // uint32 code = 1;
+  // int32 code = 1;
   void clear_code();
-  uint32_t code() const;
-  void set_code(uint32_t value);
+  int32_t code() const;
+  void set_code(int32_t value);
   private:
-  uint32_t _internal_code() const;
-  void _internal_set_code(uint32_t value);
+  int32_t _internal_code() const;
+  void _internal_set_code(int32_t value);
   public:
 
   // int32 skill_code = 2;
@@ -2725,7 +2725,7 @@ class CPlayerAttack final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::protocol::Position* position_;
-    uint32_t code_;
+    int32_t code_;
     int32_t skill_code_;
     int32_t target_code_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3446,22 +3446,22 @@ inline void Unit::set_hp(uint32_t value) {
   // @@protoc_insertion_point(field_set:protocol.Unit.hp)
 }
 
-// uint32 code = 3;
+// int32 code = 3;
 inline void Unit::clear_code() {
-  _impl_.code_ = 0u;
+  _impl_.code_ = 0;
 }
-inline uint32_t Unit::_internal_code() const {
+inline int32_t Unit::_internal_code() const {
   return _impl_.code_;
 }
-inline uint32_t Unit::code() const {
+inline int32_t Unit::code() const {
   // @@protoc_insertion_point(field_get:protocol.Unit.code)
   return _internal_code();
 }
-inline void Unit::_internal_set_code(uint32_t value) {
+inline void Unit::_internal_set_code(int32_t value) {
   
   _impl_.code_ = value;
 }
-inline void Unit::set_code(uint32_t value) {
+inline void Unit::set_code(int32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.Unit.code)
 }
@@ -3996,22 +3996,22 @@ inline void SInsertplayer::set_allocated_player(::protocol::Player* player) {
 
 // SMove
 
-// uint32 code = 1;
+// int32 code = 1;
 inline void SMove::clear_code() {
-  _impl_.code_ = 0u;
+  _impl_.code_ = 0;
 }
-inline uint32_t SMove::_internal_code() const {
+inline int32_t SMove::_internal_code() const {
   return _impl_.code_;
 }
-inline uint32_t SMove::code() const {
+inline int32_t SMove::code() const {
   // @@protoc_insertion_point(field_get:protocol.SMove.code)
   return _internal_code();
 }
-inline void SMove::_internal_set_code(uint32_t value) {
+inline void SMove::_internal_set_code(int32_t value) {
   
   _impl_.code_ = value;
 }
-inline void SMove::set_code(uint32_t value) {
+inline void SMove::set_code(int32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.SMove.code)
 }
@@ -4150,22 +4150,22 @@ inline void SChat::set_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:protocol.SChat.type)
 }
 
-// uint32 code = 2;
+// int32 code = 2;
 inline void SChat::clear_code() {
-  _impl_.code_ = 0u;
+  _impl_.code_ = 0;
 }
-inline uint32_t SChat::_internal_code() const {
+inline int32_t SChat::_internal_code() const {
   return _impl_.code_;
 }
-inline uint32_t SChat::code() const {
+inline int32_t SChat::code() const {
   // @@protoc_insertion_point(field_get:protocol.SChat.code)
   return _internal_code();
 }
-inline void SChat::_internal_set_code(uint32_t value) {
+inline void SChat::_internal_set_code(int32_t value) {
   
   _impl_.code_ = value;
 }
-inline void SChat::set_code(uint32_t value) {
+inline void SChat::set_code(int32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.SChat.code)
 }
@@ -4318,22 +4318,22 @@ inline void SPlayerData::set_allocated_player(::protocol::Player* player) {
 
 // SClosePlayer
 
-// uint32 code = 1;
+// int32 code = 1;
 inline void SClosePlayer::clear_code() {
-  _impl_.code_ = 0u;
+  _impl_.code_ = 0;
 }
-inline uint32_t SClosePlayer::_internal_code() const {
+inline int32_t SClosePlayer::_internal_code() const {
   return _impl_.code_;
 }
-inline uint32_t SClosePlayer::code() const {
+inline int32_t SClosePlayer::code() const {
   // @@protoc_insertion_point(field_get:protocol.SClosePlayer.code)
   return _internal_code();
 }
-inline void SClosePlayer::_internal_set_code(uint32_t value) {
+inline void SClosePlayer::_internal_set_code(int32_t value) {
   
   _impl_.code_ = value;
 }
-inline void SClosePlayer::set_code(uint32_t value) {
+inline void SClosePlayer::set_code(int32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.SClosePlayer.code)
 }
@@ -4520,22 +4520,22 @@ SUnitStates::unit_state() const {
 
 // Attack
 
-// uint32 code = 1;
+// int32 code = 1;
 inline void Attack::clear_code() {
-  _impl_.code_ = 0u;
+  _impl_.code_ = 0;
 }
-inline uint32_t Attack::_internal_code() const {
+inline int32_t Attack::_internal_code() const {
   return _impl_.code_;
 }
-inline uint32_t Attack::code() const {
+inline int32_t Attack::code() const {
   // @@protoc_insertion_point(field_get:protocol.Attack.code)
   return _internal_code();
 }
-inline void Attack::_internal_set_code(uint32_t value) {
+inline void Attack::_internal_set_code(int32_t value) {
   
   _impl_.code_ = value;
 }
-inline void Attack::set_code(uint32_t value) {
+inline void Attack::set_code(int32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.Attack.code)
 }
@@ -4584,22 +4584,22 @@ inline void Attack::set_is_monster(bool value) {
 
 // CPlayerAttack
 
-// uint32 code = 1;
+// int32 code = 1;
 inline void CPlayerAttack::clear_code() {
-  _impl_.code_ = 0u;
+  _impl_.code_ = 0;
 }
-inline uint32_t CPlayerAttack::_internal_code() const {
+inline int32_t CPlayerAttack::_internal_code() const {
   return _impl_.code_;
 }
-inline uint32_t CPlayerAttack::code() const {
+inline int32_t CPlayerAttack::code() const {
   // @@protoc_insertion_point(field_get:protocol.CPlayerAttack.code)
   return _internal_code();
 }
-inline void CPlayerAttack::_internal_set_code(uint32_t value) {
+inline void CPlayerAttack::_internal_set_code(int32_t value) {
   
   _impl_.code_ = value;
 }
-inline void CPlayerAttack::set_code(uint32_t value) {
+inline void CPlayerAttack::set_code(int32_t value) {
   _internal_set_code(value);
   // @@protoc_insertion_point(field_set:protocol.CPlayerAttack.code)
 }

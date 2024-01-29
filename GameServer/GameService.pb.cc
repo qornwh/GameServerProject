@@ -58,7 +58,7 @@ PROTOBUF_CONSTEXPR Unit::Unit(
   , /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.type_)*/0u
   , /*decltype(_impl_.hp_)*/0u
-  , /*decltype(_impl_.code_)*/0u
+  , /*decltype(_impl_.code_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct UnitDefaultTypeInternal {
   PROTOBUF_CONSTEXPR UnitDefaultTypeInternal()
@@ -126,7 +126,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR SMove::SMove(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.position_)*/nullptr
-  , /*decltype(_impl_.code_)*/0u
+  , /*decltype(_impl_.code_)*/0
   , /*decltype(_impl_.is_monster_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SMoveDefaultTypeInternal {
@@ -142,7 +142,7 @@ PROTOBUF_CONSTEXPR SChat::SChat(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.text_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.type_)*/0u
-  , /*decltype(_impl_.code_)*/0u
+  , /*decltype(_impl_.code_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SChatDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SChatDefaultTypeInternal()
@@ -168,7 +168,7 @@ struct SPlayerDataDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SPlayerDataDefaultTypeInternal _SPlayerData_default_instance_;
 PROTOBUF_CONSTEXPR SClosePlayer::SClosePlayer(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.code_)*/0u
+    /*decltype(_impl_.code_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SClosePlayerDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SClosePlayerDefaultTypeInternal()
@@ -209,7 +209,7 @@ struct SUnitStatesDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SUnitStatesDefaultTypeInternal _SUnitStates_default_instance_;
 PROTOBUF_CONSTEXPR Attack::Attack(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.code_)*/0u
+    /*decltype(_impl_.code_)*/0
   , /*decltype(_impl_.skill_code_)*/0
   , /*decltype(_impl_.is_monster_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -225,7 +225,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR CPlayerAttack::CPlayerAttack(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.position_)*/nullptr
-  , /*decltype(_impl_.code_)*/0u
+  , /*decltype(_impl_.code_)*/0
   , /*decltype(_impl_.skill_code_)*/0
   , /*decltype(_impl_.target_code_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
@@ -483,7 +483,7 @@ const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARI
   "\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\n\n\002hp\030d \001(\005\"8"
   "\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 "
   "\001(\002\022\013\n\003yaw\030\004 \001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001(\r\022\n"
-  "\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\r\022$\n\010position\030\004 \001"
+  "\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\005\022$\n\010position\030\004 \001"
   "(\0132\022.protocol.Position\022\014\n\004name\030\005 \001(\t\"&\n\006"
   "Player\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\"6\n\007"
   "Monster\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\022\r\n"
@@ -491,17 +491,17 @@ const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARI
   "protocol.Player\022\"\n\007monster\030\002 \003(\0132\021.proto"
   "col.Monster\"1\n\rSInsertplayer\022 \n\006player\030\001"
   " \001(\0132\020.protocol.Player\"O\n\005SMove\022\014\n\004code\030"
-  "\001 \001(\r\022$\n\010position\030\002 \001(\0132\022.protocol.Posit"
+  "\001 \001(\005\022$\n\010position\030\002 \001(\0132\022.protocol.Posit"
   "ion\022\022\n\nis_monster\030\003 \001(\010\"1\n\005SChat\022\014\n\004type"
-  "\030\001 \001(\r\022\014\n\004code\030\002 \001(\r\022\014\n\004text\030\005 \001(\t\"/\n\013SP"
+  "\030\001 \001(\r\022\014\n\004code\030\002 \001(\005\022\014\n\004text\030\005 \001(\t\"/\n\013SP"
   "layerData\022 \n\006player\030\001 \001(\0132\020.protocol.Pla"
-  "yer\"\034\n\014SClosePlayer\022\014\n\004code\030\001 \001(\r\"S\n\tUni"
+  "yer\"\034\n\014SClosePlayer\022\014\n\004code\030\001 \001(\005\"S\n\tUni"
   "tState\022\"\n\007monster\030\001 \001(\0132\021.protocol.Monst"
   "er\022\016\n\006demage\030\004 \001(\005\022\022\n\nis_monster\030\n \001(\010\"6"
   "\n\013SUnitStates\022\'\n\nunit_state\030\001 \003(\0132\023.prot"
-  "ocol.UnitState\">\n\006Attack\022\014\n\004code\030\001 \001(\r\022\022"
+  "ocol.UnitState\">\n\006Attack\022\014\n\004code\030\001 \001(\005\022\022"
   "\n\nskill_code\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\"l"
-  "\n\rCPlayerAttack\022\014\n\004code\030\001 \001(\r\022\022\n\nskill_c"
+  "\n\rCPlayerAttack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_c"
   "ode\030\002 \001(\005\022\023\n\013target_code\030\003 \001(\005\022$\n\010positi"
   "on\030\004 \001(\0132\022.protocol.Position\"/\n\013SUnitAtt"
   "ack\022 \n\006attack\030\001 \003(\0132\020.protocol.Attack\":\n"
@@ -1181,7 +1181,7 @@ inline void Unit::SharedCtor(
     , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.type_){0u}
     , decltype(_impl_.hp_){0u}
-    , decltype(_impl_.code_){0u}
+    , decltype(_impl_.code_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
@@ -1248,7 +1248,7 @@ const char* Unit::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         } else
           goto handle_unusual;
         continue;
-      // uint32 code = 3;
+      // int32 code = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
@@ -1315,10 +1315,10 @@ uint8_t* Unit::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_hp(), target);
   }
 
-  // uint32 code = 3;
+  // int32 code = 3;
   if (this->_internal_code() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_code(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_code(), target);
   }
 
   // .protocol.Position position = 4;
@@ -1378,9 +1378,9 @@ size_t Unit::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_hp());
   }
 
-  // uint32 code = 3;
+  // int32 code = 3;
   if (this->_internal_code() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_code());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_code());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -2325,7 +2325,7 @@ inline void SMove::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.position_){nullptr}
-    , decltype(_impl_.code_){0u}
+    , decltype(_impl_.code_){0}
     , decltype(_impl_.is_monster_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -2371,7 +2371,7 @@ const char* SMove::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint32 code = 1;
+      // int32 code = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
@@ -2424,10 +2424,10 @@ uint8_t* SMove::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_code(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_code(), target);
   }
 
   // .protocol.Position position = 2;
@@ -2466,9 +2466,9 @@ size_t SMove::ByteSizeLong() const {
         *_impl_.position_);
   }
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_code());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_code());
   }
 
   // bool is_monster = 3;
@@ -2578,7 +2578,7 @@ inline void SChat::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.text_){}
     , decltype(_impl_.type_){0u}
-    , decltype(_impl_.code_){0u}
+    , decltype(_impl_.code_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.text_.InitDefault();
@@ -2632,7 +2632,7 @@ const char* SChat::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         } else
           goto handle_unusual;
         continue;
-      // uint32 code = 2;
+      // int32 code = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
@@ -2685,10 +2685,10 @@ uint8_t* SChat::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_type(), target);
   }
 
-  // uint32 code = 2;
+  // int32 code = 2;
   if (this->_internal_code() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_code(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_code(), target);
   }
 
   // string text = 5;
@@ -2729,9 +2729,9 @@ size_t SChat::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
   }
 
-  // uint32 code = 2;
+  // int32 code = 2;
   if (this->_internal_code() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_code());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_code());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3020,7 +3020,7 @@ inline void SClosePlayer::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.code_){0u}
+      decltype(_impl_.code_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -3048,7 +3048,7 @@ void SClosePlayer::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.code_ = 0u;
+  _impl_.code_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3058,7 +3058,7 @@ const char* SClosePlayer::_InternalParse(const char* ptr, ::_pbi::ParseContext* 
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint32 code = 1;
+      // int32 code = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
@@ -3095,10 +3095,10 @@ uint8_t* SClosePlayer::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_code(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_code(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3117,9 +3117,9 @@ size_t SClosePlayer::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_code());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_code());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3639,7 +3639,7 @@ inline void Attack::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.code_){0u}
+      decltype(_impl_.code_){0}
     , decltype(_impl_.skill_code_){0}
     , decltype(_impl_.is_monster_){false}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -3681,7 +3681,7 @@ const char* Attack::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint32 code = 1;
+      // int32 code = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
@@ -3734,10 +3734,10 @@ uint8_t* Attack::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_code(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_code(), target);
   }
 
   // int32 skill_code = 2;
@@ -3768,9 +3768,9 @@ size_t Attack::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_code());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_code());
   }
 
   // int32 skill_code = 2;
@@ -3884,7 +3884,7 @@ inline void CPlayerAttack::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.position_){nullptr}
-    , decltype(_impl_.code_){0u}
+    , decltype(_impl_.code_){0}
     , decltype(_impl_.skill_code_){0}
     , decltype(_impl_.target_code_){0}
     , /*decltype(_impl_._cached_size_)*/{}
@@ -3931,7 +3931,7 @@ const char* CPlayerAttack::_InternalParse(const char* ptr, ::_pbi::ParseContext*
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // uint32 code = 1;
+      // int32 code = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
@@ -3992,10 +3992,10 @@ uint8_t* CPlayerAttack::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_code(), target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_code(), target);
   }
 
   // int32 skill_code = 2;
@@ -4040,9 +4040,9 @@ size_t CPlayerAttack::ByteSizeLong() const {
         *_impl_.position_);
   }
 
-  // uint32 code = 1;
+  // int32 code = 1;
   if (this->_internal_code() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_code());
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_code());
   }
 
   // int32 skill_code = 2;
