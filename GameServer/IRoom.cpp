@@ -289,6 +289,7 @@ void GameRoom::Task()
                         monster->set_state(info->GetObjectState());
                         protocol::Unit* unit = new protocol::Unit();
                         unit->set_code(info->GetCode());
+                        unit->set_hp(info->GetHp());
                         protocol::Position* position = new protocol::Position();
                         position->set_x(info->GetPosition().X);
                         position->set_y(info->GetPosition().Y);
