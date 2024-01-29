@@ -234,7 +234,16 @@ void GameRoom::Task()
                         protocol::Position* position = new protocol::Position();
                         if (info->GetTarget() >= 0 && _playerMap.find(info->GetTarget()) != _playerMap.end())
                         {
-                            info->MoveTarget(_playerMap[info->GetTarget()]->GetPosition());
+                            FVector& pos = _playerMap[info->GetTarget()]->GetPosition();
+                                
+                            if (_gameMapInfo->GetMonsterMapInfo()->InRect(pos.X, pos.Z))
+                            {
+                                info->MoveTarget(pos);
+                            }
+                            else
+                            {
+                                info->Move();
+                            }
                         }
                         else
                         {
@@ -348,7 +357,7 @@ void GameRoom::CreateMapInfo(int32 type)
         // 일반 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(22, 15, 0, 0, MapType::MONSTER);
-        _monsterCount = 1;
+        _monsterCount = 10;
     }
     else if (type == 1)
     {

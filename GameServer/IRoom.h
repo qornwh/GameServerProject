@@ -141,7 +141,7 @@ private:
     int32 _bosMonsterCount = -1;
     queue<GamePlayerInfoRef> attackQueue;
 
-    boost::shared_ptr<class GameMapInfo> _gameMapInfo;
+    GameMapInfoRef _gameMapInfo;
     unordered_map<int32, GameMosterInfoRef> _monsterMap;
     unordered_map<int32, GamePlayerInfoRef> _playerMap;
     Atomic<bool> _isTask{false};
