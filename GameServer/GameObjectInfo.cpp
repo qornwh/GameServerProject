@@ -137,15 +137,34 @@ void GameMosterInfo::MoveTarget(FVector targetPosition)
 
 bool GameMosterInfo::CheckAttackTarget(FVector targetPosition)
 {
-    // 스킬 범위 지정
-    float radius = 2.f;
-    float dist = sqrt(pow(_position.X - targetPosition.X, 2) + pow(_position.Z - targetPosition.Z, 2));
+    // 임시로 하드코딩 해둠 나중에 함수화 해야됨 !!!
+    int32 skillType = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._type;
+    bool isTargeting = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._target;
 
-    if (radius >= dist)
+    if (isTargeting)
     {
-        return true;
-    }
+        if (skillType == Skill::RECT)
+        {
+            int32 rangeX = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._width;
+            int32 rangeZ = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._height;
 
+            float targetX = targetPosition.X - _position.X;
+            float targetZ = targetPosition.Z - _position.Z;
+
+            targetX = targetX * GameUtils::MathUtils::GetSin(_position.Yaw);
+            targetZ = targetZ * GameUtils::MathUtils::GetCos(_position.Yaw);
+
+            if (0 <= targetX && targetX < rangeX)
+            {
+                if (0 <= targetZ && targetZ < rangeZ)
+                {
+                    // 공격 성공
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
     return false;
 }
 
@@ -284,11 +303,12 @@ bool GamePlayerInfo::AttackRect(FVector position, GameMosterInfoRef target)
     int32 rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width;
     int32 rangeZ = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
 
-    float targetX = min(abs(_position.X - position.X), abs(_position.X - (position.X + target->GetRangeX())));
-    float targetZ = min(abs(_position.Z - position.Z), abs(_position.Z - (position.Z + target->GetRangeZ())));
+    float targetX = _position.X - (position.X + target->GetRangeX());
+    float targetZ = _position.Z - (position.Z + target->GetRangeZ());
 
-    // cout << "attackx : " << targetX << " playerx : " << _position.X << " monsterx : " << position.X << endl;
-    // cout << "attackz : " << targetZ << " playerx : " << _position.Z << " monsterx : " << position.Z << endl;
+    targetX = targetX * GameUtils::MathUtils::GetSin(_position.Yaw);
+    targetZ = targetZ * GameUtils::MathUtils::GetCos(_position.Yaw);
+
     if (targetX < rangeX)
     {
         if (targetZ < rangeZ)

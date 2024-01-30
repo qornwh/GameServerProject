@@ -175,13 +175,11 @@ void GameRoom::Task()
                 info->IdlePosition();
                 if (info->GetHp() > 0)
                 {
-                    // 메시지 작성필요
                     info->SetObjecteState(ObjectState::HITED);
                     info->SetTarget(attackInfo->GetCode());
                 }
                 else
                 {
-                    // 몬스터 사망처리 필요.
                     info->SetObjecteState(ObjectState::DIE);
                 }
             }
