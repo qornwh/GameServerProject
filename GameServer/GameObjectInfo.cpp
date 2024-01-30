@@ -32,11 +32,17 @@ void GameObjectInfo::SetName(const string& name)
     _name = name;
 }
 
-void GameObjectInfo::TakeDemage(int32 Demage)
+void GameObjectInfo::TakeDamage(int32 Damage)
 {
-    _hp -= Demage;
+    _hp -= Damage;
     if (_hp < 0)
         _hp = 0;
+    _damage += Damage;
+}
+
+void GameObjectInfo::ResetDamage()
+{
+    _damage = 0;
 }
 
 void GameObjectInfo::SetObjecteState(ObjectState state)

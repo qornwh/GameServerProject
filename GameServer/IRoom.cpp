@@ -170,7 +170,7 @@ void GameRoom::Task()
             if (info != nullptr)
             {
                 info->SetTarget(attackInfo->GetCode());
-                info->TakeDemage(10); // 공격력 설정 필요
+                info->TakeDamage(10); // 공격력 설정 필요
                 cout << "공격 성공 : " << info->GetCode() << endl;
                 info->IdlePosition();
                 if (info->GetHp() > 0)
@@ -282,7 +282,8 @@ void GameRoom::Task()
                         // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
-                        childPkt->set_demage(10);
+                        childPkt->set_demage(info->GetDamage());
+                        info->ResetDamage();
                         protocol::Monster* monster = new protocol::Monster();
                         monster->set_state(info->GetObjectState());
                         protocol::Unit* unit = new protocol::Unit();
@@ -307,7 +308,8 @@ void GameRoom::Task()
                     {
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
-                        childPkt->set_demage(10);
+                        childPkt->set_demage(info->GetDamage());
+                        info->ResetDamage();
                         protocol::Monster* monster = new protocol::Monster();
                         protocol::Unit* unit = new protocol::Unit();
                         monster->set_state(ObjectState::DIE);

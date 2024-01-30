@@ -61,7 +61,9 @@ public:
     FVector& GetPosition() { return _position; }
 
     void SetName(const string& name);
-    void TakeDemage(int32 Demage);
+    void TakeDamage(int32 Damage);
+    void ResetDamage();
+    int32 GetDamage() { return _damage; };
 
     virtual void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
@@ -73,6 +75,7 @@ protected:
     std::string _name;
     int32 _uuid;
     int32 _hp;
+    int32 _damage;
     int32 _type;
 
     FVector _position{0, 0, 0, 0};
