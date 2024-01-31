@@ -67,6 +67,7 @@ void GameMosterInfo::SetObjecteState(ObjectState state)
     switch (_state)
     {
     case ObjectState::IDLE:
+        _IdleCounter.ResetTic();
         break;
     case ObjectState::DIE:
         _DieCounter.ResetTic();
