@@ -54,18 +54,28 @@ public:
                 {
                     int32 width = GameUtils::JsonParser::Parser("width", skill).as_int64();
                     int32 height = GameUtils::JsonParser::Parser("height", skill).as_int64();
+                    int32 damage = GameUtils::JsonParser::Parser("damage", skill).as_int64();
                     if (!isMonster)
-                        GSkill->GetPlayerSkill()[type].AddSkill(skillCode, isRectType, target, width, height);
+                        GSkill->GetPlayerSkill()[type].AddSkill(skillCode, isRectType, target, width, height, damage);
                     else
-                        GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, width, height);
+                        GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, width, height, damage);
                 }
-                else
+                else if (isRectType == 1)
                 {
                     int32 radius = GameUtils::JsonParser::Parser("radius", skill).as_int64();
+                    int32 damage = GameUtils::JsonParser::Parser("damage", skill).as_int64();
                     if (!isMonster)
-                        GSkill->GetPlayerSkill()[type].AddSkill(skillCode, isRectType, target, radius);
+                        GSkill->GetPlayerSkill()[type].AddSkill(skillCode, isRectType, target, radius, damage);
                     else
-                        GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, radius);
+                        GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, radius, damage);
+                }
+                else if (isRectType == 2)
+                {
+                    int32 heal = GameUtils::JsonParser::Parser("heal", skill).as_int64();
+                    if (!isMonster)
+                        GSkill->GetPlayerSkill()[type].AddSkill(skillCode, isRectType, target, heal);
+                    else
+                        GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, heal);
                 }
             }
         }

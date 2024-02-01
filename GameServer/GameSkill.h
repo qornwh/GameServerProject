@@ -7,11 +7,13 @@ public:
     enum SkillType
     {
         RECT = 0,
-        CIRCLE = 1
+        CIRCLE = 1,
+        HEAL = 2
     };
 
-    Skill(int32 type, bool target, int32 width, int32 heigth);
-    Skill(int32 type, bool target, int32 radius);
+    Skill(int32 type, bool target, int32 width, int32 height, int32 damage);
+    Skill(int32 type, bool target, int32 radius, int32 damage);
+    Skill(int32 type, bool target, int32 heal);
     Skill();
 
     SkillType _type;
@@ -19,6 +21,8 @@ public:
     int32 _width;
     int32 _height;
     int32 _radius;
+    int32 _heal;
+    int32 _damage;
 };
 
 class UnitSkill
@@ -39,8 +43,9 @@ public:
     UnitSkill(int32 type);
     UnitSkill();
 
-    void AddSkill(int32 skillCode, int32 type, bool target, int32 width, int32 height);
-    void AddSkill(int32 skillCode, int32 type, bool target, int32 radius);
+    void AddSkill(int32 skillCode, int32 type, bool target, int32 width, int32 height, int32 damage);
+    void AddSkill(int32 skillCode, int32 type, bool target, int32 radius, int32 damage);
+    void AddSkill(int32 skillCode, int32 type, bool target, int32 heal);
     void ClearSkill();
 
     unordered_map<int32, Skill>& GetSkillMap() { return _skillMap; }

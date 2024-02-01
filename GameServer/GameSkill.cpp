@@ -1,18 +1,27 @@
 ﻿#include "GameSkill.h"
 
-Skill::Skill(int32 type, bool target, int32 width, int32 heigth) : _type(static_cast<SkillType>(type)), _target(target),
-                                                                   _width(width),
-                                                                   _height(heigth), _radius(-1)
+Skill::Skill(int32 type, bool target, int32 width, int32 height, int32 damage) : _type(static_cast<SkillType>(type)),
+    _target(target),
+    _width(width),
+    _height(height), _radius(-1), _heal(-1), _damage(damage)
 {
 }
 
-Skill::Skill(int32 type, bool target, int32 radius) : _type(static_cast<SkillType>(type)), _target(target), _width(-1),
-                                                      _height(-1),
-                                                      _radius(radius)
+Skill::Skill(int32 type, bool target, int32 radius, int32 damage) : _type(static_cast<SkillType>(type)),
+                                                                    _target(target), _width(-1),
+                                                                    _height(-1), _heal(-1),
+                                                                    _radius(radius), _damage(damage)
 {
 }
 
-Skill::Skill() : _type(static_cast<SkillType>(0)), _target(false), _width(-1), _height(-1), _radius(-1)
+Skill::Skill(int32 type, bool target, int32 heal) : _type(static_cast<SkillType>(type)), _target(target), _heal(heal),
+                                                    _width(-1),
+                                                    _height(-1), _radius(-1)
+{
+}
+
+Skill::Skill() : _type(static_cast<SkillType>(0)), _target(false), _width(-1), _height(-1), _radius(-1), _heal(-1),
+                 _damage(-1)
 {
     cout << "Skill !!!!" << endl;
 }
@@ -26,14 +35,19 @@ UnitSkill::UnitSkill() : _type(-1)
     cout << "UnitSkill !!!!" << endl;
 }
 
-void UnitSkill::AddSkill(int32 skillCode, int32 type, bool target, int32 width, int32 height)
+void UnitSkill::AddSkill(int32 skillCode, int32 type, bool target, int32 width, int32 height, int32 damage)
 {
-    _skillMap.emplace(skillCode, Skill(type, target, width, height));
+    _skillMap.emplace(skillCode, Skill(type, target, width, height, damage));
 }
 
-void UnitSkill::AddSkill(int32 skillCode, int32 type, bool target, int32 radius)
+void UnitSkill::AddSkill(int32 skillCode, int32 type, bool target, int32 radius, int32 damage)
 {
-    _skillMap.emplace(skillCode, Skill(type, target, radius));
+    _skillMap.emplace(skillCode, Skill(type, target, radius, damage));
+}
+
+void UnitSkill::AddSkill(int32 skillCode, int32 type, bool target, int32 heal)
+{
+    _skillMap.emplace(skillCode, Skill(type, target, heal));
 }
 
 void UnitSkill::ClearSkill()
