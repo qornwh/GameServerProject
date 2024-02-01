@@ -21,10 +21,10 @@
             "damage": 80
           },
           {
-            "code": 5,
+            "code": 6,
             "target": false,
             "type": 2,
-            "heal": 80
+            "heal": 60
           }
         ]
       },
@@ -46,10 +46,10 @@
             "damage": 80
           },
           {
-            "code": 5,
+            "code": 6,
             "target": false,
             "type": 2,
-            "heal": 80
+            "heal": 60
           }
         ]
       }
