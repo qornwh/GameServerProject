@@ -149,7 +149,14 @@ void GameRoom::Task()
         GameMosterInfoRef info = GetMonster(targetCode);
         vector<int32> attackList;
 
-        if (targetCode < -1)
+        // 힐 스킬 임시처리
+        if (skillCode == ObjectState::SKILL2)
+        {
+            
+            continue;
+        }
+
+        if (targetCode < 0)
         {
             // 논타겟
             attackInfo->Attack(nullptr, attackList);
@@ -169,9 +176,8 @@ void GameRoom::Task()
             GameMosterInfoRef info = GetMonster(monsterCode);
             if (info != nullptr)
             {
-                info->SetTarget(attackInfo->GetCode());
-                info->TakeDamage(10); // 공격력 설정 필요
                 cout << "공격 성공 : " << info->GetCode() << endl;
+                info->SetTarget(attackInfo->GetCode());
                 info->IdlePosition();
                 if (info->GetHp() > 0)
                 {
@@ -191,7 +197,6 @@ void GameRoom::Task()
         for (auto& it : _monsterMap)
         {
             GameMosterInfoRef info = it.second;
-
             switch (info->GetObjectState())
             {
             case ObjectState::IDLE:
@@ -343,11 +348,13 @@ void GameRoom::Task()
     // - 일단 완
     // 케이스 2
     // 플레이어의 공격명령(이때 현재 좌표도 함께 받음)을 받고 현재몬스터들의 좌표에 공격범위에 있으면 몬스터 Hit처리후 클라에게 메시지 전달
-    // - 처리중
+    // - 일단 완
     // 케이스 3
     // 공격받은 몬스터들은 플레이어 쪽으로 이동 (방향전환 함께)
+    // - 일단 완
     // 케이스 4
-    // 공격받은 몬스터들의 공격범위에 플레이어가 있으면 공격 및 데미지 계산 플레이어 Hit처리후 클라에게 공격 데미지 메시지 전달. 
+    // 공격받은 몬스터들의 공격범위에 플레이어가 있으면 공격 및 데미지 계산 플레이어 Hit처리후 클라에게 공격 데미지 메시지 전달.
+    // - 하는중
 }
 
 void GameRoom::CreateMapInfo(int32 type)

@@ -20,11 +20,12 @@ void GameObjectInfo::SetPosition(FVector& position)
     _position.Z = position.Z;
 }
 
-void GameObjectInfo::SetPosition(float X, float Y, float Z)
+void GameObjectInfo::SetPosition(float X, float Y, float Z, float Yaw)
 {
     _position.X = X;
     _position.Y = Y;
     _position.Z = Z;
+    _position.Yaw = Yaw;
 }
 
 void GameObjectInfo::SetName(const string& name)
@@ -40,9 +41,22 @@ void GameObjectInfo::TakeDamage(int32 Damage)
     _damage += Damage;
 }
 
+void GameObjectInfo::TakeHeal(int32 heal)
+{
+    _hp += heal;
+    if (_hp > 100)
+        _hp = 100;
+    _heal += heal;
+}
+
 void GameObjectInfo::ResetDamage()
 {
     _damage = 0;
+}
+
+void GameObjectInfo::ResetHeal()
+{
+    _heal = 0;
 }
 
 void GameObjectInfo::SetObjecteState(ObjectState state)
@@ -145,30 +159,30 @@ void GameMosterInfo::MoveTarget(FVector targetPosition)
 bool GameMosterInfo::CheckAttackTarget(FVector targetPosition)
 {
     // 임시로 하드코딩 해둠 나중에 함수화 해야됨 !!!
-    int32 skillType = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._type;
-    bool isTargeting = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._target;
+    unordered_map<int32, Skill>& skillMap = GSkill->GetMonsterSkill()[GetType()].GetSkillMap();
+
+    int32 skillType = skillMap[ObjectState::ATTACK]._type;
+    bool isTargeting = skillMap[ObjectState::ATTACK]._target;
 
     if (isTargeting)
     {
-        if (skillType == Skill::RECT)
+        if (skillType == Skill::CIRCLE)
         {
-            int32 rangeX = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._width;
-            int32 rangeZ = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._height;
+            int32 radius = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._radius;
 
-            float targetX = targetPosition.X - _position.X;
-            float targetZ = targetPosition.Z - _position.Z;
+            float targetX = abs(_position.X - targetPosition.X);
+            float targetZ = abs(_position.Z - targetPosition.Z);
 
-            targetX = targetX * GameUtils::MathUtils::GetSin(_position.Yaw);
-            targetZ = targetZ * GameUtils::MathUtils::GetCos(_position.Yaw);
+            float targetRadius = sqrtf(powf(targetX, 2) + powf(targetZ, 2));
 
-            if (0 <= targetX && targetX < rangeX)
-            {
-                if (0 <= targetZ && targetZ < rangeZ)
-                {
-                    // 공격 성공
-                    return true;
-                }
-            }
+            if (targetRadius < radius)
+                // 공격 성공
+                return true;
+
+            if (targetRadius < radius)
+                // 공격 성공
+                return true;
+
             return false;
         }
     }
@@ -262,43 +276,53 @@ void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
     if (GetGameSession() == nullptr)
         return;
 
-    int32 skillType = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._type;
+    Skill& skill = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()];
+    int32 skillType = skill._type;
+
+    if (skillType == Skill::HEAL)
+    {
+        return;
+    }
+
     if (target != nullptr)
     {
         // 타겟팅
         if (skillType == Skill::RECT)
         {
-            if (AttackRect(target->GetPrePosition(), target))
+            if (AttackRect(target->GetPosition(), target))
             {
                 attackList.push_back(target->GetCode());
             }
         }
         else if (skillType == Skill::CIRCLE)
         {
-            if (AttackCircle(target->GetPrePosition(), target))
+            if (AttackCircle(target->GetPosition(), target))
             {
                 attackList.push_back(target->GetCode());
             }
         }
+        target->TakeDamage(skill._damage);
     }
     else
     {
+        // 논타겟
         GameRoomRef gameRoom = GRoomManger->getRoom(GetGameSession()->GetRoomId());
         for (auto& it : gameRoom->GetMonsterMap())
         {
-            // 논타겟
             if (skillType == Skill::RECT)
             {
-                if (AttackRect(it.second->GetPrePosition(), it.second))
+                if (AttackRect(it.second->GetPosition(), it.second))
                 {
                     attackList.push_back(it.second->GetCode());
+                    it.second->TakeDamage(skill._damage);
                 }
             }
             else if (skillType == Skill::CIRCLE)
             {
-                if (AttackCircle(it.second->GetPrePosition(), it.second))
+                if (AttackCircle(it.second->GetPosition(), it.second))
                 {
                     attackList.push_back(it.second->GetCode());
+                    it.second->TakeDamage(skill._damage);
                 }
             }
         }
@@ -307,18 +331,19 @@ void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
 
 bool GamePlayerInfo::AttackRect(FVector position, GameMosterInfoRef target)
 {
-    int32 rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width;
-    int32 rangeZ = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
+    int32 rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
+    float rangeZ = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width / 2.f;
 
-    float targetX = _position.X - (position.X + target->GetRangeX());
-    float targetZ = _position.Z - (position.Z + target->GetRangeZ());
+    float targetX = _position.X - (position.X);
+    float targetZ = _position.Z - (position.Z);
+    float radius = GameUtils::MathUtils::Magnitude(targetX, targetZ);
 
-    targetX = targetX * GameUtils::MathUtils::GetSin(_position.Yaw);
-    targetZ = targetZ * GameUtils::MathUtils::GetCos(_position.Yaw);
+    targetX = abs(radius * GameUtils::MathUtils::GetSin((-1) * _position.Yaw));
+    targetZ = radius * GameUtils::MathUtils::GetCos((-1) * _position.Yaw);
 
     if (targetX < rangeX)
     {
-        if (targetZ < rangeZ)
+        if ((-1.f * rangeZ) < targetZ && targetZ < rangeZ)
         {
             // 공격 성공
             return true;
@@ -332,8 +357,8 @@ bool GamePlayerInfo::AttackCircle(FVector position, GameMosterInfoRef target)
 {
     int32 radius = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._radius;
 
-    float targetX = min(abs(_position.X - position.X), abs(_position.X - (position.X + target->GetRangeX())));
-    float targetZ = min(abs(_position.Z - position.Z), abs(_position.Z - (position.Z + target->GetRangeZ())));
+    float targetX = abs(_position.X - position.X);
+    float targetZ = abs(_position.Z - position.Z);
 
     float targetRadius = sqrtf(powf(targetX, 2) + powf(targetZ, 2));
 

@@ -52,7 +52,7 @@ public:
     ~GameObjectInfo();
 
     void SetPosition(FVector& position);
-    void SetPosition(float X, float Y, float Z);
+    void SetPosition(float X, float Y, float Z, float Yaw);
 
     std::string& GetName() { return _name; }
     int32 GetCode() { return _uuid; }
@@ -62,8 +62,10 @@ public:
 
     void SetName(const string& name);
     void TakeDamage(int32 Damage);
+    void TakeHeal(int32 heal);
     void ResetDamage();
-    int32 GetDamage() { return _damage; };
+    void ResetHeal();
+    int32 GetDamage() { return _damage; }
 
     virtual void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
@@ -76,6 +78,7 @@ protected:
     int32 _uuid;
     int32 _hp;
     int32 _damage;
+    int32 _heal;
     int32 _type;
 
     FVector _position{0, 0, 0, 0};

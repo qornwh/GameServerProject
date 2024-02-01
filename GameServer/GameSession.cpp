@@ -97,7 +97,7 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
         auto& position = pkt.position();
         // cout << position.x() << " : " << position.y() << " : " << position.z() << endl;
 
-        GetPlayer()->SetPosition(position.x(), position.y(), position.z());
+        GetPlayer()->SetPosition(position.x(), position.y(), position.z(), position.yaw());
         pkt.set_code(_sessionId);
         protocol::Position* playerPosition = new protocol::Position;
         playerPosition->set_x(position.x());
@@ -213,7 +213,7 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
             cout << "targetCode : " << TargetCode << " skillCode : " << SkillCode << endl;
             
             auto& position = pkt.position();
-            GetPlayer()->SetPosition(position.x(), position.y(), position.z());
+            GetPlayer()->SetPosition(position.x(), position.y(), position.z(), position.yaw());
             GetPlayer()->SetObjecteState(static_cast<ObjectState>(SkillCode));
             GetPlayer()->SetTarget(TargetCode);
             GRoomManger->getRoom(GetRoomId())->AttackSession(static_pointer_cast<GameSession>(shared_from_this()));
