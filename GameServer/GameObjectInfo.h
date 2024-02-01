@@ -66,6 +66,7 @@ public:
     void ResetDamage();
     void ResetHeal();
     int32 GetDamage() { return _damage; }
+    int32 GetHeal() { return _heal; }
 
     virtual void SetObjecteState(ObjectState state);
     ObjectState GetObjectState() { return _state; }
@@ -155,6 +156,7 @@ public:
     ~GamePlayerInfo();
 
     void Attack(GameMosterInfoRef target, vector<int32>& attackList);
+    void Healing();
     bool AttackRect(FVector position, GameMosterInfoRef target);
     bool AttackCircle(FVector position, GameMosterInfoRef target);
 

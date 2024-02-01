@@ -279,11 +279,6 @@ void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
     Skill& skill = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()];
     int32 skillType = skill._type;
 
-    if (skillType == Skill::HEAL)
-    {
-        return;
-    }
-
     if (target != nullptr)
     {
         // 타겟팅
@@ -326,6 +321,18 @@ void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
                 }
             }
         }
+    }
+}
+
+void GamePlayerInfo::Healing()
+{
+    Skill& skill = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()];
+    int32 skillType = skill._type;
+
+    if (Skill::HEAL == skillType)
+    {
+        int32 heal = skill._heal;
+        TakeHeal(heal);
     }
 }
 

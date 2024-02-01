@@ -98,6 +98,7 @@ public:
     void EnterSession(GameSessionRef session) override;
     void OutSession(GameSessionRef session) override;
     void AttackSession(GameSessionRef session);
+    void BuffSession(GameSessionRef session);
 
     void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
     {

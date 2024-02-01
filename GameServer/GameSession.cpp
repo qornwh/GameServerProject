@@ -216,16 +216,27 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
             GetPlayer()->SetPosition(position.x(), position.y(), position.z(), position.yaw());
             GetPlayer()->SetObjecteState(static_cast<ObjectState>(SkillCode));
             GetPlayer()->SetTarget(TargetCode);
-            GRoomManger->getRoom(GetRoomId())->AttackSession(static_pointer_cast<GameSession>(shared_from_this()));
+            
+            if (ObjectState::SKILL2 == SkillCode)
+            {
+                // 힐, 버프 등.
+                GRoomManger->getRoom(GetRoomId())->BuffSession(static_pointer_cast<GameSession>(shared_from_this()));
+            }
+            else
+            {
+                // 공격
+                GRoomManger->getRoom(GetRoomId())->AttackSession(static_pointer_cast<GameSession>(shared_from_this()));
 
-            protocol::SUnitAttack sendPkt;
-            protocol::Attack* attackPkt = sendPkt.add_attack();
-            attackPkt->set_code(GetPlayer()->GetCode());
-            attackPkt->set_is_monster(false);
-            attackPkt->set_skill_code(SkillCode);
+                protocol::SUnitAttack sendPkt;
+                protocol::Attack* attackPkt = sendPkt.add_attack();
+                attackPkt->set_code(GetPlayer()->GetCode());
+                attackPkt->set_is_monster(false);
+                attackPkt->set_skill_code(SkillCode);
 
-            SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_UNITATTACK);
-            GRoomManger->getRoom(GetRoomId())->BroadCastAnother(sendBuffer, GetPlayer()->GetCode());
+                SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_UNITATTACK);
+                GRoomManger->getRoom(GetRoomId())->BroadCastAnother(sendBuffer, GetPlayer()->GetCode());
+            }
+
         }
     }
 }

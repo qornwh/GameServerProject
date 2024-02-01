@@ -104,6 +104,23 @@ void GameRoom::AttackSession(GameSessionRef session)
     }));
 }
 
+void GameRoom::BuffSession(GameSessionRef session)
+{
+    GamePlayerInfoRef info = session->GetPlayer();
+
+    info->Healing();
+
+    protocol::SUnitBuff sendPkt;
+    protocol::Buff* buff = sendPkt.add_buff();
+    buff->set_code(info->GetCode());
+    buff->set_heal(info->GetHeal());
+    buff->set_hp(info->GetHp());
+    buff->set_skill_code(info->GetObjectState());
+    buff->set_is_monster(false);
+    SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_UNITBUFF);
+    BroadCast(sendBuffer);
+}
+
 void GameRoom::StartGameRoom()
 {
     cout << "StartGameRoom !!!" << endl;
@@ -148,13 +165,6 @@ void GameRoom::Task()
         int32 targetCode = attackInfo->GetTarget();
         GameMosterInfoRef info = GetMonster(targetCode);
         vector<int32> attackList;
-
-        // 힐 스킬 임시처리
-        if (skillCode == ObjectState::SKILL2)
-        {
-            
-            continue;
-        }
 
         if (targetCode < 0)
         {
