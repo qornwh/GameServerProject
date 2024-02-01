@@ -117,6 +117,7 @@ void GameRoom::BuffSession(GameSessionRef session)
     buff->set_hp(info->GetHp());
     buff->set_skill_code(info->GetObjectState());
     buff->set_is_monster(false);
+    info->ResetHeal();
     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_UNITBUFF);
     BroadCast(sendBuffer);
 }
