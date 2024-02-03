@@ -311,8 +311,23 @@ struct SUnitDemageDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SUnitDemageDefaultTypeInternal _SUnitDemage_default_instance_;
+PROTOBUF_CONSTEXPR SRoomQuest::SRoomQuest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.is_clear_)*/false
+  , /*decltype(_impl_.kill_count_)*/0
+  , /*decltype(_impl_.sum_kill_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct SRoomQuestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SRoomQuestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SRoomQuestDefaultTypeInternal() {}
+  union {
+    SRoomQuest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SRoomQuestDefaultTypeInternal _SRoomQuest_default_instance_;
 }  // namespace protocol
-static ::_pb::Metadata file_level_metadata_GameService_2eproto[20];
+static ::_pb::Metadata file_level_metadata_GameService_2eproto[21];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_GameService_2eproto[1];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_GameService_2eproto = nullptr;
 
@@ -487,6 +502,15 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::SUnitDemage, _impl_.demage_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::protocol::SRoomQuest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::protocol::SRoomQuest, _impl_.is_clear_),
+  PROTOBUF_FIELD_OFFSET(::protocol::SRoomQuest, _impl_.kill_count_),
+  PROTOBUF_FIELD_OFFSET(::protocol::SRoomQuest, _impl_.sum_kill_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::protocol::Login)},
@@ -509,6 +533,7 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 147, -1, -1, sizeof(::protocol::SUnitBuff)},
   { 154, -1, -1, sizeof(::protocol::Demage)},
   { 163, -1, -1, sizeof(::protocol::SUnitDemage)},
+  { 170, -1, -1, sizeof(::protocol::SRoomQuest)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -532,6 +557,7 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::protocol::_SUnitBuff_default_instance_._instance,
   &::protocol::_Demage_default_instance_._instance,
   &::protocol::_SUnitDemage_default_instance_._instance,
+  &::protocol::_SRoomQuest_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -568,18 +594,20 @@ const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARI
   "\0132\016.protocol.Buff\":\n\006Demage\022\014\n\004code\030\001 \001("
   "\005\022\016\n\006demage\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\"/\n"
   "\013SUnitDemage\022 \n\006demage\030\001 \001(\0132\020.protocol."
-  "Demage*\317\001\n\013MessageCode\022\t\n\005LOGIN\020\000\022\n\n\006S_L"
-  "OAD\020\001\022\022\n\016S_INSERTPLAYER\020\002\022\n\n\006S_MOVE\020\003\022\n\n"
-  "\006S_CHAT\020\004\022\020\n\014S_PLAYERDATA\020\005\022\021\n\rS_CLOSEPL"
-  "AYER\020\006\022\020\n\014S_UNITSTATES\020\007\022\022\n\016C_PLAYERATTA"
-  "CK\020\010\022\020\n\014S_UNITATTACK\020\t\022\020\n\014S_UNITDEMAGE\020\n"
-  "\022\016\n\nS_UNITBUFF\020\013b\006proto3"
+  "Demage\"D\n\nSRoomQuest\022\020\n\010is_clear\030\001 \001(\010\022\022"
+  "\n\nkill_count\030\002 \001(\005\022\020\n\010sum_kill\030\003 \001(\005*\340\001\n"
+  "\013MessageCode\022\t\n\005LOGIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S"
+  "_INSERTPLAYER\020\002\022\n\n\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022"
+  "\020\n\014S_PLAYERDATA\020\005\022\021\n\rS_CLOSEPLAYER\020\006\022\020\n\014"
+  "S_UNITSTATES\020\007\022\022\n\016C_PLAYERATTACK\020\010\022\020\n\014S_"
+  "UNITATTACK\020\t\022\020\n\014S_UNITDEMAGE\020\n\022\016\n\nS_UNIT"
+  "BUFF\020\013\022\017\n\013S_ROOMQUEST\020\014b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GameService_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GameService_2eproto = {
-    false, false, 1544, descriptor_table_protodef_GameService_2eproto,
+    false, false, 1631, descriptor_table_protodef_GameService_2eproto,
     "GameService.proto",
-    &descriptor_table_GameService_2eproto_once, nullptr, 0, 20,
+    &descriptor_table_GameService_2eproto_once, nullptr, 0, 21,
     schemas, file_default_instances, TableStruct_GameService_2eproto::offsets,
     file_level_metadata_GameService_2eproto, file_level_enum_descriptors_GameService_2eproto,
     file_level_service_descriptors_GameService_2eproto,
@@ -609,6 +637,7 @@ bool MessageCode_IsValid(int value) {
     case 9:
     case 10:
     case 11:
+    case 12:
       return true;
     default:
       return false;
@@ -5325,6 +5354,241 @@ void SUnitDemage::InternalSwap(SUnitDemage* other) {
       file_level_metadata_GameService_2eproto[19]);
 }
 
+// ===================================================================
+
+class SRoomQuest::_Internal {
+ public:
+};
+
+SRoomQuest::SRoomQuest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:protocol.SRoomQuest)
+}
+SRoomQuest::SRoomQuest(const SRoomQuest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  SRoomQuest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.is_clear_){}
+    , decltype(_impl_.kill_count_){}
+    , decltype(_impl_.sum_kill_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.is_clear_, &from._impl_.is_clear_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.sum_kill_) -
+    reinterpret_cast<char*>(&_impl_.is_clear_)) + sizeof(_impl_.sum_kill_));
+  // @@protoc_insertion_point(copy_constructor:protocol.SRoomQuest)
+}
+
+inline void SRoomQuest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.is_clear_){false}
+    , decltype(_impl_.kill_count_){0}
+    , decltype(_impl_.sum_kill_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+SRoomQuest::~SRoomQuest() {
+  // @@protoc_insertion_point(destructor:protocol.SRoomQuest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void SRoomQuest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void SRoomQuest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void SRoomQuest::Clear() {
+// @@protoc_insertion_point(message_clear_start:protocol.SRoomQuest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&_impl_.is_clear_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.sum_kill_) -
+      reinterpret_cast<char*>(&_impl_.is_clear_)) + sizeof(_impl_.sum_kill_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SRoomQuest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool is_clear = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.is_clear_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 kill_count = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.kill_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 sum_kill = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.sum_kill_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* SRoomQuest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.SRoomQuest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool is_clear = 1;
+  if (this->_internal_is_clear() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_is_clear(), target);
+  }
+
+  // int32 kill_count = 2;
+  if (this->_internal_kill_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_kill_count(), target);
+  }
+
+  // int32 sum_kill = 3;
+  if (this->_internal_sum_kill() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_sum_kill(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.SRoomQuest)
+  return target;
+}
+
+size_t SRoomQuest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:protocol.SRoomQuest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // bool is_clear = 1;
+  if (this->_internal_is_clear() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // int32 kill_count = 2;
+  if (this->_internal_kill_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_kill_count());
+  }
+
+  // int32 sum_kill = 3;
+  if (this->_internal_sum_kill() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_sum_kill());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SRoomQuest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    SRoomQuest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SRoomQuest::GetClassData() const { return &_class_data_; }
+
+
+void SRoomQuest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SRoomQuest*>(&to_msg);
+  auto& from = static_cast<const SRoomQuest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:protocol.SRoomQuest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_is_clear() != 0) {
+    _this->_internal_set_is_clear(from._internal_is_clear());
+  }
+  if (from._internal_kill_count() != 0) {
+    _this->_internal_set_kill_count(from._internal_kill_count());
+  }
+  if (from._internal_sum_kill() != 0) {
+    _this->_internal_set_sum_kill(from._internal_sum_kill());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void SRoomQuest::CopyFrom(const SRoomQuest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:protocol.SRoomQuest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SRoomQuest::IsInitialized() const {
+  return true;
+}
+
+void SRoomQuest::InternalSwap(SRoomQuest* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(SRoomQuest, _impl_.sum_kill_)
+      + sizeof(SRoomQuest::_impl_.sum_kill_)
+      - PROTOBUF_FIELD_OFFSET(SRoomQuest, _impl_.is_clear_)>(
+          reinterpret_cast<char*>(&_impl_.is_clear_),
+          reinterpret_cast<char*>(&other->_impl_.is_clear_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SRoomQuest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
+      file_level_metadata_GameService_2eproto[20]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace protocol
 PROTOBUF_NAMESPACE_OPEN
@@ -5407,6 +5671,10 @@ Arena::CreateMaybeMessage< ::protocol::Demage >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::protocol::SUnitDemage*
 Arena::CreateMaybeMessage< ::protocol::SUnitDemage >(Arena* arena) {
   return Arena::CreateMessageInternal< ::protocol::SUnitDemage >(arena);
+}
+template<> PROTOBUF_NOINLINE ::protocol::SRoomQuest*
+Arena::CreateMaybeMessage< ::protocol::SRoomQuest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::protocol::SRoomQuest >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

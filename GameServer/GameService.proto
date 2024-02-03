@@ -15,6 +15,7 @@ enum MessageCode {
     S_UNITATTACK = 9; // 유닛(유저, 몬스터) 공격
     S_UNITDEMAGE = 10; // 유닛(유저, 몬스터) 히트, 데미지
     S_UNITBUFF = 11; // 유닛(유저, 몬스터) 버프
+    S_ROOMQUEST = 12; // 룸 클리어 정보
 }
 
 message Login {
@@ -126,4 +127,10 @@ message Demage {
 
 message SUnitDemage {
     Demage demage = 1;
+}
+
+message SRoomQuest {
+    bool is_clear = 1;
+    int32 kill_count = 2;
+    int32 sum_kill = 3;
 }

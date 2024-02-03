@@ -88,6 +88,9 @@ extern SMoveDefaultTypeInternal _SMove_default_instance_;
 class SPlayerData;
 struct SPlayerDataDefaultTypeInternal;
 extern SPlayerDataDefaultTypeInternal _SPlayerData_default_instance_;
+class SRoomQuest;
+struct SRoomQuestDefaultTypeInternal;
+extern SRoomQuestDefaultTypeInternal _SRoomQuest_default_instance_;
 class SUnitAttack;
 struct SUnitAttackDefaultTypeInternal;
 extern SUnitAttackDefaultTypeInternal _SUnitAttack_default_instance_;
@@ -122,6 +125,7 @@ template<> ::protocol::SInsertplayer* Arena::CreateMaybeMessage<::protocol::SIns
 template<> ::protocol::SLoad* Arena::CreateMaybeMessage<::protocol::SLoad>(Arena*);
 template<> ::protocol::SMove* Arena::CreateMaybeMessage<::protocol::SMove>(Arena*);
 template<> ::protocol::SPlayerData* Arena::CreateMaybeMessage<::protocol::SPlayerData>(Arena*);
+template<> ::protocol::SRoomQuest* Arena::CreateMaybeMessage<::protocol::SRoomQuest>(Arena*);
 template<> ::protocol::SUnitAttack* Arena::CreateMaybeMessage<::protocol::SUnitAttack>(Arena*);
 template<> ::protocol::SUnitBuff* Arena::CreateMaybeMessage<::protocol::SUnitBuff>(Arena*);
 template<> ::protocol::SUnitDemage* Arena::CreateMaybeMessage<::protocol::SUnitDemage>(Arena*);
@@ -144,12 +148,13 @@ enum MessageCode : int {
   S_UNITATTACK = 9,
   S_UNITDEMAGE = 10,
   S_UNITBUFF = 11,
+  S_ROOMQUEST = 12,
   MessageCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MessageCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MessageCode_IsValid(int value);
 constexpr MessageCode MessageCode_MIN = LOGIN;
-constexpr MessageCode MessageCode_MAX = S_UNITBUFF;
+constexpr MessageCode MessageCode_MAX = S_ROOMQUEST;
 constexpr int MessageCode_ARRAYSIZE = MessageCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageCode_descriptor();
@@ -3606,6 +3611,176 @@ class SUnitDemage final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_GameService_2eproto;
 };
+// -------------------------------------------------------------------
+
+class SRoomQuest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.SRoomQuest) */ {
+ public:
+  inline SRoomQuest() : SRoomQuest(nullptr) {}
+  ~SRoomQuest() override;
+  explicit PROTOBUF_CONSTEXPR SRoomQuest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SRoomQuest(const SRoomQuest& from);
+  SRoomQuest(SRoomQuest&& from) noexcept
+    : SRoomQuest() {
+    *this = ::std::move(from);
+  }
+
+  inline SRoomQuest& operator=(const SRoomQuest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SRoomQuest& operator=(SRoomQuest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SRoomQuest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SRoomQuest* internal_default_instance() {
+    return reinterpret_cast<const SRoomQuest*>(
+               &_SRoomQuest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(SRoomQuest& a, SRoomQuest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SRoomQuest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SRoomQuest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SRoomQuest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SRoomQuest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SRoomQuest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SRoomQuest& from) {
+    SRoomQuest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SRoomQuest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "protocol.SRoomQuest";
+  }
+  protected:
+  explicit SRoomQuest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIsClearFieldNumber = 1,
+    kKillCountFieldNumber = 2,
+    kSumKillFieldNumber = 3,
+  };
+  // bool is_clear = 1;
+  void clear_is_clear();
+  bool is_clear() const;
+  void set_is_clear(bool value);
+  private:
+  bool _internal_is_clear() const;
+  void _internal_set_is_clear(bool value);
+  public:
+
+  // int32 kill_count = 2;
+  void clear_kill_count();
+  int32_t kill_count() const;
+  void set_kill_count(int32_t value);
+  private:
+  int32_t _internal_kill_count() const;
+  void _internal_set_kill_count(int32_t value);
+  public:
+
+  // int32 sum_kill = 3;
+  void clear_sum_kill();
+  int32_t sum_kill() const;
+  void set_sum_kill(int32_t value);
+  private:
+  int32_t _internal_sum_kill() const;
+  void _internal_set_sum_kill(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.SRoomQuest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    bool is_clear_;
+    int32_t kill_count_;
+    int32_t sum_kill_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GameService_2eproto;
+};
 // ===================================================================
 
 
@@ -5583,9 +5758,75 @@ inline void SUnitDemage::set_allocated_demage(::protocol::Demage* demage) {
   // @@protoc_insertion_point(field_set_allocated:protocol.SUnitDemage.demage)
 }
 
+// -------------------------------------------------------------------
+
+// SRoomQuest
+
+// bool is_clear = 1;
+inline void SRoomQuest::clear_is_clear() {
+  _impl_.is_clear_ = false;
+}
+inline bool SRoomQuest::_internal_is_clear() const {
+  return _impl_.is_clear_;
+}
+inline bool SRoomQuest::is_clear() const {
+  // @@protoc_insertion_point(field_get:protocol.SRoomQuest.is_clear)
+  return _internal_is_clear();
+}
+inline void SRoomQuest::_internal_set_is_clear(bool value) {
+  
+  _impl_.is_clear_ = value;
+}
+inline void SRoomQuest::set_is_clear(bool value) {
+  _internal_set_is_clear(value);
+  // @@protoc_insertion_point(field_set:protocol.SRoomQuest.is_clear)
+}
+
+// int32 kill_count = 2;
+inline void SRoomQuest::clear_kill_count() {
+  _impl_.kill_count_ = 0;
+}
+inline int32_t SRoomQuest::_internal_kill_count() const {
+  return _impl_.kill_count_;
+}
+inline int32_t SRoomQuest::kill_count() const {
+  // @@protoc_insertion_point(field_get:protocol.SRoomQuest.kill_count)
+  return _internal_kill_count();
+}
+inline void SRoomQuest::_internal_set_kill_count(int32_t value) {
+  
+  _impl_.kill_count_ = value;
+}
+inline void SRoomQuest::set_kill_count(int32_t value) {
+  _internal_set_kill_count(value);
+  // @@protoc_insertion_point(field_set:protocol.SRoomQuest.kill_count)
+}
+
+// int32 sum_kill = 3;
+inline void SRoomQuest::clear_sum_kill() {
+  _impl_.sum_kill_ = 0;
+}
+inline int32_t SRoomQuest::_internal_sum_kill() const {
+  return _impl_.sum_kill_;
+}
+inline int32_t SRoomQuest::sum_kill() const {
+  // @@protoc_insertion_point(field_get:protocol.SRoomQuest.sum_kill)
+  return _internal_sum_kill();
+}
+inline void SRoomQuest::_internal_set_sum_kill(int32_t value) {
+  
+  _impl_.sum_kill_ = value;
+}
+inline void SRoomQuest::set_sum_kill(int32_t value) {
+  _internal_set_sum_kill(value);
+  // @@protoc_insertion_point(field_set:protocol.SRoomQuest.sum_kill)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
