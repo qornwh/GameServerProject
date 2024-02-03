@@ -287,6 +287,7 @@ void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
             if (AttackRect(target->GetPosition(), target))
             {
                 attackList.push_back(target->GetCode());
+                target->TakeDamage(skill._damage);
             }
         }
         else if (skillType == Skill::CIRCLE)
@@ -294,9 +295,9 @@ void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
             if (AttackCircle(target->GetPosition(), target))
             {
                 attackList.push_back(target->GetCode());
+                target->TakeDamage(skill._damage);
             }
         }
-        target->TakeDamage(skill._damage);
     }
     else
     {
