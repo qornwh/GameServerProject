@@ -2,6 +2,7 @@
 
 #include "GameMapInfo.h"
 #include "GamePacketHandler.h"
+#include "GameRoomQuest.h"
 #include "GameService.pb.h"
 
 void GameRoom::EnterSession(GameSessionRef session)
@@ -146,6 +147,19 @@ void GameRoom::Tick()
     {
         // 룸의 일정 시간마다 작업 (일단 10프레임 해봄)
         Task();
+
+        GameRoomQuestInfo& rqInfo =_gameRoomQuest->GetInfo();
+        if (rqInfo.IsKilled())
+        {
+            rqInfo.SetDeadMonster();
+
+            protocol::SRoomQuest pkt;
+            pkt.set_is_clear(rqInfo.IsClear());
+            pkt.set_kill_count(rqInfo.GetKillCount());
+            pkt.set_sum_kill(rqInfo.GetSumCount());
+            SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_ROOMQUEST);
+            BroadCast(sendBuffer);
+        }
     }));
 }
 
@@ -185,7 +199,7 @@ void GameRoom::Task()
         for (auto monsterCode : attackList)
         {
             GameMosterInfoRef info = GetMonster(monsterCode);
-            if (info != nullptr)
+            if (info != nullptr && info->GetObjectState() != ObjectState::DIE)
             {
                 cout << "공격 성공 : " << info->GetCode() << endl;
                 info->SetTarget(attackInfo->GetCode());
@@ -198,6 +212,7 @@ void GameRoom::Task()
                 else
                 {
                     info->SetObjecteState(ObjectState::DIE);
+                    _gameRoomQuest->GetInfo().AddDeadMonster();
                 }
             }
         }
@@ -338,6 +353,7 @@ void GameRoom::Task()
             }
         }
     }
+    
     if (pkt.unit_state_size() > 0)
     {
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_UNITSTATES);
@@ -376,6 +392,7 @@ void GameRoom::CreateMapInfo(int32 type)
         // 일반 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(22, 15, 0, 0, MapType::MONSTER);
+        _gameRoomQuest = boost::make_shared<GameRoomQuest>(5);
         _monsterCount = 10;
     }
     else if (type == 1)
@@ -383,6 +400,7 @@ void GameRoom::CreateMapInfo(int32 type)
         // 보스 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(15, 15, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(10, 10, 0, 0, MapType::BOS);
+        _gameRoomQuest = boost::make_shared<GameRoomQuest>(1);
         _bosMonsterCount = 1;
     }
 

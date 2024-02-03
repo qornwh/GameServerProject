@@ -143,6 +143,7 @@ private:
     queue<GamePlayerInfoRef> attackQueue;
 
     GameMapInfoRef _gameMapInfo;
+    GameRoomQuestRef _gameRoomQuest;
     unordered_map<int32, GameMosterInfoRef> _monsterMap;
     unordered_map<int32, GamePlayerInfoRef> _playerMap;
     Atomic<bool> _isTask{false};

@@ -177,6 +177,7 @@
     <ClInclude Include="GameMapInfo.h" />
     <ClInclude Include="GameObjectInfo.h" />
     <ClInclude Include="GameRoomManager.h" />
+    <ClInclude Include="GameRoomQuest.h" />
     <ClInclude Include="GameSkill.h" />
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="IRoom.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="GameMapInfo.cpp" />
     <ClCompile Include="GameObjectInfo.cpp" />
     <ClCompile Include="GameRoomManager.cpp" />
+    <ClCompile Include="GameRoomQuest.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameSkill.cpp" />
     <ClCompile Include="GameUtils.cpp" />

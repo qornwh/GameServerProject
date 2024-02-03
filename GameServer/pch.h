@@ -19,3 +19,5 @@ using MapInfoRef = boost::shared_ptr<class MapInfo>;
 using GameObjectInfoRef = boost::shared_ptr<class GameObjectInfo>;
 using GameMosterInfoRef = boost::shared_ptr<class GameMosterInfo>;
 using GamePlayerInfoRef = boost::shared_ptr<class GamePlayerInfo>;
+
+using GameRoomQuestRef = boost::shared_ptr<class GameRoomQuest>;
