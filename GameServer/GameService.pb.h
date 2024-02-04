@@ -52,6 +52,9 @@ extern AttackDefaultTypeInternal _Attack_default_instance_;
 class Buff;
 struct BuffDefaultTypeInternal;
 extern BuffDefaultTypeInternal _Buff_default_instance_;
+class CMovePotal;
+struct CMovePotalDefaultTypeInternal;
+extern CMovePotalDefaultTypeInternal _CMovePotal_default_instance_;
 class CPlayerAttack;
 struct CPlayerAttackDefaultTypeInternal;
 extern CPlayerAttackDefaultTypeInternal _CPlayerAttack_default_instance_;
@@ -113,6 +116,7 @@ extern UnitStateDefaultTypeInternal _UnitState_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::protocol::Attack* Arena::CreateMaybeMessage<::protocol::Attack>(Arena*);
 template<> ::protocol::Buff* Arena::CreateMaybeMessage<::protocol::Buff>(Arena*);
+template<> ::protocol::CMovePotal* Arena::CreateMaybeMessage<::protocol::CMovePotal>(Arena*);
 template<> ::protocol::CPlayerAttack* Arena::CreateMaybeMessage<::protocol::CPlayerAttack>(Arena*);
 template<> ::protocol::Demage* Arena::CreateMaybeMessage<::protocol::Demage>(Arena*);
 template<> ::protocol::Login* Arena::CreateMaybeMessage<::protocol::Login>(Arena*);
@@ -149,12 +153,13 @@ enum MessageCode : int {
   S_UNITDEMAGE = 10,
   S_UNITBUFF = 11,
   S_ROOMQUEST = 12,
+  C_MOVEPOTAL = 13,
   MessageCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MessageCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MessageCode_IsValid(int value);
 constexpr MessageCode MessageCode_MIN = LOGIN;
-constexpr MessageCode MessageCode_MAX = S_ROOMQUEST;
+constexpr MessageCode MessageCode_MAX = C_MOVEPOTAL;
 constexpr int MessageCode_ARRAYSIZE = MessageCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageCode_descriptor();
@@ -1870,6 +1875,7 @@ class SPlayerData final :
 
   enum : int {
     kPlayerFieldNumber = 1,
+    kRoomIdFieldNumber = 2,
   };
   // .protocol.Player player = 1;
   bool has_player() const;
@@ -1889,6 +1895,15 @@ class SPlayerData final :
       ::protocol::Player* player);
   ::protocol::Player* unsafe_arena_release_player();
 
+  // int32 room_id = 2;
+  void clear_room_id();
+  int32_t room_id() const;
+  void set_room_id(int32_t value);
+  private:
+  int32_t _internal_room_id() const;
+  void _internal_set_room_id(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:protocol.SPlayerData)
  private:
   class _Internal;
@@ -1898,6 +1913,7 @@ class SPlayerData final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::protocol::Player* player_;
+    int32_t room_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -3781,6 +3797,165 @@ class SRoomQuest final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_GameService_2eproto;
 };
+// -------------------------------------------------------------------
+
+class CMovePotal final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.CMovePotal) */ {
+ public:
+  inline CMovePotal() : CMovePotal(nullptr) {}
+  ~CMovePotal() override;
+  explicit PROTOBUF_CONSTEXPR CMovePotal(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CMovePotal(const CMovePotal& from);
+  CMovePotal(CMovePotal&& from) noexcept
+    : CMovePotal() {
+    *this = ::std::move(from);
+  }
+
+  inline CMovePotal& operator=(const CMovePotal& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CMovePotal& operator=(CMovePotal&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CMovePotal& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CMovePotal* internal_default_instance() {
+    return reinterpret_cast<const CMovePotal*>(
+               &_CMovePotal_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    21;
+
+  friend void swap(CMovePotal& a, CMovePotal& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CMovePotal* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CMovePotal* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CMovePotal* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CMovePotal>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CMovePotal& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const CMovePotal& from) {
+    CMovePotal::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CMovePotal* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "protocol.CMovePotal";
+  }
+  protected:
+  explicit CMovePotal(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPreRoomIdFieldNumber = 1,
+    kNextRoomIdFieldNumber = 2,
+  };
+  // int32 pre_room_id = 1;
+  void clear_pre_room_id();
+  int32_t pre_room_id() const;
+  void set_pre_room_id(int32_t value);
+  private:
+  int32_t _internal_pre_room_id() const;
+  void _internal_set_pre_room_id(int32_t value);
+  public:
+
+  // int32 next_room_id = 2;
+  void clear_next_room_id();
+  int32_t next_room_id() const;
+  void set_next_room_id(int32_t value);
+  private:
+  int32_t _internal_next_room_id() const;
+  void _internal_set_next_room_id(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.CMovePotal)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    int32_t pre_room_id_;
+    int32_t next_room_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GameService_2eproto;
+};
 // ===================================================================
 
 
@@ -4878,6 +5053,26 @@ inline void SPlayerData::set_allocated_player(::protocol::Player* player) {
   // @@protoc_insertion_point(field_set_allocated:protocol.SPlayerData.player)
 }
 
+// int32 room_id = 2;
+inline void SPlayerData::clear_room_id() {
+  _impl_.room_id_ = 0;
+}
+inline int32_t SPlayerData::_internal_room_id() const {
+  return _impl_.room_id_;
+}
+inline int32_t SPlayerData::room_id() const {
+  // @@protoc_insertion_point(field_get:protocol.SPlayerData.room_id)
+  return _internal_room_id();
+}
+inline void SPlayerData::_internal_set_room_id(int32_t value) {
+  
+  _impl_.room_id_ = value;
+}
+inline void SPlayerData::set_room_id(int32_t value) {
+  _internal_set_room_id(value);
+  // @@protoc_insertion_point(field_set:protocol.SPlayerData.room_id)
+}
+
 // -------------------------------------------------------------------
 
 // SClosePlayer
@@ -5822,9 +6017,55 @@ inline void SRoomQuest::set_sum_kill(int32_t value) {
   // @@protoc_insertion_point(field_set:protocol.SRoomQuest.sum_kill)
 }
 
+// -------------------------------------------------------------------
+
+// CMovePotal
+
+// int32 pre_room_id = 1;
+inline void CMovePotal::clear_pre_room_id() {
+  _impl_.pre_room_id_ = 0;
+}
+inline int32_t CMovePotal::_internal_pre_room_id() const {
+  return _impl_.pre_room_id_;
+}
+inline int32_t CMovePotal::pre_room_id() const {
+  // @@protoc_insertion_point(field_get:protocol.CMovePotal.pre_room_id)
+  return _internal_pre_room_id();
+}
+inline void CMovePotal::_internal_set_pre_room_id(int32_t value) {
+  
+  _impl_.pre_room_id_ = value;
+}
+inline void CMovePotal::set_pre_room_id(int32_t value) {
+  _internal_set_pre_room_id(value);
+  // @@protoc_insertion_point(field_set:protocol.CMovePotal.pre_room_id)
+}
+
+// int32 next_room_id = 2;
+inline void CMovePotal::clear_next_room_id() {
+  _impl_.next_room_id_ = 0;
+}
+inline int32_t CMovePotal::_internal_next_room_id() const {
+  return _impl_.next_room_id_;
+}
+inline int32_t CMovePotal::next_room_id() const {
+  // @@protoc_insertion_point(field_get:protocol.CMovePotal.next_room_id)
+  return _internal_next_room_id();
+}
+inline void CMovePotal::_internal_set_next_room_id(int32_t value) {
+  
+  _impl_.next_room_id_ = value;
+}
+inline void CMovePotal::set_next_room_id(int32_t value) {
+  _internal_set_next_room_id(value);
+  // @@protoc_insertion_point(field_set:protocol.CMovePotal.next_room_id)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
