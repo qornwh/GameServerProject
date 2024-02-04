@@ -109,8 +109,8 @@ public:
 
     void Move();
     void updatePrePosition();
-    void MoveTarget(FVector targetPosition);
-    bool CheckAttackTarget(FVector targetPosition);
+    void MoveTarget(GamePlayerInfoRef target);
+    bool CheckAttackTarget(GamePlayerInfoRef target);
 
     void UpdateYaw();
     void UpdateYaw(float theta);

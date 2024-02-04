@@ -135,12 +135,13 @@ void GameMosterInfo::updatePrePosition()
     _prePosition.Z += _increaseZ;
 }
 
-void GameMosterInfo::MoveTarget(FVector targetPosition)
+void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
 {
-    float theta = GameUtils::MathUtils::CalculateAngle(_position.Z, _position.X, targetPosition.Z, targetPosition.X);
+    float theta = GameUtils::MathUtils::CalculateAngle(_position.Z, _position.X, target->GetPosition().Z,
+                                                       target->GetPosition().X);
     UpdateYaw(theta);
 
-    if (CheckAttackTarget(targetPosition))
+    if (CheckAttackTarget(target))
     {
         // 여기서만 바로 공격
         SetObjecteState(ObjectState::ATTACK);
@@ -156,7 +157,7 @@ void GameMosterInfo::MoveTarget(FVector targetPosition)
     }
 }
 
-bool GameMosterInfo::CheckAttackTarget(FVector targetPosition)
+bool GameMosterInfo::CheckAttackTarget(GamePlayerInfoRef target)
 {
     // 임시로 하드코딩 해둠 나중에 함수화 해야됨 !!!
     unordered_map<int32, Skill>& skillMap = GSkill->GetMonsterSkill()[GetType()].GetSkillMap();
@@ -168,20 +169,19 @@ bool GameMosterInfo::CheckAttackTarget(FVector targetPosition)
     {
         if (skillType == Skill::CIRCLE)
         {
-            int32 radius = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[ObjectState::ATTACK]._radius;
+            int32 radius = skillMap[ObjectState::ATTACK]._radius;
 
-            float targetX = abs(_position.X - targetPosition.X);
-            float targetZ = abs(_position.Z - targetPosition.Z);
+            float targetX = abs(_position.X - target->GetPosition().X);
+            float targetZ = abs(_position.Z - target->GetPosition().Z);
 
             float targetRadius = sqrtf(powf(targetX, 2) + powf(targetZ, 2));
 
             if (targetRadius < radius)
+            {
                 // 공격 성공
+                target->TakeDamage(skillMap[ObjectState::ATTACK]._damage);
                 return true;
-
-            if (targetRadius < radius)
-                // 공격 성공
-                return true;
+            }
 
             return false;
         }

@@ -129,7 +129,7 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
     protocol::Login readPkt;
     if (GamePacketHandler::ParsePacketHandler(readPkt, buffer, header->size - offset, offset))
     {
-        CreatePlayerInfo(readPkt.type(), 100);
+        CreatePlayerInfo(readPkt.type(), 1000);
         GetPlayer()->SetName(readPkt.name());
 
         // 나를 확인용 메시지 전달.

@@ -149,7 +149,7 @@ void GameRoom::Tick()
         // 룸의 일정 시간마다 작업 (일단 10프레임 해봄)
         Task();
 
-        GameRoomQuestInfo& rqInfo =_gameRoomQuest->GetInfo();
+        GameRoomQuestInfo& rqInfo = _gameRoomQuest->GetInfo();
         if (rqInfo.IsKilled())
         {
             rqInfo.SetDeadMonster();
@@ -265,10 +265,10 @@ void GameRoom::Task()
                         if (info->GetTarget() >= 0 && _playerMap.find(info->GetTarget()) != _playerMap.end())
                         {
                             FVector& pos = _playerMap[info->GetTarget()]->GetPosition();
-                                
+
                             if (_gameMapInfo->GetMonsterMapInfo()->InRect(pos.X, pos.Z))
                             {
-                                info->MoveTarget(pos);
+                                info->MoveTarget(_playerMap[info->GetTarget()]);
                             }
                             else
                             {
@@ -297,13 +297,28 @@ void GameRoom::Task()
                     {
                         protocol::UnitState* childPkt = pkt.add_unit_state();
                         childPkt->set_is_monster(true);
-                        childPkt->set_demage(10);
                         protocol::Monster* monster = new protocol::Monster();
                         monster->set_state(info->GetObjectState());
                         protocol::Unit* unit = new protocol::Unit();
                         unit->set_code(info->GetCode());
                         monster->set_allocated_unit(unit);
                         childPkt->set_allocated_monster(monster);
+
+                        if (info->GetTarget() >= 0 && _playerMap.find(info->GetTarget()) != _playerMap.end())
+                        {
+                            GamePlayerInfoRef playerInfo = _playerMap[info->GetTarget()];
+                            // 플레이어 히트
+                            protocol::UnitState* childPkt2 = pkt.add_unit_state();
+                            childPkt2->set_is_monster(false);
+                            childPkt2->set_demage(playerInfo->GetDamage());
+                            playerInfo->ResetDamage();
+                            protocol::Player* _player = new protocol::Player();
+                            protocol::Unit* unit2 = new protocol::Unit();
+                            unit2->set_code(playerInfo->GetCode());
+                            unit2->set_hp(playerInfo->GetHp());
+                            _player->set_allocated_unit(unit2);
+                            childPkt2->set_allocated_player(_player);
+                        }
                     }
                 }
                 break;
@@ -354,7 +369,7 @@ void GameRoom::Task()
             }
         }
     }
-    
+
     if (pkt.unit_state_size() > 0)
     {
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_UNITSTATES);
