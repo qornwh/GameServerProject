@@ -100,6 +100,7 @@ PROTOBUF_CONSTEXPR SLoad::SLoad(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.player_)*/{}
   , /*decltype(_impl_.monster_)*/{}
+  , /*decltype(_impl_.room_id_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SLoadDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SLoadDefaultTypeInternal()
@@ -156,7 +157,6 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR SPlayerData::SPlayerData(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.player_)*/nullptr
-  , /*decltype(_impl_.room_id_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SPlayerDataDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SPlayerDataDefaultTypeInternal()
@@ -400,6 +400,7 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::SLoad, _impl_.player_),
   PROTOBUF_FIELD_OFFSET(::protocol::SLoad, _impl_.monster_),
+  PROTOBUF_FIELD_OFFSET(::protocol::SLoad, _impl_.room_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::SInsertplayer, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -432,7 +433,6 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::SPlayerData, _impl_.player_),
-  PROTOBUF_FIELD_OFFSET(::protocol::SPlayerData, _impl_.room_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::SClosePlayer, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -543,10 +543,10 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 30, -1, -1, sizeof(::protocol::Player)},
   { 37, -1, -1, sizeof(::protocol::Monster)},
   { 45, -1, -1, sizeof(::protocol::SLoad)},
-  { 53, -1, -1, sizeof(::protocol::SInsertplayer)},
-  { 60, -1, -1, sizeof(::protocol::SMove)},
-  { 69, -1, -1, sizeof(::protocol::SChat)},
-  { 78, -1, -1, sizeof(::protocol::SPlayerData)},
+  { 54, -1, -1, sizeof(::protocol::SInsertplayer)},
+  { 61, -1, -1, sizeof(::protocol::SMove)},
+  { 70, -1, -1, sizeof(::protocol::SChat)},
+  { 79, -1, -1, sizeof(::protocol::SPlayerData)},
   { 86, -1, -1, sizeof(::protocol::SClosePlayer)},
   { 93, -1, -1, sizeof(::protocol::UnitState)},
   { 104, -1, -1, sizeof(::protocol::SUnitStates)},
@@ -595,15 +595,15 @@ const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARI
   "(\0132\022.protocol.Position\022\014\n\004name\030\005 \001(\t\"&\n\006"
   "Player\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\"6\n\007"
   "Monster\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\022\r\n"
-  "\005state\030\002 \001(\r\"M\n\005SLoad\022 \n\006player\030\001 \003(\0132\020."
+  "\005state\030\002 \001(\r\"^\n\005SLoad\022 \n\006player\030\001 \003(\0132\020."
   "protocol.Player\022\"\n\007monster\030\002 \003(\0132\021.proto"
-  "col.Monster\"1\n\rSInsertplayer\022 \n\006player\030\001"
-  " \001(\0132\020.protocol.Player\"O\n\005SMove\022\014\n\004code\030"
-  "\001 \001(\005\022$\n\010position\030\002 \001(\0132\022.protocol.Posit"
-  "ion\022\022\n\nis_monster\030\003 \001(\010\"1\n\005SChat\022\014\n\004type"
-  "\030\001 \001(\r\022\014\n\004code\030\002 \001(\005\022\014\n\004text\030\005 \001(\t\"@\n\013SP"
-  "layerData\022 \n\006player\030\001 \001(\0132\020.protocol.Pla"
-  "yer\022\017\n\007room_id\030\002 \001(\005\"\034\n\014SClosePlayer\022\014\n\004"
+  "col.Monster\022\017\n\007room_id\030\003 \001(\005\"1\n\rSInsertp"
+  "layer\022 \n\006player\030\001 \001(\0132\020.protocol.Player\""
+  "O\n\005SMove\022\014\n\004code\030\001 \001(\005\022$\n\010position\030\002 \001(\013"
+  "2\022.protocol.Position\022\022\n\nis_monster\030\003 \001(\010"
+  "\"1\n\005SChat\022\014\n\004type\030\001 \001(\r\022\014\n\004code\030\002 \001(\005\022\014\n"
+  "\004text\030\005 \001(\t\"/\n\013SPlayerData\022 \n\006player\030\001 \001"
+  "(\0132\020.protocol.Player\"\034\n\014SClosePlayer\022\014\n\004"
   "code\030\001 \001(\005\"\203\001\n\tUnitState\022\"\n\007monster\030\001 \001("
   "\0132\021.protocol.Monster\022 \n\006player\030\002 \001(\0132\020.p"
   "rotocol.Player\022\016\n\006demage\030\004 \001(\005\022\014\n\004heal\030\005"
@@ -2010,9 +2010,11 @@ SLoad::SLoad(const SLoad& from)
   new (&_impl_) Impl_{
       decltype(_impl_.player_){from._impl_.player_}
     , decltype(_impl_.monster_){from._impl_.monster_}
+    , decltype(_impl_.room_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.room_id_ = from._impl_.room_id_;
   // @@protoc_insertion_point(copy_constructor:protocol.SLoad)
 }
 
@@ -2023,6 +2025,7 @@ inline void SLoad::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.player_){arena}
     , decltype(_impl_.monster_){arena}
+    , decltype(_impl_.room_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -2054,6 +2057,7 @@ void SLoad::Clear() {
 
   _impl_.player_.Clear();
   _impl_.monster_.Clear();
+  _impl_.room_id_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2086,6 +2090,14 @@ const char* SLoad::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 room_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.room_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2134,6 +2146,12 @@ uint8_t* SLoad::_InternalSerialize(
         InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
   }
 
+  // int32 room_id = 3;
+  if (this->_internal_room_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_room_id(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2164,6 +2182,11 @@ size_t SLoad::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
+  // int32 room_id = 3;
+  if (this->_internal_room_id() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_room_id());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2184,6 +2207,9 @@ void SLoad::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF
 
   _this->_impl_.player_.MergeFrom(from._impl_.player_);
   _this->_impl_.monster_.MergeFrom(from._impl_.monster_);
+  if (from._internal_room_id() != 0) {
+    _this->_internal_set_room_id(from._internal_room_id());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2203,6 +2229,7 @@ void SLoad::InternalSwap(SLoad* other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.player_.InternalSwap(&other->_impl_.player_);
   _impl_.monster_.InternalSwap(&other->_impl_.monster_);
+  swap(_impl_.room_id_, other->_impl_.room_id_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SLoad::GetMetadata() const {
@@ -2941,14 +2968,12 @@ SPlayerData::SPlayerData(const SPlayerData& from)
   SPlayerData* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.player_){nullptr}
-    , decltype(_impl_.room_id_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_player()) {
     _this->_impl_.player_ = new ::protocol::Player(*from._impl_.player_);
   }
-  _this->_impl_.room_id_ = from._impl_.room_id_;
   // @@protoc_insertion_point(copy_constructor:protocol.SPlayerData)
 }
 
@@ -2958,7 +2983,6 @@ inline void SPlayerData::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.player_){nullptr}
-    , decltype(_impl_.room_id_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -2991,7 +3015,6 @@ void SPlayerData::Clear() {
     delete _impl_.player_;
   }
   _impl_.player_ = nullptr;
-  _impl_.room_id_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3005,14 +3028,6 @@ const char* SPlayerData::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_player(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // int32 room_id = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          _impl_.room_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3053,12 +3068,6 @@ uint8_t* SPlayerData::_InternalSerialize(
         _Internal::player(this).GetCachedSize(), target, stream);
   }
 
-  // int32 room_id = 2;
-  if (this->_internal_room_id() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_room_id(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3080,11 +3089,6 @@ size_t SPlayerData::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *_impl_.player_);
-  }
-
-  // int32 room_id = 2;
-  if (this->_internal_room_id() != 0) {
-    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_room_id());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3109,9 +3113,6 @@ void SPlayerData::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
     _this->_internal_mutable_player()->::protocol::Player::MergeFrom(
         from._internal_player());
   }
-  if (from._internal_room_id() != 0) {
-    _this->_internal_set_room_id(from._internal_room_id());
-  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -3129,12 +3130,7 @@ bool SPlayerData::IsInitialized() const {
 void SPlayerData::InternalSwap(SPlayerData* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SPlayerData, _impl_.room_id_)
-      + sizeof(SPlayerData::_impl_.room_id_)
-      - PROTOBUF_FIELD_OFFSET(SPlayerData, _impl_.player_)>(
-          reinterpret_cast<char*>(&_impl_.player_),
-          reinterpret_cast<char*>(&other->_impl_.player_));
+  swap(_impl_.player_, other->_impl_.player_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SPlayerData::GetMetadata() const {

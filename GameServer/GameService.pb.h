@@ -1188,6 +1188,7 @@ class SLoad final :
   enum : int {
     kPlayerFieldNumber = 1,
     kMonsterFieldNumber = 2,
+    kRoomIdFieldNumber = 3,
   };
   // repeated .protocol.Player player = 1;
   int player_size() const;
@@ -1225,6 +1226,15 @@ class SLoad final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Monster >&
       monster() const;
 
+  // int32 room_id = 3;
+  void clear_room_id();
+  int32_t room_id() const;
+  void set_room_id(int32_t value);
+  private:
+  int32_t _internal_room_id() const;
+  void _internal_set_room_id(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:protocol.SLoad)
  private:
   class _Internal;
@@ -1235,6 +1245,7 @@ class SLoad final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Player > player_;
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Monster > monster_;
+    int32_t room_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1875,7 +1886,6 @@ class SPlayerData final :
 
   enum : int {
     kPlayerFieldNumber = 1,
-    kRoomIdFieldNumber = 2,
   };
   // .protocol.Player player = 1;
   bool has_player() const;
@@ -1895,15 +1905,6 @@ class SPlayerData final :
       ::protocol::Player* player);
   ::protocol::Player* unsafe_arena_release_player();
 
-  // int32 room_id = 2;
-  void clear_room_id();
-  int32_t room_id() const;
-  void set_room_id(int32_t value);
-  private:
-  int32_t _internal_room_id() const;
-  void _internal_set_room_id(int32_t value);
-  public:
-
   // @@protoc_insertion_point(class_scope:protocol.SPlayerData)
  private:
   class _Internal;
@@ -1913,7 +1914,6 @@ class SPlayerData final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::protocol::Player* player_;
-    int32_t room_id_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4637,6 +4637,26 @@ SLoad::monster() const {
   return _impl_.monster_;
 }
 
+// int32 room_id = 3;
+inline void SLoad::clear_room_id() {
+  _impl_.room_id_ = 0;
+}
+inline int32_t SLoad::_internal_room_id() const {
+  return _impl_.room_id_;
+}
+inline int32_t SLoad::room_id() const {
+  // @@protoc_insertion_point(field_get:protocol.SLoad.room_id)
+  return _internal_room_id();
+}
+inline void SLoad::_internal_set_room_id(int32_t value) {
+  
+  _impl_.room_id_ = value;
+}
+inline void SLoad::set_room_id(int32_t value) {
+  _internal_set_room_id(value);
+  // @@protoc_insertion_point(field_set:protocol.SLoad.room_id)
+}
+
 // -------------------------------------------------------------------
 
 // SInsertplayer
@@ -5051,26 +5071,6 @@ inline void SPlayerData::set_allocated_player(::protocol::Player* player) {
   }
   _impl_.player_ = player;
   // @@protoc_insertion_point(field_set_allocated:protocol.SPlayerData.player)
-}
-
-// int32 room_id = 2;
-inline void SPlayerData::clear_room_id() {
-  _impl_.room_id_ = 0;
-}
-inline int32_t SPlayerData::_internal_room_id() const {
-  return _impl_.room_id_;
-}
-inline int32_t SPlayerData::room_id() const {
-  // @@protoc_insertion_point(field_get:protocol.SPlayerData.room_id)
-  return _internal_room_id();
-}
-inline void SPlayerData::_internal_set_room_id(int32_t value) {
-  
-  _impl_.room_id_ = value;
-}
-inline void SPlayerData::set_room_id(int32_t value) {
-  _internal_set_room_id(value);
-  // @@protoc_insertion_point(field_set:protocol.SPlayerData.room_id)
 }
 
 // -------------------------------------------------------------------

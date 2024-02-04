@@ -52,6 +52,7 @@ message Monster {
 message SLoad {
     repeated Player player = 1;
     repeated Monster monster = 2;
+    int32 room_id = 3;
 }
 
 message SInsertplayer {
@@ -72,7 +73,6 @@ message SChat {
 
 message SPlayerData {
     Player player = 1;
-    int32 room_id = 2;
 }
 
 message SClosePlayer {
