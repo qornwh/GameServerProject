@@ -144,7 +144,6 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
             unit->set_hp(_player->GetHp());
             player->set_allocated_unit(unit);
             sendPkt.set_allocated_player(player);
-            sendPkt.set_room_id(0);
 
             SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
                 sendPkt, protocol::MessageCode::S_PLAYERDATA);

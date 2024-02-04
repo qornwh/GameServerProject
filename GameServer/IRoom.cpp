@@ -27,6 +27,7 @@ void GameRoom::EnterSession(GameSessionRef session)
 
     {
         protocol::SLoad sendPkt;
+        sendPkt.set_room_id(_id);
         for (auto it : _sessionList)
         {
             if (it != nullptr)
