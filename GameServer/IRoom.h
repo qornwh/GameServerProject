@@ -31,7 +31,7 @@ public:
         // 1개씩 처리됨
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            std::cout << "세션 추가 !!!" << std::endl;
+            cout << "세션 추가 !!!" << endl;
             _sessionList.insert(session);
         }));
     }
@@ -42,7 +42,7 @@ public:
         // 1개씩 처리됨
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            std::cout << "세션 탈주 !!!" << std::endl;
+            cout << "세션 탈주 !!!" << endl;
             _sessionList.erase(session);
         }));
     }
@@ -92,7 +92,7 @@ public:
 
     ~GameRoom() override
     {
-        std::cout << "~GameRoom !!!" << std::endl;
+        cout << "~GameRoom !!!" << endl;
     }
 
     void EnterSession(GameSessionRef session) override;

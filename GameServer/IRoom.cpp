@@ -8,7 +8,6 @@
 void GameRoom::EnterSession(GameSessionRef session)
 {
     _playerMap.emplace(session->GetPlayer()->GetCode(), session->GetPlayer());
-    IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::EnterSession(session);
     session->SetRoomId(_id);
     {
         protocol::SInsertplayer sendPkt;
@@ -82,13 +81,13 @@ void GameRoom::EnterSession(GameSessionRef session)
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
         session->AsyncWrite(sendBuffer);
     }
+    IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::EnterSession(session);
 }
 
 void GameRoom::OutSession(GameSessionRef session)
 {
     // playerInfo 레퍼런스카운트 미리 제거해둔다.
     _playerMap.erase(session->GetPlayer()->GetCode());
-    IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::OutSession(session);
     session->SetRoomId(-1);
 
     protocol::SClosePlayer sendPkt;
@@ -96,6 +95,7 @@ void GameRoom::OutSession(GameSessionRef session)
 
     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_CLOSEPLAYER);
     BroadCastAnother(sendBuffer, session->GetPlayer()->GetCode());
+    IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::OutSession(session);
 }
 
 void GameRoom::AttackSession(GameSessionRef session)
