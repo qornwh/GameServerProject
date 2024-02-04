@@ -85,6 +85,11 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
             AttackHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
         }
         break;
+    case protocol::MessageCode::C_MOVEPOTAL:
+        {
+            ChangeRoomHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+        }
+        break;
     }
 }
 
@@ -200,5 +205,23 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
             }
 
         }
+    }
+}
+
+void GameSession::ChangeRoomHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+{
+    protocol::CMovePotal readPkt;
+
+    int32 currentRoomId = readPkt.pre_room_id();
+    int32 nextRoomId = readPkt.next_room_id();
+
+    if (GRoomManger->getRoom(GetRoomId()) != nullptr)
+    {
+        GRoomManger->getRoom(GetRoomId())->OutSession(static_pointer_cast<GameSession>(shared_from_this()));
+    }
+
+    if (GRoomManger->getRoom(nextRoomId) != nullptr)
+    {
+        GRoomManger->getRoom(nextRoomId)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
     }
 }
