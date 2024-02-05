@@ -132,6 +132,8 @@ public:
         return nullptr;
     }
 
+    GameRoomQuestRef GetQuest() { return _gameRoomQuest; }
+
 private:
     boost::asio::steady_timer _timer;
     boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
