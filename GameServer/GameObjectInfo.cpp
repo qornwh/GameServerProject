@@ -5,7 +5,7 @@
 #include "GameSkill.h"
 #include "IRoom.h"
 
-GameObjectInfo::GameObjectInfo(int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type), _hp(hp)
+GameObjectInfo::GameObjectInfo(int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type), _hp(hp), _maxHp(hp)
 {
 }
 
@@ -44,8 +44,8 @@ void GameObjectInfo::TakeDamage(int32 Damage)
 void GameObjectInfo::TakeHeal(int32 heal)
 {
     _hp += heal;
-    if (_hp > 100)
-        _hp = 100;
+    if (_hp > _maxHp)
+        _hp = _maxHp;
     _heal += heal;
 }
 

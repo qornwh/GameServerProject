@@ -78,6 +78,7 @@ protected:
     std::string _name;
     int32 _uuid;
     int32 _hp;
+    int32 _maxHp;
     int32 _damage;
     int32 _heal;
     int32 _type;
