@@ -8,7 +8,7 @@ namespace BS_Protocol
         int32 X;
         int32 Y;
         int32 Z;
-        float Yew;
+        float Yaw;
 
         uint32 size()
         {

@@ -4,8 +4,8 @@
 
 #include "Session.h"
 
-class Pawn;
-using PawnRef = boost::shared_ptr<Pawn>;
+class DummyPlayerInfo;
+using PawnRef = boost::shared_ptr<DummyPlayerInfo>;
 
 class DummySession : public Session
 {
@@ -25,12 +25,12 @@ public:
 
     void OnConnect(const boost::system::error_code& error) override;
 
-    PawnRef GetPawn() { return _pawn; }
+    PawnRef GetPawn() { return _playerInfo; }
 
 private:
     int32 _id;
     boost::uuids::uuid _uuid;
     boost::uuids::random_generator generator;
 
-    PawnRef _pawn;
+    PawnRef _playerInfo;
 };

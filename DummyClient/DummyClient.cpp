@@ -12,9 +12,7 @@ int main()
     boost::asio::io_context io_context;
 
     std::string address = "172.30.1.53";
-    // std::string address = "127.0.0.1";
     uint16 port = 12127;
-    // uint16 port = 12128;
 
     GThreadManager->CreateThread([&io_context, &address, &port]()
         {
@@ -28,7 +26,7 @@ int main()
         }
     );
     
-    boost::core::detail::Sleep(300 * 4);
+    boost::core::detail::Sleep(1000 * 4);
     DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 1);
 
     ThreadManager tm;

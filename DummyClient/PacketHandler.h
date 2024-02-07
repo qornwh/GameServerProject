@@ -55,9 +55,9 @@ public:
         SendBufferRef sendBuffer = MakeSendBuffer(1, dataSize);
 
         BufferWrite bw(sendBuffer->Buffer() + sizeof(PacketHeader), dataSize);
+        bw.Write(&pkt.Type);
         bw.Write(&pkt.IdLen);
         bw.Write(pkt.Id.data(), pkt.IdLen);
-        bw.Write(&pkt.Type);
 
         return sendBuffer;
     }
@@ -71,7 +71,7 @@ public:
         bw.Write(&pkt.Position.X);
         bw.Write(&pkt.Position.Y);
         bw.Write(&pkt.Position.Z);
-        bw.Write(&pkt.Position.Yew);
+        bw.Write(&pkt.Position.Yaw);
 
         return sendBuffer;
     }

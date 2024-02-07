@@ -6,10 +6,10 @@
 #include <boost/smart_ptr/enable_shared_from_this.hpp>
 
 static boost::random::mt19937 rng;
-static boost::random::uniform_int_distribution<> dstX{2000, 5000};
-static boost::random::uniform_int_distribution<> dstY{2000, 5000};
+static boost::random::uniform_int_distribution<> dstX{-2000, 2000};
+static boost::random::uniform_int_distribution<> dstY{-2000, 2000};
 
-static boost::random::uniform_real_distribution<> rot{-1.f, 1.f};
+static boost::random::uniform_real_distribution<> rot{0, 360};
 
 struct Vector
 {
@@ -34,11 +34,11 @@ struct MapRange
     int32 EndY;
 };
 
-class Pawn : public boost::enable_shared_from_this<Pawn>
+class DummyPlayerInfo : public boost::enable_shared_from_this<DummyPlayerInfo>
 {
 public:
-    Pawn();
-    ~Pawn();
+    DummyPlayerInfo();
+    ~DummyPlayerInfo();
 
     Vector& GetPostion();
     void SetPostion(Vector vec);
@@ -46,10 +46,10 @@ public:
     void SetRotate(Vector vec);
     void SetRandRotate();
 
-    bool isUse() const { return _use; }
+    bool IsUse() const { return _use; }
     void Start();
 
-    bool isMapRange();
+    bool IsMapRange();
 
 protected:
     Vector _position{0, 0, 0};
@@ -59,9 +59,5 @@ protected:
 
 private:
     bool _use = false;
-    MapRange _map{0, 0, 0, 0};
-
-    // 나중에 전역변수로 따로 빼자
-    const int32 _del = 2000;
-    const int32 _range = 5000;
+    MapRange _map{-2400, -2400, 2400, 2400};
 };

@@ -10,7 +10,7 @@ DummySession::DummySession(boost::asio::io_context& io_context, const boost::asi
     : Session(io_context, ep)
 {
     static atomic<int32> id = 0;
-    _pawn = boost::make_shared<Pawn>();
+    _playerInfo = boost::make_shared<DummyPlayerInfo>();
     _id = id.fetch_add(1);
 }
 
@@ -45,13 +45,13 @@ void DummySession::AsyncTestMessage(const boost::system::error_code& ec)
 void DummySession::AsyncLoad()
 {
     BS_Protocol::P_LOGIN_PAKCET pkt;
-    std::wstring wsId = L"";
+    std::wstring wsId = L"dummy";
     wsId += std::to_wstring(_id);
 
     memcpy(pkt.Id.data(), wsId.data(), wsId.size() * 2);
     pkt.IdLen = wsId.size() * 2;
     pkt.Type = _id % 3;
-    cout << "type : " << _id % 3 << "  TPye : " << pkt.Type << endl;
+    cout << "id : " << _id % 3 << " type : " << pkt.Type << endl;
     SendBufferRef sendBuffer = PacketHandler::MakePacket(pkt);
     AsyncWrite(sendBuffer);
 }
