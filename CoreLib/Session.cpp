@@ -24,11 +24,11 @@ bool Session::AsyncConnect()
     return true;
 }
 
-void Session::OnConnect(const boost::system::error_code& ec)
+void Session::OnConnect(const boost::system::error_code& err)
 {
-    if (ec)
+    if (err)
     {
-        // TODO : error 처리 세션 종료
+        std::cout << "OnConnect error code: " << err.value() << ", msg: " << err.message() << std::endl;
     }
     else
     {
@@ -104,13 +104,25 @@ void Session::OnRead(const boost::system::error_code err, size_t bytes_transferr
 
 void Session::AsyncWrite()
 {
-    std::string _buffer = "Hello World!!";
+    std::vector<boost::asio::const_buffer> buffers;
+    {
+        WriteLockGuard wl(lock, "write");
+        for (auto buffer : _sendBuffers)
+        {
+            buffers.emplace_back(boost::asio::buffer(buffer->Buffer(), buffer->WriteSize()));
+        }
+    }
     auto ptr = shared_from_this();
-    _socket.async_write_some(
-        boost::asio::buffer(_buffer),
+    boost::asio::async_write(
+        _socket,
+        buffers,
         [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
         {
             ptr->OnWrite(ec, bytes_transferred);
+            WriteLockGuard wl(ptr->lock, "write");
+            ptr->_sendBuffers.clear();
+            // std::cout << "sendbuffer size !!! : " << bytes_transferred << std::endl;
+            // 세션 shared_ptr관리 필요?? disconnected될때 끊길 확률 있다
         });
 }
 
@@ -133,7 +145,7 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
         _sendBuffers.emplace_back(sendBuffer);
         for (auto buffer : _sendBuffers)
         {
-            buffers.emplace_back(boost::asio::buffer(sendBuffer->Buffer(), sendBuffer->WriteSize()));
+            buffers.emplace_back(boost::asio::buffer(buffer->Buffer(), buffer->WriteSize()));
         }
     }
     auto ptr = shared_from_this();
@@ -159,7 +171,7 @@ void Session::OnWrite(const boost::system::error_code err, const size_t bytes_tr
     else
     {
         // TODO : error 처리
-        std::cout << "OnWrite error code: " << err.value() << "msg: " << err.message() << std::endl;
+        std::cout << "OnWrite error code: " << err.value() << " msg: " << err.message() << std::endl;
     }
 }
 
@@ -178,4 +190,10 @@ void Session::Disconnect()
     {
         _serviceRef.lock()->ReleaseSession(shared_from_this());
     }
+}
+
+void Session::AddWriteBuffer(SendBufferRef sendBuffer)
+{
+    WriteLockGuard wl(lock, "write");
+    _sendBuffers.emplace_back(sendBuffer);
 }

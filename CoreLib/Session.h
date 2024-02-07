@@ -10,18 +10,18 @@ public:
     Session(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep);
     ~Session();
 
-public:
     bool AsyncConnect();
     void AsyncRead();
     void AsyncWrite();
     void AsyncWrite(void* data, std::size_t size_in_bytes);
     void AsyncWrite(SendBufferRef sendBuffer);
-    virtual void OnConnect(const boost::system::error_code& error);
+    virtual void OnConnect(const boost::system::error_code& err);
     virtual int32 OnRecv(BYTE* buffer, int32 len);
     void OnRead(const boost::system::error_code err, const size_t bytes_transferred);
     void OnWrite(const boost::system::error_code err, const size_t bytes_transferred);
     void Connect();
     void Disconnect();
+    void AddWriteBuffer(SendBufferRef sendBuffer);
 
     void SetService(ServiceRef service) { _serviceRef = service; }
     ServiceRef GetService() { return _serviceRef.lock(); }
