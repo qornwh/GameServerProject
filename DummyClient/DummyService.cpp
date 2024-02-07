@@ -76,7 +76,7 @@ void DummyService::AsyncSession()
     // 맵 20000 * 30000
     for (auto session : _sessions)
     {
-        DummySessionRef dummySession = reinterpret_pointer_cast<DummySession>(session);
+        DummySessionRef dummySession = static_pointer_cast<DummySession>(session);
         PawnRef pawn = dummySession->GetPawn();
         if (pawn != nullptr)
         {

@@ -26,7 +26,6 @@ int main()
         }
     );
     
-    boost::core::detail::Sleep(1000 * 4);
     DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 1);
 
     ThreadManager tm;
