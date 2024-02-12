@@ -3,8 +3,10 @@
 
 #ifdef _DEBUG
 #pragma comment(lib, "CoreLib\\Debug\\CoreLib.lib")
+#pragma comment(lib, "EngineLib\\Debug\\GameEngine.lib")
 #else
 #pragma comment(lib, "CoreLib\\Release\\CoreLib.lib")
+#pragma comment(lib, "EngineLib\\Release\\GameEngine.lib")
 #endif
 
 #include "CorePch.h"

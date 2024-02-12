@@ -47,10 +47,10 @@ void GameRoom::EnterSession(GameSessionRef session)
                     unit->set_type(info->GetType());
                     unit->set_hp(info->GetHp());
                     protocol::Position* position = new protocol::Position;
-                    position->set_x(info->GetPosition().X);
-                    position->set_y(info->GetPosition().Y);
-                    position->set_z(info->GetPosition().Z);
-                    position->set_yaw(info->GetPosition().Yaw);
+                    position->set_x(info->GetPosition().Y);
+                    position->set_y(0);
+                    position->set_z(info->GetPosition().X);
+                    position->set_yaw(info->GetRotate());
                     // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
                     unit->set_allocated_position(position);
                     player->set_allocated_unit(unit);
@@ -69,10 +69,10 @@ void GameRoom::EnterSession(GameSessionRef session)
             unit->set_type(info->GetType());
             unit->set_hp(info->GetHp());
             protocol::Position* position = new protocol::Position;
-            position->set_x(info->GetPosition().X);
-            position->set_y(info->GetPosition().Y);
-            position->set_z(info->GetPosition().Z);
-            position->set_yaw(info->GetPosition().Yaw);
+            position->set_x(info->GetPosition().Y);
+            position->set_y(0);
+            position->set_z(info->GetPosition().X);
+            position->set_yaw(info->GetRotate());
             // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
             unit->set_allocated_position(position);
             monster->set_state(info->GetObjectState());
@@ -241,10 +241,10 @@ void GameRoom::Task()
                         unit->set_type(info->GetType());
                         unit->set_name(info->GetName());
                         protocol::Position* position = new protocol::Position();
-                        position->set_x(info->GetPosition().X);
-                        position->set_y(info->GetPosition().Y);
-                        position->set_z(info->GetPosition().Z);
-                        position->set_yaw(info->GetPosition().Yaw);
+                        position->set_x(info->GetPosition().Y);
+                        position->set_y(0);
+                        position->set_z(info->GetPosition().X);
+                        position->set_yaw(info->GetRotate());
                         unit->set_allocated_position(position);
                         monster->set_allocated_unit(unit);
                         childPkt->set_allocated_monster(monster);
@@ -264,9 +264,9 @@ void GameRoom::Task()
                         protocol::Position* position = new protocol::Position();
                         if (info->GetTarget() >= 0 && _playerMap.find(info->GetTarget()) != _playerMap.end())
                         {
-                            FVector& pos = _playerMap[info->GetTarget()]->GetPosition();
+                            Vector2& pos = _playerMap[info->GetTarget()]->GetPosition();
 
-                            if (_gameMapInfo->GetMonsterMapInfo()->InRect(pos.X, pos.Z))
+                            if (_gameMapInfo->GetMonsterMapInfo()->InRect(pos.X, pos.Y))
                             {
                                 info->MoveTarget(_playerMap[info->GetTarget()]);
                             }
@@ -279,11 +279,11 @@ void GameRoom::Task()
                         {
                             info->Move();
                         }
-                        monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Z);
-                        position->set_x(info->GetPosition().X);
-                        position->set_y(info->GetPosition().Y);
-                        position->set_z(info->GetPosition().Z);
-                        position->set_yaw(info->GetPosition().Yaw);
+                        monsterMap->InSetRect(info->GetPosition().X, info->GetPosition().Y);
+                        position->set_x(info->GetPosition().Y);
+                        position->set_y(0);
+                        position->set_z(info->GetPosition().X);
+                        position->set_yaw(info->GetRotate());
                         unit->set_allocated_position(position);
                         monster->set_allocated_unit(unit);
                         childPkt->set_allocated_monster(monster);
@@ -337,10 +337,10 @@ void GameRoom::Task()
                         unit->set_code(info->GetCode());
                         unit->set_hp(info->GetHp());
                         protocol::Position* position = new protocol::Position();
-                        position->set_x(info->GetPosition().X);
-                        position->set_y(info->GetPosition().Y);
-                        position->set_z(info->GetPosition().Z);
-                        position->set_yaw(info->GetPosition().Yaw);
+                        position->set_x(info->GetPosition().Y);
+                        position->set_y(0);
+                        position->set_z(info->GetPosition().X);
+                        position->set_yaw(info->GetRotate());
                         unit->set_allocated_position(position);
                         monster->set_allocated_unit(unit);
                         childPkt->set_allocated_monster(monster);
@@ -407,7 +407,7 @@ void GameRoom::CreateMapInfo(int32 type)
     {
         // 일반 몹 맵
         _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
-        _gameMapInfo->CreateMonsterMapInfo(22, 15, 0, 0, MapType::MONSTER);
+        _gameMapInfo->CreateMonsterMapInfo(15, 22, 0, 0, MapType::MONSTER);
         _gameRoomQuest = boost::make_shared<GameRoomQuest>(5);
         _monsterCount = 10;
     }

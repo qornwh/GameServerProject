@@ -102,7 +102,9 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
         auto& position = pkt.position();
         // cout << position.x() << " : " << position.y() << " : " << position.z() << endl;
 
-        GetPlayer()->SetPosition(position.x(), position.y(), position.z(), position.yaw());
+        // 유니티 왼손 법칙이라 이렇게 받는다.
+        GetPlayer()->SetPosition(position.z(), position.x());
+        GetPlayer()->SetRotate(position.yaw());
         pkt.set_code(_sessionId);
         protocol::Position* playerPosition = new protocol::Position;
         playerPosition->set_x(position.x());
@@ -179,7 +181,8 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
             cout << "targetCode : " << TargetCode << " skillCode : " << SkillCode << endl;
             
             auto& position = pkt.position();
-            GetPlayer()->SetPosition(position.x(), position.y(), position.z(), position.yaw());
+            GetPlayer()->SetPosition(position.z(), position.x());
+            GetPlayer()->SetRotate(position.yaw());
             GetPlayer()->SetObjecteState(static_cast<ObjectState>(SkillCode));
             GetPlayer()->SetTarget(TargetCode);
             
@@ -211,16 +214,19 @@ void GameSession::ChangeRoomHandler(const boost::asio::mutable_buffer& buffer, P
 {
     protocol::CMovePotal readPkt;
 
-    int32 currentRoomId = readPkt.pre_room_id();
-    int32 nextRoomId = readPkt.next_room_id();
-
-    if (GRoomManger->getRoom(GetRoomId()) != nullptr)
+    if (GamePacketHandler::ParsePacketHandler(readPkt, buffer, header->size - offset, offset))
     {
-        GRoomManger->getRoom(GetRoomId())->OutSession(static_pointer_cast<GameSession>(shared_from_this()));
-    }
+        int32 currentRoomId = readPkt.pre_room_id();
+        int32 nextRoomId = readPkt.next_room_id();
 
-    if (GRoomManger->getRoom(nextRoomId) != nullptr)
-    {
-        GRoomManger->getRoom(nextRoomId)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
+        if (GRoomManger->getRoom(GetRoomId()) != nullptr)
+        {
+            GRoomManger->getRoom(GetRoomId())->OutSession(static_pointer_cast<GameSession>(shared_from_this()));
+        }
+
+        if (GRoomManger->getRoom(nextRoomId) != nullptr)
+        {
+            GRoomManger->getRoom(nextRoomId)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
+        }
     }
 }

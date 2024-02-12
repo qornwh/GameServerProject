@@ -5,6 +5,7 @@
 #include "GameRoomManager.h"
 #include "GameUtils.h"
 #include "pch.h"
+#include "Collider.h"
 
 static boost::random::mt19937_64 rng;
 
@@ -26,39 +27,23 @@ enum GameObjectType
     OBJECT = 2,
 };
 
-struct FVector
-{
-    FVector(float X, float Y, float Z, float Yaw) : X(X), Y(Y), Z(Z), Yaw(Yaw)
-    {
-    }
-
-    float X;
-    float Y;
-    float Z;
-    float Yaw;
-
-    FVector& operator=(const FVector& ref)
-    {
-        X = ref.X;
-        Z = ref.Z;
-        return *this;
-    }
-};
-
 class GameObjectInfo : public boost::enable_shared_from_this<GameObjectInfo>
 {
 public:
     GameObjectInfo(int32 uuid, int32 type, int32 hp);
     ~GameObjectInfo();
 
-    void SetPosition(FVector& position);
-    void SetPosition(float X, float Y, float Z, float Yaw);
+    void SetPosition(Vector2& position);
+    void SetPosition(float x, float y);
+    void SetRotate(float yaw);
 
     std::string& GetName() { return _name; }
     int32 GetCode() { return _uuid; }
     int32 GetType() { return _type; }
     int32 GetHp() { return _hp; }
-    FVector& GetPosition() { return _position; }
+    Vector2& GetPosition() { return _collider.GetPosition(); }
+    float GetRotate() { return _collider.GetRotate(); }
+    Collider& GetCollider() { return _collider; }
 
     void SetName(const string& name);
     void TakeDamage(int32 Damage);
@@ -83,10 +68,11 @@ protected:
     int32 _heal;
     int32 _type;
 
-    FVector _position{0, 0, 0, 0};
     ObjectState _state = ObjectState::IDLE;
 
     boost::weak_ptr<GameRoom> _gameRoomRef;
+
+    Collider _collider;
 };
 
 class GameMosterInfo : public GameObjectInfo
@@ -102,8 +88,8 @@ public:
 
     void SetObjecteState(ObjectState state) override;
 
-    void SetStartPosition(int32 x, int32 z);
-    void GetStartPosition(int32& x, int32& z);
+    void SetStartPosition(int32 x, int32 y);
+    void GetStartPosition(int32& x, int32& y);
 
     void SetTarget(int32 uuid);
     int32 GetTarget() { return _targetCode; }
@@ -116,9 +102,9 @@ public:
     void UpdateYaw();
     void UpdateYaw(float theta);
 
-    FVector& GetPrePosition() { return _prePosition; }
+    Vector2& GetPrePosition() { return _prePosition; }
     float GetRangeX() { return _increaseX; }
-    float GetRangeZ() { return _increaseZ; }
+    float GetRangeZ() { return _increaseY; }
 
     int32 AddAttackCounter(int count = 1);
     int32 AddIdleCounter(int count = 1);
@@ -130,15 +116,15 @@ public:
 
 private:
     int32 _startX;
-    int32 _startZ;
+    int32 _startY;
     int32 _targetCode;
     float _speed = 3.f;
 
     float _increaseX = 0;
-    float _increaseZ = 0;
+    float _increaseY = 0;
 
     // 이전 위치
-    FVector _prePosition{0, 0, 0, 0};
+    Vector2 _prePosition{0, 0};
 
     boost::random::uniform_int_distribution<> genYaw;
 
@@ -158,8 +144,8 @@ public:
 
     void Attack(GameMosterInfoRef target, vector<int32>& attackList);
     void Healing();
-    bool AttackRect(FVector position, GameMosterInfoRef target);
-    bool AttackCircle(FVector position, GameMosterInfoRef target);
+    bool AttackRect(Vector2 position, GameMosterInfoRef target);
+    bool AttackCircle(Vector2 position, GameMosterInfoRef target);
 
     GameSessionRef GetGameSession() { return _gameSession.lock(); }
 

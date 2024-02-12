@@ -87,7 +87,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)binary\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)CoreLib\;$(IncludePath);C:\vcpkg\packages\protobuf_x64-windows\include</IncludePath>
+    <IncludePath>$(SolutionDir)CoreLib\;$(SolutionDir)GameEngine\;$(IncludePath);C:\vcpkg\packages\protobuf_x64-windows\include</IncludePath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\boost\boost_1_83_0</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)Libraries\Libs\;$(LibraryPath);C:\vcpkg\installed\x64-windows\debug\lib</LibraryPath>
     <PreBuildEventUseInBuild>false</PreBuildEventUseInBuild>
@@ -95,7 +95,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)binary\$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)CoreLib\;$(IncludePath);C:\vcpkg\packages\protobuf_x64-windows\include</IncludePath>
+    <IncludePath>$(SolutionDir)CoreLib\;$(SolutionDir)GameEngine\;$(IncludePath);C:\vcpkg\packages\protobuf_x64-windows\include</IncludePath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\boost\boost_1_83_0</ExternalIncludePath>
     <LibraryPath>$(SolutionDir)Libraries\Libs\;$(LibraryPath);C:\vcpkg\installed\x64-windows\lib;</LibraryPath>
   </PropertyGroup>
@@ -172,6 +172,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GameBossInfo.h" />
     <ClInclude Include="GameGlobal.h" />
     <ClInclude Include="GameInit.h" />
     <ClInclude Include="GameMapInfo.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="GameSession.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameBossInfo.cpp" />
     <ClCompile Include="GameGlobal.cpp" />
     <ClCompile Include="GameInit.cpp" />
     <ClCompile Include="GameMapInfo.cpp" />

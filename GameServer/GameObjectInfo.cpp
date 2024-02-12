@@ -5,7 +5,8 @@
 #include "GameSkill.h"
 #include "IRoom.h"
 
-GameObjectInfo::GameObjectInfo(int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type), _hp(hp), _maxHp(hp)
+GameObjectInfo::GameObjectInfo(int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type), _hp(hp), _maxHp(hp),
+                                                                   _collider(0.35f)
 {
 }
 
@@ -13,19 +14,19 @@ GameObjectInfo::~GameObjectInfo()
 {
 }
 
-void GameObjectInfo::SetPosition(FVector& position)
+void GameObjectInfo::SetPosition(Vector2& position)
 {
-    _position.X = position.X;
-    _position.Y = position.Y;
-    _position.Z = position.Z;
+    _collider.SetPosition(position.X, position.Y);
 }
 
-void GameObjectInfo::SetPosition(float X, float Y, float Z, float Yaw)
+void GameObjectInfo::SetPosition(float x, float y)
 {
-    _position.X = X;
-    _position.Y = Y;
-    _position.Z = Z;
-    _position.Yaw = Yaw;
+    _collider.SetPosition(x, y);
+}
+
+void GameObjectInfo::SetRotate(float yaw)
+{
+    _collider.SetRotate(yaw);
 }
 
 void GameObjectInfo::SetName(const string& name)
@@ -66,7 +67,7 @@ void GameObjectInfo::SetObjecteState(ObjectState state)
 
 GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ):
     GameObjectInfo(uuid, type, hp),
-    _startX(startX), _startZ(startZ), _targetCode(-1), genYaw(0, 360)
+    _startX(startX), _startY(startZ), _targetCode(-1), genYaw(0, 360)
 {
 }
 
@@ -98,17 +99,16 @@ void GameMosterInfo::SetObjecteState(ObjectState state)
     }
 }
 
-void GameMosterInfo::SetStartPosition(int32 x, int32 z)
+void GameMosterInfo::SetStartPosition(int32 x, int32 y)
 {
+    SetPosition(x, y);
     UpdateYaw();
-    _position.X = x;
-    _position.Z = z;
 }
 
-void GameMosterInfo::GetStartPosition(int32& x, int32& z)
+void GameMosterInfo::GetStartPosition(int32& x, int32& y)
 {
     x = _startX;
-    z = _startZ;
+    y = _startY;
 }
 
 void GameMosterInfo::SetTarget(int32 uuid)
@@ -118,27 +118,25 @@ void GameMosterInfo::SetTarget(int32 uuid)
 
 void GameMosterInfo::Move()
 {
-    _prePosition = _position;
+    _prePosition = GetPosition();
     if (_YawCounter.Add() == 0)
     {
         UpdateYaw();
     }
 
     // 기본 거리 3
-    _position.X += (_increaseX * _speed);
-    _position.Z += (_increaseZ * _speed);
+    SetPosition(GetPosition().X + (_increaseX * _speed), GetPosition().Y + (_increaseY * _speed));
 }
 
 void GameMosterInfo::updatePrePosition()
 {
     _prePosition.X += _increaseX;
-    _prePosition.Z += _increaseZ;
+    _prePosition.Y += _increaseY;
 }
 
 void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
 {
-    float theta = GameUtils::MathUtils::CalculateAngle(_position.Z, _position.X, target->GetPosition().Z,
-                                                       target->GetPosition().X);
+    float theta = Vector2::CalculateAngle(GetPosition(), target->GetPosition());
     UpdateYaw(theta);
 
     if (CheckAttackTarget(target))
@@ -149,11 +147,10 @@ void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
     else
     {
         // 타겟지점 이동
-        _prePosition = _position;
+        _prePosition = GetPosition();
 
         // 기본 거리 3
-        _position.X += (_increaseX * _speed);
-        _position.Z += (_increaseZ * _speed);
+        SetPosition(GetPosition().X + (_increaseX * _speed), GetPosition().Y + (_increaseY * _speed));
     }
 }
 
@@ -171,8 +168,8 @@ bool GameMosterInfo::CheckAttackTarget(GamePlayerInfoRef target)
         {
             int32 radius = skillMap[ObjectState::ATTACK]._radius;
 
-            float targetX = abs(_position.X - target->GetPosition().X);
-            float targetZ = abs(_position.Z - target->GetPosition().Z);
+            float targetX = abs(GetPosition().X - target->GetPosition().X);
+            float targetZ = abs(GetPosition().Y - target->GetPosition().Y);
 
             float targetRadius = sqrtf(powf(targetX, 2) + powf(targetZ, 2));
 
@@ -192,16 +189,16 @@ bool GameMosterInfo::CheckAttackTarget(GamePlayerInfoRef target)
 void GameMosterInfo::UpdateYaw()
 {
     // room 1 tick 당 이동거리 계산
-    _position.Yaw = genYaw(rng);
-    _increaseX = GameUtils::MathUtils::GetSin(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
-    _increaseZ = GameUtils::MathUtils::GetCos(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
+    SetRotate(genYaw(rng));
+    _increaseX = GameEngine::MathUtils::GetCos(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
+    _increaseY = GameEngine::MathUtils::GetSin(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
 }
 
 void GameMosterInfo::UpdateYaw(float theta)
 {
-    _position.Yaw = theta;
-    _increaseX = GameUtils::MathUtils::GetSin(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
-    _increaseZ = GameUtils::MathUtils::GetCos(_position.Yaw) * (_speed / _MoveCounter.GetTickValue());
+    SetRotate(theta);
+    _increaseX = GameEngine::MathUtils::GetCos(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
+    _increaseY = GameEngine::MathUtils::GetSin(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
 }
 
 int32 GameMosterInfo::AddAttackCounter(int count)
@@ -238,12 +235,10 @@ int32 GameMosterInfo::AddDieCounter(int count)
     int32 value = _DieCounter.Add(count);
     if (value == _DieCounter.GetTickValue() - 1)
     {
-        _position.X = _startX;
-        _position.Z = _startZ;
-        _prePosition.X = _startX;
-        _prePosition.Z = _startZ;
+        SetPosition(_startX, _startY);
+        _prePosition = _collider.GetPosition();
         _increaseX = 0;
-        _increaseZ = 0;
+        _increaseY = 0;
         _hp = 100;
         _targetCode = -1;
         SetObjecteState(ObjectState::IDLE);
@@ -253,11 +248,9 @@ int32 GameMosterInfo::AddDieCounter(int count)
 
 void GameMosterInfo::IdlePosition()
 {
-    _position.X = _prePosition.X;
-    _position.Y = _prePosition.Y;
-    _position.Z = _prePosition.Z;
+    SetPosition(_prePosition.X, _prePosition.Y);
     _increaseX = 0;
-    _increaseZ = 0;
+    _increaseY = 0;
 }
 
 GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
@@ -337,38 +330,28 @@ void GamePlayerInfo::Healing()
     }
 }
 
-bool GamePlayerInfo::AttackRect(FVector position, GameMosterInfoRef target)
+bool GamePlayerInfo::AttackRect(Vector2 position, GameMosterInfoRef target)
 {
-    int32 rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
-    float rangeZ = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width / 2.f;
+    float rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width;
+    float rangeY = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
 
-    float targetX = _position.X - (position.X);
-    float targetZ = _position.Z - (position.Z);
-    float radius = GameUtils::MathUtils::Magnitude(targetX, targetZ);
-
-    targetX = abs(radius * GameUtils::MathUtils::GetSin((-1) * _position.Yaw));
-    targetZ = radius * GameUtils::MathUtils::GetCos((-1) * _position.Yaw);
-
-    if (targetX < rangeX)
-    {
-        if ((-1.f * rangeZ) < targetZ && targetZ < rangeZ)
-        {
-            // 공격 성공
-            return true;
-        }
-    }
-
+    Collider attackCollider(rangeX, rangeY, 0, 0);
+    attackCollider.SetPosition(GetPosition().X + rangeY * GameEngine::MathUtils::GetCos(GetRotate()),
+                               GetPosition().Y + rangeY / 2 * GameEngine::MathUtils::GetSin(GetRotate()));
+    attackCollider.SetRotate(_collider.GetRotate());
+    if (attackCollider.IsTrigger(target->GetCollider()))
+        return true;
     return false;
 }
 
-bool GamePlayerInfo::AttackCircle(FVector position, GameMosterInfoRef target)
+bool GamePlayerInfo::AttackCircle(Vector2 position, GameMosterInfoRef target)
 {
     int32 radius = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._radius;
 
-    float targetX = abs(_position.X - position.X);
-    float targetZ = abs(_position.Z - position.Z);
+    float targetX = abs(GetPosition().X - position.X);
+    float targetY = abs(GetPosition().Y - position.Y);
 
-    float targetRadius = sqrtf(powf(targetX, 2) + powf(targetZ, 2));
+    float targetRadius = sqrtf(powf(targetX, 2) + powf(targetY, 2));
 
     if (targetRadius < radius)
         // 공격 성공

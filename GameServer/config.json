@@ -8,8 +8,8 @@
             "code": 4,
             "target": true,
             "type": 0,
-            "width": 3,
-            "height": 3,
+            "width": 2,
+            "height": 2,
             "damage": 10
           },
           {
@@ -80,5 +80,33 @@
         ]
       }
     ]
-  }
+  },
+  "maps": [
+    {
+      "x" : 25,
+      "y" : 25,
+      "centerX": 0,
+      "centerY": 0,
+      "monsterMap":
+      {
+        "x" : 22,
+        "y" : 15,
+        "centerX": 0,
+        "centerY": 0
+      }
+    },
+    {
+      "x" : 15,
+      "y" : 15,
+      "centerX": 0,
+      "centerY": 0,
+      "bossMap":
+      {
+        "x" : 10,
+        "y" : 10,
+        "centerX": 0,
+        "centerY": 0
+      }
+    }
+  ]
 }
