@@ -15,9 +15,8 @@
           {
             "code": 5,
             "target": false,
-            "type": 0,
-            "width": 3,
-            "height": 3,
+            "type": 1,
+            "radius": 2,
             "damage": 80
           },
           {
@@ -42,7 +41,7 @@
             "code": 5,
             "target": false,
             "type": 1,
-            "radius": 5,
+            "radius": 2,
             "damage": 80
           },
           {
