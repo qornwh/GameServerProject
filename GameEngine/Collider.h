@@ -13,8 +13,8 @@
 class Collider
 {
 public:
-    Collider(float radius, float x = 0, float y = 0);
-    Collider(float width, float height, float x = 0, float y = 0);
+    Collider(float radius);
+    Collider(float width, float height);
 
     ~Collider();
 

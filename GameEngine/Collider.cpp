@@ -1,13 +1,13 @@
 ﻿#include "Collider.h"
 
-Collider::Collider(float radius, float x, float y)
+Collider::Collider(float radius)
 {
-    _shape = new Circle(x, y, radius);
+    _shape = new Circle(radius);
 }
 
-Collider::Collider(float width, float height, float x, float y)
+Collider::Collider(float width, float height)
 {
-    _shape = new Rectangle(x, y, width, height);
+    _shape = new Rectangle(width, height);
 }
 
 Collider::~Collider()
@@ -32,7 +32,7 @@ bool Collider::IsTrigger(Collider& other)
                 Vector2 del = other.GetPosition() - _position;
                 float dist = Vector2::Magnitude(del);
 
-                if (dist > otherShape.GetRadius() + shape->GetRadius())
+                if (dist < otherShape.GetRadius() + shape->GetRadius())
                     return true;
             }
             else
