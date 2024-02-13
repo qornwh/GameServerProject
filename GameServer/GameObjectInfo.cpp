@@ -166,14 +166,13 @@ bool GameMosterInfo::CheckAttackTarget(GamePlayerInfoRef target)
     {
         if (skillType == Skill::CIRCLE)
         {
-            int32 radius = skillMap[ObjectState::ATTACK]._radius;
+            float radius = skillMap[ObjectState::ATTACK]._radius;
 
-            float targetX = abs(GetPosition().X - target->GetPosition().X);
-            float targetZ = abs(GetPosition().Y - target->GetPosition().Y);
+            Collider attackCollider(radius);
+            attackCollider.SetPosition(GetPosition().X, GetPosition().Y);
+            attackCollider.SetRotate(_collider.GetRotate());
 
-            float targetRadius = sqrtf(powf(targetX, 2) + powf(targetZ, 2));
-
-            if (targetRadius < radius)
+            if (attackCollider.IsTrigger(target->GetCollider()))
             {
                 // 공격 성공
                 target->TakeDamage(skillMap[ObjectState::ATTACK]._damage);
@@ -248,7 +247,7 @@ int32 GameMosterInfo::AddDieCounter(int count)
 
 void GameMosterInfo::IdlePosition()
 {
-    SetPosition(_prePosition.X, _prePosition.Y);
+    // SetPosition(_prePosition.X, _prePosition.Y);
     _increaseX = 0;
     _increaseY = 0;
 }
@@ -335,7 +334,7 @@ bool GamePlayerInfo::AttackRect(Vector2 position, GameMosterInfoRef target)
     float rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width;
     float rangeY = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
 
-    Collider attackCollider(rangeX, rangeY, 0, 0);
+    Collider attackCollider(rangeX, rangeY);
     attackCollider.SetPosition(GetPosition().X + rangeY * GameEngine::MathUtils::GetCos(GetRotate()),
                                GetPosition().Y + rangeY / 2 * GameEngine::MathUtils::GetSin(GetRotate()));
     attackCollider.SetRotate(_collider.GetRotate());
@@ -346,15 +345,13 @@ bool GamePlayerInfo::AttackRect(Vector2 position, GameMosterInfoRef target)
 
 bool GamePlayerInfo::AttackCircle(Vector2 position, GameMosterInfoRef target)
 {
-    int32 radius = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._radius;
+    float radius = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._radius;
 
-    float targetX = abs(GetPosition().X - position.X);
-    float targetY = abs(GetPosition().Y - position.Y);
+    Collider attackCollider(radius);
+    attackCollider.SetPosition(GetPosition().X, GetPosition().Y);
+    attackCollider.SetRotate(_collider.GetRotate());
 
-    float targetRadius = sqrtf(powf(targetX, 2) + powf(targetY, 2));
-
-    if (targetRadius < radius)
-        // 공격 성공
+    if (attackCollider.IsTrigger(target->GetCollider()))
         return true;
 
     return false;
