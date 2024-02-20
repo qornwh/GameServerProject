@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
 
-using GameRoomRef = boost::shared_ptr<class GameRoom>;
-
 class GameRoomManager : public enable_shared_from_this<GameRoomManager>
 {
 public:

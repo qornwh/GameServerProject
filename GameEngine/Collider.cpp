@@ -43,11 +43,10 @@ bool Collider::IsTrigger(Collider& other)
                 // 원의 중심점은 사각형 중심점을 기준으로 1사분면으로 좌표 변환 한다. 그냥 abs 절대값으로 변경하면 된다.
                 // 사각형의 가로 세로 길이에 원의 반지름 더해주고 원의 중심점이 들어가면, 겹친다.
                 Vector2 del = (_position + _shape->GetCenter()) - (other.GetPosition() + otherShape.GetCenter());
-                float delY = _position.Y - other.GetPosition().Y;
                 float radius = shape->GetRadius();
 
-                float vWidth = otherShape.GetWidth() + radius;
-                float vHeight = otherShape.GetWidth() + radius;
+                float vWidth = otherShape.GetWidth() / 2.f + radius;
+                float vHeight = otherShape.GetHeight() / 2.f + radius;
 
                 if (abs(del.X) < vWidth && abs(del.Y) < vHeight)
                     return true;
@@ -68,8 +67,8 @@ bool Collider::IsTrigger(Collider& other)
                 Vector2 del = (other.GetPosition() + otherShape.GetCenter()) - (_position + _shape->GetCenter());
                 float radius = otherShape.GetRadius();
 
-                float vWidth = shape->GetWidth() + radius;
-                float vHeight = shape->GetWidth() + radius;
+                float vWidth = shape->GetWidth() / 2.f + radius;
+                float vHeight = shape->GetHeight() / 2.f + radius;
 
                 if (abs(del.X) < vWidth && abs(del.Y) < vHeight)
                     return true;
@@ -125,4 +124,22 @@ void Collider::SetPosition(float x, float y)
 void Collider::SetRotate(float rot)
 {
     _rotate = rot;
+}
+
+void Collider::ResetCollider(float radius)
+{
+    if (_shape != nullptr)
+    {
+        delete _shape;
+    }
+    _shape = new Circle(radius);
+}
+
+void Collider::ResetCollider(float width, float height)
+{
+    if (_shape != nullptr)
+    {
+        delete _shape;
+    }
+    _shape = new Rectangle(width, height);
 }

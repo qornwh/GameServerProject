@@ -2,9 +2,8 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
-#include "GameRoomManager.h"
-#include "GameUtils.h"
 #include "pch.h"
+#include "GameUtils.h"
 #include "Collider.h"
 
 static boost::random::mt19937_64 rng;
@@ -14,10 +13,11 @@ enum ObjectState
     IDLE = 0,
     DIE = 1,
     HITED = 2,
-    MOVE = 3,
     ATTACK = 4,
+    MOVE = 3,
     SKILL1 = 5,
     SKILL2 = 6,
+    READY_ATTACK = 14,
 };
 
 enum GameObjectType
@@ -30,7 +30,7 @@ enum GameObjectType
 class GameObjectInfo : public boost::enable_shared_from_this<GameObjectInfo>
 {
 public:
-    GameObjectInfo(int32 uuid, int32 type, int32 hp);
+    GameObjectInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp);
     ~GameObjectInfo();
 
     void SetPosition(Vector2& position);
@@ -83,7 +83,7 @@ public:
     // 타겟 이동
     // 공격 (시간) - tict필요
     // 스킬 (시간) - tict필요
-    GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ);
+    GameMosterInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ);
     ~GameMosterInfo();
 
     void SetObjecteState(ObjectState state) override;
@@ -94,25 +94,25 @@ public:
     void SetTarget(int32 uuid);
     int32 GetTarget() { return _targetCode; }
 
-    void Move();
+    virtual void Move();
     void updatePrePosition();
-    void MoveTarget(GamePlayerInfoRef target);
+    virtual void MoveTarget(GamePlayerInfoRef target);
     bool CheckAttackTarget(GamePlayerInfoRef target);
 
-    void UpdateYaw();
-    void UpdateYaw(float theta);
+    virtual void UpdateYaw();
+    virtual void UpdateYaw(float theta);
 
     Vector2& GetPrePosition() { return _prePosition; }
     float GetRangeX() { return _increaseX; }
     float GetRangeZ() { return _increaseY; }
 
-    int32 AddAttackCounter(int count = 1);
-    int32 AddIdleCounter(int count = 1);
-    int32 AddHitCounter(int count = 1);
-    int32 AddMoveCounter(int count = 1);
-    int32 AddDieCounter(int count = 1);
+    virtual int32 AddAttackCounter(int count = 1);
+    virtual int32 AddIdleCounter(int count = 1);
+    virtual int32 AddHitCounter(int count = 1);
+    virtual int32 AddMoveCounter(int count = 1);
+    virtual int32 AddDieCounter(int count = 1);
 
-    void IdlePosition();
+    virtual void IdlePosition();
 
 private:
     int32 _startX;
@@ -128,12 +128,14 @@ private:
 
     boost::random::uniform_int_distribution<> genYaw;
 
+protected:
     GameUtils::TickCounter _YawCounter{4};
     GameUtils::TickCounter _MoveCounter{10};
     GameUtils::TickCounter _IdleCounter{3};
     GameUtils::TickCounter _HitCounter{3};
     GameUtils::TickCounter _DieCounter{30};
     GameUtils::TickCounter _AttackCounter{10};
+    GameUtils::TickCounter _ReadyAttackCounter{10};
 };
 
 class GamePlayerInfo : public GameObjectInfo
@@ -142,20 +144,21 @@ public:
     GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp);
     ~GamePlayerInfo();
 
-    void Attack(GameMosterInfoRef target, vector<int32>& attackList);
+    void Attack(GameObjectInfoRef target, vector<int32>& attackList);
     void Healing();
-    bool AttackRect(Vector2 position, GameMosterInfoRef target);
-    bool AttackCircle(Vector2 position, GameMosterInfoRef target);
-
-    GameSessionRef GetGameSession() { return _gameSession.lock(); }
+    bool AttackRect(Vector2 position, GameObjectInfoRef target);
+    bool AttackCircle(Vector2 position, GameObjectInfoRef target);
 
     void SetTarget(int32 uuid);
     int32 GetTarget() { return _targetCode; }
 
+    GameSessionRef GetGameSession() { return _gameSession.lock(); }
+
 private:
-    // 혹시나 해서 들고 있는다.
-    boost::weak_ptr<GameSession> _gameSession;
     int32 _targetCode;
 
     // boost::json::value& _skillJson;
+    
+    // 혹시나 해서 들고 있는다.
+    boost::weak_ptr<GameSession> _gameSession;
 };

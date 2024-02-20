@@ -5,6 +5,7 @@
 #include "GameRoomManager.h"
 #include "pch.h"
 #include "GameSerivce.h"
+#include "IRoom.h"
 #include "ThreadManager.h"
 
 int main()
@@ -19,8 +20,10 @@ int main()
 
     // 일반몹 맵 = 0
     GRoomManger->CreateRoom(io_context, 0);
+    GRoomManger->getRoom(0)->InitMonsters();
     // 보스몹 맵 = 1
     GRoomManger->CreateRoom(io_context, 1);
+    GRoomManger->getRoom(1)->InitMonsters();
 
     GameServiceRef service = boost::make_shared<GameService>(io_context, port);
 

@@ -27,6 +27,9 @@ public:
     void SetRotate(float rot);
     float GetRotate() { return _rotate; }
 
+    void ResetCollider(float radius);
+    void ResetCollider(float width, float height);
+
 private:
     Shape* _shape;
 

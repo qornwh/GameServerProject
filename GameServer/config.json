@@ -40,8 +40,9 @@
           {
             "code": 5,
             "target": false,
-            "type": 1,
-            "radius": 2,
+            "type": 0,
+            "width": 1,
+            "height": 5,
             "damage": 80
           },
           {
@@ -75,6 +76,19 @@
             "type": 1,
             "radius": 2,
             "damage": 4
+          }
+        ]
+      },
+      {
+        "type": 2,
+        "skills": [
+          {
+            "code": 4,
+            "target": false,
+            "type": 0,
+            "width": 10,
+            "height": 10,
+            "damage": 10
           }
         ]
       }

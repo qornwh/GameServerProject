@@ -17,6 +17,7 @@ enum MessageCode {
     S_UNITBUFF = 11; // 유닛(유저, 몬스터) 버프
     S_ROOMQUEST = 12; // 룸 클리어 정보
     C_MOVEPOTAL = 13; // 포탈 이동
+    S_ENDGAME = 14; // 게임 종료
 }
 
 message Login {
@@ -140,4 +141,8 @@ message SRoomQuest {
 message CMovePotal {
     int32 pre_room_id = 1;
     int32 next_room_id = 2;
+}
+
+message SEndGame {
+    bool end_game = 1;
 }

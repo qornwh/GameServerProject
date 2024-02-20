@@ -5,9 +5,11 @@
 #include "GameSkill.h"
 #include "IRoom.h"
 
-GameObjectInfo::GameObjectInfo(int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type), _hp(hp), _maxHp(hp),
-                                                                   _collider(0.35f)
+GameObjectInfo::GameObjectInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type),
+    _hp(hp), _maxHp(hp),
+    _collider(0.35f)
 {
+    _gameRoomRef = gameRoom;
 }
 
 GameObjectInfo::~GameObjectInfo()
@@ -65,8 +67,9 @@ void GameObjectInfo::SetObjecteState(ObjectState state)
     _state = state;
 }
 
-GameMosterInfo::GameMosterInfo(int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ):
-    GameObjectInfo(uuid, type, hp),
+GameMosterInfo::GameMosterInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX,
+                               int32 startZ):
+    GameObjectInfo(gameRoom, uuid, type, hp),
     _startX(startX), _startY(startZ), _targetCode(-1), genYaw(0, 360)
 {
 }
@@ -247,12 +250,11 @@ int32 GameMosterInfo::AddDieCounter(int count)
 
 void GameMosterInfo::IdlePosition()
 {
-    // SetPosition(_prePosition.X, _prePosition.Y);
     _increaseX = 0;
     _increaseY = 0;
 }
 
-GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
+GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(GRoomManger->getRoom(gameSession->GetRoomId()),
     uuid, type, hp)
 {
     _gameSession = gameSession;
@@ -263,7 +265,7 @@ GamePlayerInfo::~GamePlayerInfo()
     cout << "close player info" << endl;
 }
 
-void GamePlayerInfo::Attack(GameMosterInfoRef target, vector<int32>& attackList)
+void GamePlayerInfo::Attack(GameObjectInfoRef target, vector<int32>& attackList)
 {
     if (GetGameSession() == nullptr)
         return;
@@ -329,21 +331,21 @@ void GamePlayerInfo::Healing()
     }
 }
 
-bool GamePlayerInfo::AttackRect(Vector2 position, GameMosterInfoRef target)
+bool GamePlayerInfo::AttackRect(Vector2 position, GameObjectInfoRef target)
 {
     float rangeX = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._width;
     float rangeY = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
 
     Collider attackCollider(rangeX, rangeY);
-    attackCollider.SetPosition(GetPosition().X + rangeY * GameEngine::MathUtils::GetCos(GetRotate()),
-                               GetPosition().Y + rangeY / 2 * GameEngine::MathUtils::GetSin(GetRotate()));
+    attackCollider.SetPosition(GetPosition().X + rangeY / 2.f * GameEngine::MathUtils::GetCos(GetRotate()),
+                               GetPosition().Y + rangeY / 2.f * GameEngine::MathUtils::GetSin(GetRotate()));
     attackCollider.SetRotate(_collider.GetRotate());
     if (attackCollider.IsTrigger(target->GetCollider()))
         return true;
     return false;
 }
 
-bool GamePlayerInfo::AttackCircle(Vector2 position, GameMosterInfoRef target)
+bool GamePlayerInfo::AttackCircle(Vector2 position, GameObjectInfoRef target)
 {
     float radius = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._radius;
 

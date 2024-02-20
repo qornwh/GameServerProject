@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "GameObjectInfo.h"
 
-class GameBossInfo : public GameObjectInfo
+class GameBossInfo : public GameMosterInfo
 {
 public:
     // 초기위치
@@ -9,40 +9,31 @@ public:
     // 타겟 이동
     // 공격 (시간) - tict필요
     // 스킬 (시간) - tict필요
-    GameBossInfo(int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ);
+    GameBossInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX, int32 startY);
     ~GameBossInfo();
 
     void SetObjecteState(ObjectState state) override;
 
-    void SetStartPosition(int32 x, int32 y);
-    void GetStartPosition(int32& x, int32& y);
+    void Move() override;
+    void MoveTarget(GamePlayerInfoRef target) override;
 
-    void SetTarget(int32 uuid);
-    int32 GetTarget() { return _targetCode; }
+    void UpdateYaw() override;
+    void UpdateYaw(float theta) override;
 
-    void Move();
-    void updatePrePosition();
-    void MoveTarget(GamePlayerInfoRef target);
-    bool CheckAttackTarget(GamePlayerInfoRef target);
+    int32 AddReadyAttackCounter(int count = 1);
+    int32 AddDieCounter(int count = 1) override;
 
-    void UpdateYaw();
-    void UpdateYaw(float theta);
+    // 특수 스킬들
+    bool ReadyAttackSkill1(int hp);
+    bool ReadyAttackSkill2(int hp);
+    void Attack(GamePlayerInfoRef target, vector<int32>& attackList);
 
-    Vector2& GetPrePosition() { return _prePosition; }
-    float GetRangeX() { return _increaseX; }
-    float GetRangeZ() { return _increaseY; }
-
-    int32 AddAttackCounter(int count = 1);
-    int32 AddIdleCounter(int count = 1);
-    int32 AddHitCounter(int count = 1);
-    int32 AddMoveCounter(int count = 1);
-    int32 AddDieCounter(int count = 1);
-
-    void IdlePosition();
+    bool AttackRect(Vector2 position, GameObjectInfoRef target);
+    bool AttackCircle(Vector2 position, GameObjectInfoRef target);
 
 private:
-    int32 _startX;
-    int32 _startY;
+    int32 _startX = 0;
+    int32 _startY = 0;
     int32 _targetCode;
     float _speed = 3.f;
 
@@ -51,13 +42,6 @@ private:
 
     // 이전 위치
     Vector2 _prePosition{0, 0};
-
     boost::random::uniform_int_distribution<> genYaw;
-
-    GameUtils::TickCounter _YawCounter{4};
-    GameUtils::TickCounter _MoveCounter{10};
-    GameUtils::TickCounter _IdleCounter{3};
-    GameUtils::TickCounter _HitCounter{3};
-    GameUtils::TickCounter _DieCounter{30};
-    GameUtils::TickCounter _AttackCounter{30};
+    vector<function<bool(int)>> _SkillQueue;
 };

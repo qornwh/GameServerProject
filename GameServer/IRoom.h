@@ -4,17 +4,18 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
 
+#include "pch.h"
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
-#include "pch.h"
 #include "GameSession.h"
 #include "GameObjectInfo.h"
+#include "GameBossInfo.h"
 #include "GameUtils.h"
 
 // 일단 이구간 템플릿 연구 필요 아직 템플릿 숙지 덜됨, 컴파일시 어떻게 돌아가는지??
 
 template <typename T, typename = std::enable_if_t<std::is_base_of_v<SessionRef, T>>>
-class IRoom : public enable_shared_from_this<IRoom<T, SessionRef>>
+class IRoom : public boost::enable_shared_from_this<IRoom<T, SessionRef>>
 {
 public:
     IRoom(boost::asio::io_context& io_context, uint32 id) : _id(id), _strand(boost::asio::make_strand(io_context))
@@ -31,7 +32,7 @@ public:
         // 1개씩 처리됨
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            cout << "세션 추가 !!!" << endl;
+            cout << "Session Add !!!" << endl;
             _sessionList.insert(session);
         }));
     }
@@ -42,7 +43,7 @@ public:
         // 1개씩 처리됨
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            cout << "세션 탈주 !!!" << endl;
+            cout << "Session Out !!!" << endl;
             _sessionList.erase(session);
         }));
     }
@@ -120,15 +121,19 @@ public:
     void CreateMapInfo(int32 type);
 
     void InitMonsters();
-    void SpawnMonsters();
-    void MoveMonsters();
-    void AttackMonster();
 
     unordered_map<int32, GameMosterInfoRef> GetMonsterMap() { return _monsterMap; }
     GameMosterInfoRef GetMonster(int32 Code)
     {
         if (_monsterMap.find(Code) != _monsterMap.end())
             return _monsterMap[Code];
+        return nullptr;
+    }
+    unordered_map<int32, GamePlayerInfoRef> GetPlayerMap() { return _playerMap; }
+    GamePlayerInfoRef GetPlayer(int32 Code)
+    {
+        if (_playerMap.find(Code) != _playerMap.end())
+            return _playerMap[Code];
         return nullptr;
     }
 

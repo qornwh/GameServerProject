@@ -78,6 +78,7 @@ void GameRoom::EnterSession(GameSessionRef session)
             monster->set_state(info->GetObjectState());
             monster->set_allocated_unit(unit);
         }
+
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
         session->AsyncWrite(sendBuffer);
     }
@@ -179,7 +180,6 @@ void GameRoom::Task()
 
         int32 skillCode = attackInfo->GetObjectState();
         int32 targetCode = attackInfo->GetTarget();
-        GameMosterInfoRef info = GetMonster(targetCode);
         vector<int32> attackList;
 
         if (targetCode < 0)
@@ -190,6 +190,8 @@ void GameRoom::Task()
         else
         {
             // 타겟
+            GameObjectInfoRef info = GetMonster(targetCode);
+
             if (info != nullptr)
             {
                 attackInfo->Attack(info, attackList);
@@ -202,7 +204,7 @@ void GameRoom::Task()
             GameMosterInfoRef info = GetMonster(monsterCode);
             if (info != nullptr && info->GetObjectState() != ObjectState::DIE)
             {
-                cout << "공격 성공 : " << info->GetCode() << endl;
+                cout << "Attack Success : " << info->GetCode() << endl;
                 info->SetTarget(attackInfo->GetCode());
                 info->IdlePosition();
                 if (info->GetHp() > 0)
@@ -369,6 +371,124 @@ void GameRoom::Task()
             }
         }
     }
+    else if (mapType == MapType::BOS)
+    {
+        GameBossInfoRef info = static_pointer_cast<GameBossInfo>(_monsterMap[0]);
+        switch (info->GetObjectState())
+        {
+        case ObjectState::IDLE:
+            {
+                if (info->AddIdleCounter() == 0)
+                {
+                }
+            }
+            break;
+        case ObjectState::MOVE:
+            {
+                if (info->AddMoveCounter() == 0)
+                {
+                    info->Move();
+                }
+            }
+            break;
+        case ObjectState::READY_ATTACK:
+            {
+                if (info->AddReadyAttackCounter() == 0)
+                {
+                    protocol::UnitState* childPkt = pkt.add_unit_state();
+                    childPkt->set_is_monster(true);
+                    protocol::Monster* monster = new protocol::Monster();
+                    monster->set_state(info->GetObjectState());
+                    protocol::Unit* unit = new protocol::Unit();
+                    unit->set_code(info->GetCode());
+                    monster->set_allocated_unit(unit);
+                    childPkt->set_allocated_monster(monster);
+                }
+            }
+            break;
+        case ObjectState::ATTACK:
+        case ObjectState::SKILL1:
+        case ObjectState::SKILL2:
+            {
+                if (info->AddAttackCounter() == 0)
+                {
+                    protocol::UnitState* childPkt = pkt.add_unit_state();
+                    childPkt->set_is_monster(true);
+                    protocol::Monster* monster = new protocol::Monster();
+                    monster->set_state(info->GetObjectState());
+                    protocol::Unit* unit = new protocol::Unit();
+                    unit->set_code(info->GetCode());
+                    monster->set_allocated_unit(unit);
+                    childPkt->set_allocated_monster(monster);
+
+                    vector<int32> attackList;
+                    info->Attack(nullptr, attackList);
+
+                    // 공격 판정된 몬스터 리스트들
+                    for (auto playerCode : attackList)
+                    {
+                        GamePlayerInfoRef playerInfo = GetPlayer(playerCode);
+                        if (playerInfo != nullptr && playerInfo->GetObjectState() != ObjectState::DIE)
+                        {
+                            // cout << "Boss Attack Success : " << playerInfo->GetCode() << endl;
+
+                            if (playerInfo->GetHp() > 0)
+                            {
+                                playerInfo->SetObjecteState(ObjectState::HITED);
+                            }
+                            else
+                            {
+                                playerInfo->SetObjecteState(ObjectState::DIE);
+                            }
+
+                            // 플레이어 히트
+                            protocol::UnitState* childPkt2 = pkt.add_unit_state();
+                            childPkt2->set_is_monster(false);
+                            childPkt2->set_demage(playerInfo->GetDamage());
+                            playerInfo->ResetDamage();
+                            protocol::Player* _player = new protocol::Player();
+                            protocol::Unit* unit2 = new protocol::Unit();
+                            unit2->set_code(playerInfo->GetCode());
+                            unit2->set_hp(playerInfo->GetHp());
+                            _player->set_allocated_unit(unit2);
+                            childPkt2->set_allocated_player(_player);
+                        }
+                    }
+                }
+            }
+            break;
+        case ObjectState::HITED:
+            {
+                if (info->AddHitCounter() == 0)
+                {
+                    // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
+                    protocol::UnitState* childPkt = pkt.add_unit_state();
+                    childPkt->set_is_monster(true);
+                    childPkt->set_demage(info->GetDamage());
+                    info->ResetDamage();
+                    protocol::Monster* monster = new protocol::Monster();
+                    monster->set_state(info->GetObjectState());
+                    protocol::Unit* unit = new protocol::Unit();
+                    unit->set_code(info->GetCode());
+                    unit->set_hp(info->GetHp());
+                    protocol::Position* position = new protocol::Position();
+                    position->set_x(info->GetPosition().Y);
+                    position->set_y(0);
+                    position->set_z(info->GetPosition().X);
+                    position->set_yaw(info->GetRotate());
+                    unit->set_allocated_position(position);
+                    monster->set_allocated_unit(unit);
+                    childPkt->set_allocated_monster(monster);
+                }
+            }
+            break;
+        case ObjectState::DIE:
+            {
+                // 게임종료
+            }
+            break;
+        }
+    }
 
     if (pkt.unit_state_size() > 0)
     {
@@ -391,13 +511,20 @@ void GameRoom::Task()
     // - 일단 완
     // 케이스 2
     // 플레이어의 공격명령(이때 현재 좌표도 함께 받음)을 받고 현재몬스터들의 좌표에 공격범위에 있으면 몬스터 Hit처리후 클라에게 메시지 전달
-    // - 일단 완
+    // - 완
     // 케이스 3
     // 공격받은 몬스터들은 플레이어 쪽으로 이동 (방향전환 함께)
-    // - 일단 완
+    // - 완
     // 케이스 4
     // 공격받은 몬스터들의 공격범위에 플레이어가 있으면 공격 및 데미지 계산 플레이어 Hit처리후 클라에게 공격 데미지 메시지 전달.
-    // - 하는중
+    // - 완
+
+    // 보스 정책 
+    // 보스는 공격을 3초에 한번씩 한다고 친다. ( 일정 범위에 있으면 )
+    // 보스는 항상 슈퍼아머상태이다.
+    // 보스는 70, 40인 경우 특수 공격을 한다. ( 큐에 함수를 넣는 방범을 생각해 본다 )
+    // 보스는 이동 x, 방향 x
+    // 보스가 공격, 특수 공격 진행시에는 데미지가 들어가지 않는다. ( 사실상 무조건 패턴 발동 )
 }
 
 void GameRoom::CreateMapInfo(int32 type)
@@ -419,8 +546,6 @@ void GameRoom::CreateMapInfo(int32 type)
         _gameRoomQuest = boost::make_shared<GameRoomQuest>(1);
         _bosMonsterCount = 1;
     }
-
-    InitMonsters();
 }
 
 void GameRoom::InitMonsters()
@@ -436,7 +561,8 @@ void GameRoom::InitMonsters()
         {
             int32 startX = genX(rng);
             int32 startZ = genY(rng);
-            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100, startX, startZ);
+            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(
+                static_pointer_cast<GameRoom>(shared_from_this()), i, i % 2, 100, startX, startZ);
             info->SetStartPosition(startX, startZ);
             info->SetObjecteState(ObjectState::MOVE);
 
@@ -447,25 +573,12 @@ void GameRoom::InitMonsters()
     {
         for (int32 i = 0; i < _bosMonsterCount; i++)
         {
-            int32 startX = genX(rng);
-            int32 startZ = genY(rng);
-            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(i, 0, 100, startX, startZ);
-            info->SetStartPosition(startX, startZ);
+            GameBossInfoRef info = boost::make_shared<GameBossInfo>(static_pointer_cast<GameRoom>(shared_from_this()),
+                                                                    i, 2, 100, 0, 0);
+            info->SetStartPosition(0, 0);
             info->SetObjecteState(ObjectState::MOVE);
 
             _monsterMap[i] = info;
         }
     }
-}
-
-void GameRoom::SpawnMonsters()
-{
-}
-
-void GameRoom::MoveMonsters()
-{
-}
-
-void GameRoom::AttackMonster()
-{
 }
