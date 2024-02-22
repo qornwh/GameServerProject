@@ -344,3 +344,80 @@ void GameBossInfo::Update()
         break;
     }
 }
+
+GameBossArrow::GameBossArrow(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ) :
+    GameObjectInfo(gameRoom, uuid, type, hp)
+{
+    _collider.ResetCollider(4, 10);
+    _increaseY = _speed / _MoveCounter.GetTickValue();
+}
+
+GameBossArrow::~GameBossArrow()
+{
+}
+
+void GameBossArrow::Update()
+{
+    // GameObjectInfo::Update();
+
+    _prePosition.Y += _increaseY;
+
+    GameRoomRef room = GetGameRoom();
+
+    vector<int32> players;
+    for (auto it : room->GetPlayerMap())
+    {
+        GamePlayerInfoRef player = it.second;
+
+        if (GetCollider().IsTrigger(player->GetCollider()))
+        {
+            if (_players.find(player->GetCode()) != _players.end())
+            {
+                if (_players[player->GetCode()] == 0)
+                {
+                    _players[player->GetCode()] = 1;
+                }
+                else if (_players[player->GetCode()] == 1)
+                {
+                    _players[player->GetCode()] = 2;
+                }
+                else if (_players[player->GetCode()] == 2)
+                {
+                    // 그대로 충돌 상태 유지
+                }
+            }
+            else
+            {
+                _players[player->GetCode()] = 1;
+            }
+        }
+        else
+        {
+            if (_players.find(player->GetCode()) != _players.end())
+            {
+                _players[player->GetCode()] = 0;
+            }
+        }
+    }
+
+    for (auto it : _players)
+    {
+        if (it.second == 1)
+        {
+            // 데미지 전달.
+            GamePlayerInfoRef playerInfo = room->GetPlayerMap()[it.first];
+            
+            // 플레이어 히트
+            protocol::UnitState* childPkt2 = room->GetUnitPacket().add_unit_state();
+            childPkt2->set_is_monster(false);
+            childPkt2->set_demage(playerInfo->GetDamage());
+            playerInfo->ResetDamage();
+            protocol::Player* _player = new protocol::Player();
+            protocol::Unit* unit2 = new protocol::Unit();
+            unit2->set_code(playerInfo->GetCode());
+            unit2->set_hp(playerInfo->GetHp());
+            _player->set_allocated_unit(unit2);
+            childPkt2->set_allocated_player(_player);
+        }
+    }
+}

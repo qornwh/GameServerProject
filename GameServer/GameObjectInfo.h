@@ -129,6 +129,7 @@ private:
 
     float _increaseX = 0;
     float _increaseY = 0;
+    float _preIncreaseValue = 0;
 
     // 이전 위치
     Vector2 _prePosition{0, 0};
@@ -151,6 +152,8 @@ public:
     GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp);
     ~GamePlayerInfo();
 
+    void Update() override;
+
     void Attack(GameObjectInfoRef target, vector<int32>& attackList);
     void Healing();
     bool AttackRect(Vector2 position, GameObjectInfoRef target);
@@ -161,11 +164,14 @@ public:
 
     GameSessionRef GetGameSession() { return _gameSession.lock(); }
 
+    void SetAttacked(bool attack);
+
 private:
     int32 _targetCode;
-
-    // boost::json::value& _skillJson;
     
     // 혹시나 해서 들고 있는다.
     boost::weak_ptr<GameSession> _gameSession;
+
+    //
+    bool _attacked = false;
 };

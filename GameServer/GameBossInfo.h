@@ -47,3 +47,27 @@ private:
     boost::random::uniform_int_distribution<> genYaw;
     vector<function<bool(int)>> _SkillQueue;
 };
+
+class GameBossArrow : public GameObjectInfo
+{
+public:
+    GameBossArrow(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ);
+    ~GameBossArrow();
+
+    void Update() override;
+
+private:
+    unordered_map<int32, int32> _players; // 플레이어코드, 상태(0: 안맞음, 1: 처음 충돌시작, 2: 충돌중)
+
+    int32 skillDamage = 20; // 일단 고정 시킨다.
+    
+    float _speed = 5.f;
+    int32 _startX = 0;
+    int32 _startY = 0;
+    
+    float _increaseX = 0;
+    float _increaseY = 0;
+    Vector2 _prePosition{0, 0};
+    
+    GameUtils::TickCounter _MoveCounter{10};
+};

@@ -174,62 +174,15 @@ void GameRoom::Task()
     while (!attackQueue.empty())
     {
         GamePlayerInfoRef attackInfo = attackQueue.front();
+        attackInfo->SetAttacked(true);
         attackQueue.pop();
-
-        int32 targetCode = attackInfo->GetTarget();
-        vector<int32> attackList;
-
-        if (targetCode < 0)
-        {
-            // 논타겟
-            attackInfo->Attack(nullptr, attackList);
-        }
-        else
-        {
-            // 타겟
-            GameObjectInfoRef info = GetMonster(targetCode);
-
-            if (info != nullptr)
-            {
-                attackInfo->Attack(info, attackList);
-            }
-        }
-
-        // 공격 판정된 몬스터 리스트들
-        for (auto monsterCode : attackList)
-        {
-            GameMosterInfoRef info = GetMonster(monsterCode);
-            if (info != nullptr && info->GetObjectState() != ObjectState::DIE)
-            {
-                cout << "Attack Success : " << info->GetCode() << endl;
-                info->SetTarget(attackInfo->GetCode());
-                info->IdlePosition();
-                if (info->GetHp() > 0)
-                {
-                    info->SetObjecteState(ObjectState::HITED);
-                    info->SetTarget(attackInfo->GetCode());
-                }
-                else
-                {
-                    info->SetObjecteState(ObjectState::DIE);
-                    _gameRoomQuest->GetInfo().AddDeadMonster();
-                }
-            }
-        }
     }
-
-    // if (mapType == MapType::MONSTER)
-    // {
-    //     for (auto& it : _monsterMap)
-    //     {
-    //         GameMosterInfoRef info = it.second;
-    //     }
-    // }
-    // else if (mapType == MapType::BOS)
-    // {
-    //     GameBossInfoRef info = static_pointer_cast<GameBossInfo>(_monsterMap[0]);
-    //     info->Update();
-    // }
+    
+    for (auto& it : _playerMap)
+    {
+        GamePlayerInfoRef info = it.second;
+        info->Update();
+    }
 
     for (auto& it : _monsterMap)
     {

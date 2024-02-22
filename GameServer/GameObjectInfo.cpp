@@ -1,6 +1,7 @@
 ﻿#include "GameObjectInfo.h"
 
 #include "GameGlobal.h"
+#include "GameRoomQuest.h"
 #include "GameSession.h"
 #include "GameSkill.h"
 #include "IRoom.h"
@@ -74,6 +75,7 @@ GameMosterInfo::GameMosterInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int
     GameObjectInfo(gameRoom, uuid, type, hp),
     _startX(startX), _startY(startZ), _targetCode(-1), genYaw(0, 360)
 {
+    _preIncreaseValue = _speed / _MoveCounter.GetTickValue();
 }
 
 GameMosterInfo::~GameMosterInfo()
@@ -285,8 +287,8 @@ void GameMosterInfo::Move()
 
 void GameMosterInfo::updatePrePosition()
 {
-    _prePosition.X += _increaseX;
-    _prePosition.Y += _increaseY;
+    _prePosition.X += _increaseX * _preIncreaseValue;
+    _prePosition.Y += _increaseY * _preIncreaseValue;
 }
 
 void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
@@ -344,15 +346,15 @@ void GameMosterInfo::UpdateYaw()
 {
     // room 1 tick 당 이동거리 계산
     SetRotate(genYaw(rng));
-    _increaseX = GameEngine::MathUtils::GetCos(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
-    _increaseY = GameEngine::MathUtils::GetSin(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
+    _increaseX = GameEngine::MathUtils::GetCos(GetRotate());
+    _increaseY = GameEngine::MathUtils::GetSin(GetRotate());
 }
 
 void GameMosterInfo::UpdateYaw(float theta)
 {
     SetRotate(theta);
-    _increaseX = GameEngine::MathUtils::GetCos(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
-    _increaseY = GameEngine::MathUtils::GetSin(GetRotate()) * (_speed / _MoveCounter.GetTickValue());
+    _increaseX = GameEngine::MathUtils::GetCos(GetRotate());
+    _increaseY = GameEngine::MathUtils::GetSin(GetRotate());
 }
 
 int32 GameMosterInfo::AddAttackCounter(int count)
@@ -412,10 +414,64 @@ GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 typ
 {
     _gameSession = gameSession;
 }
-
+ 
 GamePlayerInfo::~GamePlayerInfo()
 {
     cout << "close player info" << endl;
+}
+
+void GamePlayerInfo::Update()
+{
+    // GameObjectInfo::Update();
+
+    // 플레이어는 맵별로 바뀌므로 GameObjectInfo의 room 사용 x
+    GameRoomRef room = GRoomManger->getRoom(_gameSession.lock()->GetRoomId());
+    if (room == nullptr)
+        return;
+    
+    if (_attacked)
+    {
+        int32 targetCode = GetTarget();
+        vector<int32> attackList;
+
+        if (targetCode < 0)
+        {
+            // 논타겟
+            Attack(nullptr, attackList);
+        }
+        else
+        {
+            // 타겟
+            GameObjectInfoRef info = room->GetMonster(targetCode);
+
+            if (info != nullptr)
+            {
+                Attack(info, attackList);
+            }
+        }
+
+        // 공격 판정된 몬스터 리스트들
+        for (auto monsterCode : attackList)
+        {
+            GameMosterInfoRef info = room->GetMonster(monsterCode);
+            if (info != nullptr && info->GetObjectState() != ObjectState::DIE)
+            {
+                cout << "Attack Success : " << info->GetCode() << endl;
+                info->IdlePosition();
+                if (info->GetHp() > 0)
+                {
+                    info->SetObjecteState(ObjectState::HITED);
+                    info->SetTarget(GetCode());
+                }
+                else
+                {
+                    info->SetObjecteState(ObjectState::DIE);
+                    room->GetQuest()->GetInfo().AddDeadMonster();
+                }
+            }
+        }
+        _attacked = false;
+    }
 }
 
 void GamePlayerInfo::Attack(GameObjectInfoRef target, vector<int32>& attackList)
@@ -515,4 +571,9 @@ bool GamePlayerInfo::AttackCircle(Vector2 position, GameObjectInfoRef target)
 void GamePlayerInfo::SetTarget(int32 uuid)
 {
     _targetCode = uuid;
+}
+
+void GamePlayerInfo::SetAttacked(bool attack)
+{
+    _attacked = attack;
 }
