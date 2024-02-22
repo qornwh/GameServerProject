@@ -89,6 +89,13 @@
             "width": 10,
             "height": 10,
             "damage": 10
+          },
+          {
+            "code": 5,
+            "target": false,
+            "type": 1,
+            "radius": 5,
+            "damage": 15
           }
         ]
       }

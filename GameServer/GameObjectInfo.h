@@ -5,6 +5,7 @@
 #include "pch.h"
 #include "GameUtils.h"
 #include "Collider.h"
+#include "GameService.pb.h"
 
 static boost::random::mt19937_64 rng;
 
@@ -32,6 +33,8 @@ class GameObjectInfo : public boost::enable_shared_from_this<GameObjectInfo>
 public:
     GameObjectInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp);
     ~GameObjectInfo();
+
+    virtual void Update() {}
 
     void SetPosition(Vector2& position);
     void SetPosition(float x, float y);
@@ -73,6 +76,8 @@ protected:
     boost::weak_ptr<GameRoom> _gameRoomRef;
 
     Collider _collider;
+
+    bool _hitted = false;
 };
 
 class GameMosterInfo : public GameObjectInfo
@@ -85,6 +90,8 @@ public:
     // 스킬 (시간) - tict필요
     GameMosterInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ);
     ~GameMosterInfo();
+
+    void Update() override;
 
     void SetObjecteState(ObjectState state) override;
 

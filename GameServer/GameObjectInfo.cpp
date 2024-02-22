@@ -42,6 +42,7 @@ void GameObjectInfo::TakeDamage(int32 Damage)
     if (_hp < 0)
         _hp = 0;
     _damage += Damage;
+    _hitted = true;
 }
 
 void GameObjectInfo::TakeHeal(int32 heal)
@@ -55,6 +56,7 @@ void GameObjectInfo::TakeHeal(int32 heal)
 void GameObjectInfo::ResetDamage()
 {
     _damage = 0;
+    _hitted = false;
 }
 
 void GameObjectInfo::ResetHeal()
@@ -76,6 +78,156 @@ GameMosterInfo::GameMosterInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int
 
 GameMosterInfo::~GameMosterInfo()
 {
+}
+
+void GameMosterInfo::Update()
+{
+    GameObjectInfo::Update();
+    GameRoomRef room = GetGameRoom();
+
+    switch (GetObjectState())
+    {
+    case ObjectState::IDLE:
+        {
+            if (AddIdleCounter() == 0)
+            {
+                IdlePosition();
+                protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+                childPkt->set_is_monster(true);
+                protocol::Monster* monster = new protocol::Monster();
+                monster->set_state(GetObjectState());
+                protocol::Unit* unit = new protocol::Unit();
+                unit->set_code(GetCode());
+                unit->set_hp(GetHp());
+                unit->set_type(GetType());
+                unit->set_name(GetName());
+                protocol::Position* position = new protocol::Position();
+                position->set_x(GetPosition().Y);
+                position->set_y(0);
+                position->set_z(GetPosition().X);
+                position->set_yaw(GetRotate());
+                unit->set_allocated_position(position);
+                monster->set_allocated_unit(unit);
+                childPkt->set_allocated_monster(monster);
+            }
+        }
+        break;
+    case ObjectState::MOVE:
+        {
+            if (AddMoveCounter() == 0)
+            {
+                protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+                childPkt->set_is_monster(true);
+                protocol::Monster* monster = new protocol::Monster();
+                monster->set_state(GetObjectState());
+                protocol::Unit* unit = new protocol::Unit();
+                unit->set_code(GetCode());
+                protocol::Position* position = new protocol::Position();
+                if (GetTarget() >= 0 && room->GetPlayer(_targetCode) != nullptr)
+                {
+                    Vector2& pos = room->GetPlayer(_targetCode)->GetPosition();
+
+                    if (room->GetGameMap()->GetMonsterMapInfo()->InRect(pos.X, pos.Y))
+                    {
+                        MoveTarget(room->GetPlayer(_targetCode));
+                    }
+                    else
+                    {
+                        Move();
+                    }
+                }
+                else
+                {
+                    Move();
+                }
+                room->GetGameMap()->GetMonsterMapInfo()->InSetRect(GetPosition().X, GetPosition().Y);
+                position->set_x(GetPosition().Y);
+                position->set_y(0);
+                position->set_z(GetPosition().X);
+                position->set_yaw(GetRotate());
+                unit->set_allocated_position(position);
+                monster->set_allocated_unit(unit);
+                childPkt->set_allocated_monster(monster);
+            }
+            updatePrePosition();
+        }
+        break;
+    case ObjectState::ATTACK:
+        {
+            if (AddAttackCounter() == 0)
+            {
+                protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+                childPkt->set_is_monster(true);
+                protocol::Monster* monster = new protocol::Monster();
+                monster->set_state(GetObjectState());
+                protocol::Unit* unit = new protocol::Unit();
+                unit->set_code(GetCode());
+                monster->set_allocated_unit(unit);
+                childPkt->set_allocated_monster(monster);
+
+                if (_targetCode >= 0 && room->GetPlayer(_targetCode) != nullptr)
+                {
+                    GamePlayerInfoRef playerInfo = room->GetPlayer(_targetCode);
+                    // 플레이어 히트
+                    protocol::UnitState* childPkt2 = room->GetUnitPacket().add_unit_state();
+                    childPkt2->set_is_monster(false);
+                    childPkt2->set_demage(playerInfo->GetDamage());
+                    playerInfo->ResetDamage();
+                    protocol::Player* _player = new protocol::Player();
+                    protocol::Unit* unit2 = new protocol::Unit();
+                    unit2->set_code(playerInfo->GetCode());
+                    unit2->set_hp(playerInfo->GetHp());
+                    _player->set_allocated_unit(unit2);
+                    childPkt2->set_allocated_player(_player);
+                }
+            }
+        }
+        break;
+    case ObjectState::HITED:
+        {
+            if (AddHitCounter() == 0)
+            {
+                // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
+                protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+                childPkt->set_is_monster(true);
+                childPkt->set_demage(GetDamage());
+                ResetDamage();
+                protocol::Monster* monster = new protocol::Monster();
+                monster->set_state(GetObjectState());
+                protocol::Unit* unit = new protocol::Unit();
+                unit->set_code(GetCode());
+                unit->set_hp(GetHp());
+                protocol::Position* position = new protocol::Position();
+                position->set_x(GetPosition().Y);
+                position->set_y(0);
+                position->set_z(GetPosition().X);
+                position->set_yaw(GetRotate());
+                unit->set_allocated_position(position);
+                monster->set_allocated_unit(unit);
+                childPkt->set_allocated_monster(monster);
+            }
+        }
+        break;
+    case ObjectState::DIE:
+        {
+            // 리스폰 필요
+            // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
+            if (AddDieCounter() == 0)
+            {
+                protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+                childPkt->set_is_monster(true);
+                childPkt->set_demage(GetDamage());
+                ResetDamage();
+                protocol::Monster* monster = new protocol::Monster();
+                protocol::Unit* unit = new protocol::Unit();
+                monster->set_state(ObjectState::DIE);
+                unit->set_code(GetCode());
+                monster->set_allocated_unit(unit);
+                childPkt->set_allocated_monster(monster);
+            }
+        }
+        break;
+    }
 }
 
 void GameMosterInfo::SetObjecteState(ObjectState state)
@@ -254,7 +406,8 @@ void GameMosterInfo::IdlePosition()
     _increaseY = 0;
 }
 
-GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(GRoomManger->getRoom(gameSession->GetRoomId()),
+GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 type, int32 hp) : GameObjectInfo(
+    GRoomManger->getRoom(gameSession->GetRoomId()),
     uuid, type, hp)
 {
     _gameSession = gameSession;

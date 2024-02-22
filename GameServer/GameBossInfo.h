@@ -31,6 +31,8 @@ public:
     bool AttackRect(Vector2 position, GameObjectInfoRef target);
     bool AttackCircle(Vector2 position, GameObjectInfoRef target);
 
+    void Update() override;
+
 private:
     int32 _startX = 0;
     int32 _startY = 0;

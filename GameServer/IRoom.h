@@ -8,6 +8,7 @@
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
 #include "GameSession.h"
+#include "GameMapInfo.h"
 #include "GameObjectInfo.h"
 #include "GameBossInfo.h"
 #include "GameUtils.h"
@@ -123,13 +124,16 @@ public:
     void InitMonsters();
 
     unordered_map<int32, GameMosterInfoRef> GetMonsterMap() { return _monsterMap; }
+
     GameMosterInfoRef GetMonster(int32 Code)
     {
         if (_monsterMap.find(Code) != _monsterMap.end())
             return _monsterMap[Code];
         return nullptr;
     }
+
     unordered_map<int32, GamePlayerInfoRef> GetPlayerMap() { return _playerMap; }
+
     GamePlayerInfoRef GetPlayer(int32 Code)
     {
         if (_playerMap.find(Code) != _playerMap.end())
@@ -137,7 +141,13 @@ public:
         return nullptr;
     }
 
+    GameMapInfoRef GetGameMap() { return _gameMapInfo; };
     GameRoomQuestRef GetQuest() { return _gameRoomQuest; }
+
+    protocol::SUnitStates& GetUnitPacket()
+    {
+        return _unitPkt;
+    }
 
 private:
     boost::asio::steady_timer _timer;
@@ -155,4 +165,6 @@ private:
     unordered_map<int32, GamePlayerInfoRef> _playerMap;
     Atomic<bool> _isTask{false};
     GameUtils::TickCounter _tickCounter{10};
+
+    protocol::SUnitStates _unitPkt;
 };

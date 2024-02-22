@@ -17,17 +17,19 @@ GameBossInfo::GameBossInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 h
 
     _SkillQueue.emplace_back([objRef = this](const int hp)
     {
-        return objRef->ReadyAttackSkill1(hp);
+        return objRef->ReadyAttackSkill2(hp);
     });
 
     _SkillQueue.emplace_back([objRef = this](const int hp)
     {
-        return objRef->ReadyAttackSkill2(hp);
+        return objRef->ReadyAttackSkill1(hp);
     });
 
     // 일단 이거 좀 예쁘게 만들자 !!!
     _AttackCounter = GameUtils::TickCounter(20);
     _collider.ResetCollider(0.9f);
+
+    _maxHp = 300;
 }
 
 GameBossInfo::~GameBossInfo()
@@ -36,7 +38,8 @@ GameBossInfo::~GameBossInfo()
 
 void GameBossInfo::SetObjecteState(ObjectState state)
 {
-    GameObjectInfo::SetObjecteState(state);
+    if (state != ObjectState::HITED)
+        GameObjectInfo::SetObjecteState(state);
 
     switch (_state)
     {
@@ -54,6 +57,7 @@ void GameBossInfo::SetObjecteState(ObjectState state)
         _MoveCounter.ResetTic();
         break;
     case ObjectState::ATTACK:
+    case ObjectState::SKILL1:
         _AttackCounter.ResetTic();
         break;
     case ObjectState::READY_ATTACK:
@@ -65,7 +69,7 @@ void GameBossInfo::SetObjecteState(ObjectState state)
 void GameBossInfo::Move()
 {
     // 이동 x
-
+    SetObjecteState(ObjectState::READY_ATTACK);
     if (!_SkillQueue.empty())
     {
         auto& fn = _SkillQueue.back();
@@ -74,7 +78,6 @@ void GameBossInfo::Move()
             _SkillQueue.pop_back();
         }
     }
-    SetObjecteState(ObjectState::READY_ATTACK);
 }
 
 void GameBossInfo::MoveTarget(GamePlayerInfoRef target)
@@ -116,20 +119,20 @@ int32 GameBossInfo::AddDieCounter(int count)
 
 bool GameBossInfo::ReadyAttackSkill1(int hp)
 {
-    cout << "ReadyAttackSkill1 !!!" << endl;
-    if (hp <= 100)
+    if (hp <= _maxHp * 0.7f)
     {
+        cout << "ReadyAttackSkill1 !!!" << endl;
         SetObjecteState(ObjectState::SKILL1);
-        return true;
+        return false;
     }
     return false;
 }
 
 bool GameBossInfo::ReadyAttackSkill2(int hp)
 {
-    cout << "ReadyAttackSkill2 !!!" << endl;
-    if (hp <= 100)
+    if (hp <= _maxHp * 0.5f)
     {
+        cout << "ReadyAttackSkill2 !!!" << endl;
         SetObjecteState(ObjectState::SKILL2);
         return true;
     }
@@ -211,4 +214,137 @@ bool GameBossInfo::AttackCircle(Vector2 position, GameObjectInfoRef target)
         return true;
 
     return false;
+}
+
+void GameBossInfo::Update()
+{
+    // GameMosterInfo::Update();
+
+    GameRoomRef room = GetGameRoom();
+
+    if (room == nullptr)
+    {
+        // crash !!!
+        return;
+    }
+
+    if (_hitted)
+    {
+        // 보스는 데미지만 받는다.
+        protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+        childPkt->set_is_monster(true);
+        childPkt->set_demage(GetDamage());
+        protocol::Monster* monster = new protocol::Monster();
+        monster->set_state(ObjectState::HITED);
+        protocol::Unit* unit = new protocol::Unit();
+        unit->set_code(GetCode());
+        unit->set_hp(GetHp());
+        protocol::Position* position = new protocol::Position();
+        position->set_x(GetPosition().Y);
+        position->set_y(0);
+        position->set_z(GetPosition().X);
+        position->set_yaw(GetRotate());
+        unit->set_allocated_position(position);
+        monster->set_allocated_unit(unit);
+        childPkt->set_allocated_monster(monster);
+        ResetDamage();
+    }
+
+    switch (_state)
+    {
+    case ObjectState::IDLE:
+        {
+            if (AddIdleCounter() == 0)
+            {
+            }
+        }
+        break;
+    case ObjectState::MOVE:
+        {
+            if (AddMoveCounter() == 0)
+            {
+                Move();
+            }
+        }
+        break;
+    case ObjectState::READY_ATTACK:
+        {
+            if (AddReadyAttackCounter() == 0)
+            {
+                protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+                childPkt->set_is_monster(true);
+                protocol::Monster* monster = new protocol::Monster();
+                monster->set_state(GetObjectState());
+                protocol::Unit* unit = new protocol::Unit();
+                unit->set_code(GetCode());
+                monster->set_allocated_unit(unit);
+                childPkt->set_allocated_monster(monster);
+            }
+        }
+        break;
+    case ObjectState::ATTACK:
+    case ObjectState::SKILL1:
+        {
+            if (AddAttackCounter() == 0)
+            {
+                protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
+                childPkt->set_is_monster(true);
+                protocol::Monster* monster = new protocol::Monster();
+                monster->set_state(GetObjectState());
+                if (ObjectState::SKILL1 == GetObjectState())
+                {
+                    cout << "AAAAA !!!!" << endl;
+                }
+                protocol::Unit* unit = new protocol::Unit();
+                unit->set_code(GetCode());
+                monster->set_allocated_unit(unit);
+                childPkt->set_allocated_monster(monster);
+
+                vector<int32> attackList;
+                Attack(nullptr, attackList);
+
+                // 공격 판정된 몬스터 리스트들
+                for (auto playerCode : attackList)
+                {
+                    GamePlayerInfoRef playerInfo = room->GetPlayer(playerCode);
+                    if (playerInfo != nullptr && playerInfo->GetObjectState() != ObjectState::DIE)
+                    {
+                        if (playerInfo->GetHp() > 0)
+                        {
+                            playerInfo->SetObjecteState(ObjectState::HITED);
+                        }
+                        else
+                        {
+                            playerInfo->SetObjecteState(ObjectState::DIE);
+                        }
+
+                        // 플레이어 히트
+                        protocol::UnitState* childPkt2 = room->GetUnitPacket().add_unit_state();
+                        childPkt2->set_is_monster(false);
+                        childPkt2->set_demage(playerInfo->GetDamage());
+                        playerInfo->ResetDamage();
+                        protocol::Player* _player = new protocol::Player();
+                        protocol::Unit* unit2 = new protocol::Unit();
+                        unit2->set_code(playerInfo->GetCode());
+                        unit2->set_hp(playerInfo->GetHp());
+                        _player->set_allocated_unit(unit2);
+                        childPkt2->set_allocated_player(_player);
+                    }
+                }
+            }
+        }
+        break;
+    case ObjectState::SKILL2:
+        {
+            // 오브젝트 생성
+            // 콜리전에 타겟된 리스트 정보 저장 필요!!
+            // 그래서 
+        }
+        break;
+    case ObjectState::DIE:
+        {
+            // 게임종료
+        }
+        break;
+    }
 }
