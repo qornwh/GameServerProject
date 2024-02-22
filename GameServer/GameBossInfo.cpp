@@ -123,7 +123,7 @@ bool GameBossInfo::ReadyAttackSkill1(int hp)
     {
         cout << "ReadyAttackSkill1 !!!" << endl;
         SetObjecteState(ObjectState::SKILL1);
-        return false;
+        return true;
     }
     return false;
 }
@@ -291,10 +291,6 @@ void GameBossInfo::Update()
                 childPkt->set_is_monster(true);
                 protocol::Monster* monster = new protocol::Monster();
                 monster->set_state(GetObjectState());
-                if (ObjectState::SKILL1 == GetObjectState())
-                {
-                    cout << "AAAAA !!!!" << endl;
-                }
                 protocol::Unit* unit = new protocol::Unit();
                 unit->set_code(GetCode());
                 monster->set_allocated_unit(unit);
