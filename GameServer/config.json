@@ -102,7 +102,7 @@
             "target": false,
             "type": 0,
             "width": 10,
-            "height": 10,
+            "height": 50,
             "damage": 30
           }
         ]
