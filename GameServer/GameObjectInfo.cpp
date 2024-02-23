@@ -289,6 +289,7 @@ void GameMosterInfo::updatePrePosition()
 {
     _prePosition.X += _increaseX * _preIncreaseValue;
     _prePosition.Y += _increaseY * _preIncreaseValue;
+    // SetPosition(_prePosition.X, _prePosition.Y);
 }
 
 void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
@@ -306,8 +307,17 @@ void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
         // 타겟지점 이동
         _prePosition = GetPosition();
 
-        // 기본 거리 3
-        SetPosition(GetPosition().X + (_increaseX * _speed), GetPosition().Y + (_increaseY * _speed));
+        // 기본 거리 3 - 일단 하드코딩 0.8은 몬스터 콜라이더 반지름 + 플레이어 콜라이더 반지름 + 0.2 좀 떨어지도록
+        float dist = Vector2::Magnitude(_collider.GetPosition() - target->GetPosition()) - 1.f;
+
+        if (dist > _speed)
+        {
+            SetPosition(GetPosition().X + (_increaseX * _speed), GetPosition().Y + (_increaseY * _speed));
+        }
+        else
+        {
+            SetPosition(GetPosition().X + (_increaseX * dist), GetPosition().Y + (_increaseY * dist));
+        }
     }
 }
 
@@ -326,6 +336,24 @@ bool GameMosterInfo::CheckAttackTarget(GamePlayerInfoRef target)
             float radius = skillMap[ObjectState::ATTACK]._radius;
 
             Collider attackCollider(radius);
+            attackCollider.SetPosition(GetPosition().X, GetPosition().Y);
+            attackCollider.SetRotate(_collider.GetRotate());
+
+            if (attackCollider.IsTrigger(target->GetCollider()))
+            {
+                // 공격 성공
+                target->TakeDamage(skillMap[ObjectState::ATTACK]._damage);
+                return true;
+            }
+
+            return false;
+        }
+        else if (skillType == Skill::RECT)
+        {
+            float width = skillMap[ObjectState::ATTACK]._width;
+            float height = skillMap[ObjectState::ATTACK]._height;
+
+            Collider attackCollider(width, height);
             attackCollider.SetPosition(GetPosition().X, GetPosition().Y);
             attackCollider.SetRotate(_collider.GetRotate());
 
