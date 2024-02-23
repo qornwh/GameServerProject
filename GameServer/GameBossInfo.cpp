@@ -130,7 +130,7 @@ bool GameBossInfo::ReadyAttackSkill1(int hp)
 
 bool GameBossInfo::ReadyAttackSkill2(int hp)
 {
-    if (hp <= _maxHp * 0.5f)
+    if (hp <= _maxHp * 0.4f)
     {
         cout << "ReadyAttackSkill2 !!!" << endl;
         SetObjecteState(ObjectState::SKILL2);
@@ -284,6 +284,7 @@ void GameBossInfo::Update()
         break;
     case ObjectState::ATTACK:
     case ObjectState::SKILL1:
+    case ObjectState::SKILL2:
         {
             if (AddAttackCounter() == 0)
             {
@@ -330,13 +331,13 @@ void GameBossInfo::Update()
             }
         }
         break;
-    case ObjectState::SKILL2:
-        {
-            // 오브젝트 생성
-            // 콜리전에 타겟된 리스트 정보 저장 필요!!
-            // 그래서 
-        }
-        break;
+    // case ObjectState::SKILL2:
+    //     {
+    //         // 오브젝트 생성
+    //         // 콜리전에 타겟된 리스트 정보 저장 필요!!
+    //         // 그래서 
+    //     }
+    //     break; // 폐기!!
     case ObjectState::DIE:
         {
             // 게임종료

@@ -95,7 +95,15 @@
             "target": false,
             "type": 1,
             "radius": 5,
-            "damage": 15
+            "damage": 20
+          },
+          {
+            "code": 6,
+            "target": false,
+            "type": 0,
+            "width": 10,
+            "height": 10,
+            "damage": 30
           }
         ]
       }
