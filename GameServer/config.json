@@ -16,7 +16,7 @@
             "code": 5,
             "target": false,
             "type": 1,
-            "radius": 2,
+            "radius": 3,
             "damage": 80
           },
           {
