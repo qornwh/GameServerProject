@@ -574,9 +574,9 @@ bool GamePlayerInfo::AttackRect(Vector2 position, GameObjectInfoRef target)
     float rangeY = GSkill->GetPlayerSkill()[GetType()].GetSkillMap()[GetObjectState()]._height;
 
     Collider attackCollider(rangeX, rangeY);
-    attackCollider.SetPosition(GetPosition().X + rangeY / 2.f * GameEngine::MathUtils::GetCos(GetRotate()),
-                               GetPosition().Y + rangeY / 2.f * GameEngine::MathUtils::GetSin(GetRotate()));
-    attackCollider.SetRotate(_collider.GetRotate());
+    attackCollider.SetPosition(GetPosition().X + (rangeY / 2.f * GameEngine::MathUtils::GetCos(GetRotate())),
+                               GetPosition().Y + (rangeY / 2.f * GameEngine::MathUtils::GetSin(GetRotate())));
+    attackCollider.SetRotate(GetRotate());
     if (attackCollider.IsTrigger(target->GetCollider()))
         return true;
     return false;

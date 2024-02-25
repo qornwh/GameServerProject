@@ -28,7 +28,7 @@ GameBossInfo::GameBossInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 h
     // 일단 이거 좀 예쁘게 만들자 !!!
     _AttackCounter = GameUtils::TickCounter(20);
     _collider.ResetCollider(0.9f);
-
+    _collider.SetRotate(180);
     _maxHp = 300;
 }
 
