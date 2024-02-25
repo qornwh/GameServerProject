@@ -179,13 +179,13 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
             int32 SkillCode = pkt.skill_code();
             int32 TargetCode = pkt.target_code();
             cout << "targetCode : " << TargetCode << " skillCode : " << SkillCode << endl;
-            
+
             auto& position = pkt.position();
             GetPlayer()->SetPosition(position.z(), position.x());
             GetPlayer()->SetRotate(position.yaw());
             GetPlayer()->SetObjecteState(static_cast<ObjectState>(SkillCode));
             GetPlayer()->SetTarget(TargetCode);
-            
+
             if (ObjectState::SKILL2 == SkillCode)
             {
                 // 힐, 버프 등.
@@ -202,10 +202,10 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
                 attackPkt->set_is_monster(false);
                 attackPkt->set_skill_code(SkillCode);
 
-                SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_UNITATTACK);
+                SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
+                    sendPkt, protocol::MessageCode::S_UNITATTACK);
                 GRoomManger->getRoom(GetRoomId())->BroadCastAnother(sendBuffer, GetPlayer()->GetCode());
             }
-
         }
     }
 }
@@ -224,7 +224,11 @@ void GameSession::ChangeRoomHandler(const boost::asio::mutable_buffer& buffer, P
             GRoomManger->getRoom(GetRoomId())->OutSession(static_pointer_cast<GameSession>(shared_from_this()));
         }
 
-        if (GRoomManger->getRoom(nextRoomId) != nullptr)
+        if (currentRoomId == 1)
+        {
+            Disconnect();
+        }
+        else if (GRoomManger->getRoom(nextRoomId) != nullptr)
         {
             GRoomManger->getRoom(nextRoomId)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
         }
