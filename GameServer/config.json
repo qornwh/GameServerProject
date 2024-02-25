@@ -41,8 +41,8 @@
             "code": 5,
             "target": false,
             "type": 0,
-            "width": 2,
-            "height": 5,
+            "width": 5,
+            "height": 2,
             "damage": 80
           },
           {
@@ -62,8 +62,8 @@
             "code": 4,
             "target": true,
             "type": 0,
-            "width": 2,
-            "height": 3,
+            "width": 3,
+            "height": 2,
             "damage": 3
           }
         ]
@@ -75,8 +75,8 @@
             "code": 4,
             "target": true,
             "type": 0,
-            "width": 2,
-            "height": 3,
+            "width": 3,
+            "height": 2,
             "damage": 4
           }
         ]
@@ -103,8 +103,8 @@
             "code": 6,
             "target": false,
             "type": 0,
-            "width": 10,
-            "height": 50,
+            "width": 50,
+            "height": 10,
             "damage": 30
           }
         ]
