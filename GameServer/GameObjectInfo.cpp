@@ -116,6 +116,7 @@ void GameMosterInfo::Update()
         break;
     case ObjectState::MOVE:
         {
+            bool onTargeting = false;
             if (AddMoveCounter() == 0)
             {
                 protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
@@ -132,6 +133,7 @@ void GameMosterInfo::Update()
                     if (room->GetGameMap()->GetMonsterMapInfo()->InRect(pos.X, pos.Y))
                     {
                         MoveTarget(room->GetPlayer(_targetCode));
+                        onTargeting = true;
                     }
                     else
                     {
@@ -151,7 +153,8 @@ void GameMosterInfo::Update()
                 monster->set_allocated_unit(unit);
                 childPkt->set_allocated_monster(monster);
             }
-            updatePrePosition();
+            if (!onTargeting)
+                updatePrePosition();
         }
         break;
     case ObjectState::ATTACK:
@@ -285,13 +288,19 @@ void GameMosterInfo::Move()
     SetPosition(GetPosition().X + (_increaseX * _speed), GetPosition().Y + (_increaseY * _speed));
 }
 
-void GameMosterInfo::updatePrePosition()
+void GameMosterInfo::updatePrePosition(bool isTargeting)
 {
-    _prePosition.X += _increaseX * _preIncreaseValue;
-    _prePosition.Y += _increaseY * _preIncreaseValue;
-    // 틱동안 이동한 거리를 업데이트 해야 몬스터에 타격이 제대로 들어갈수 있다.
-    SetPosition(_prePosition.X, _prePosition.Y);
-    GetGameRoom()->GetGameMap()->GetMonsterMapInfo()->InSetRect(_prePosition.X, _prePosition.Y);
+    if (!isTargeting)
+    {
+    }
+    else
+    {
+        _prePosition.X += _increaseX * _preIncreaseValue;
+        _prePosition.Y += _increaseY * _preIncreaseValue;
+        // 틱동안 이동한 거리를 업데이트 해야 몬스터에 타격이 제대로 들어갈수 있다.
+        SetPosition(_prePosition.X, _prePosition.Y);
+        GetGameRoom()->GetGameMap()->GetMonsterMapInfo()->InSetRect(_prePosition.X, _prePosition.Y);
+    }
 }
 
 void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)

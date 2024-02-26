@@ -102,7 +102,7 @@ public:
     int32 GetTarget() { return _targetCode; }
 
     virtual void Move();
-    void updatePrePosition();
+    void updatePrePosition(bool isTargeting);
     virtual void MoveTarget(GamePlayerInfoRef target);
     bool CheckAttackTarget(GamePlayerInfoRef target);
 
