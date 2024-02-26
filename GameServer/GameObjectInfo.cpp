@@ -289,7 +289,9 @@ void GameMosterInfo::updatePrePosition()
 {
     _prePosition.X += _increaseX * _preIncreaseValue;
     _prePosition.Y += _increaseY * _preIncreaseValue;
-    // SetPosition(_prePosition.X, _prePosition.Y);
+    // 틱동안 이동한 거리를 업데이트 해야 몬스터에 타격이 제대로 들어갈수 있다.
+    SetPosition(_prePosition.X, _prePosition.Y);
+    GetGameRoom()->GetGameMap()->GetMonsterMapInfo()->InSetRect(_prePosition.X, _prePosition.Y);
 }
 
 void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
@@ -348,7 +350,7 @@ bool GameMosterInfo::CheckAttackTarget(GamePlayerInfoRef target)
 
             return false;
         }
-        else if (skillType == Skill::RECT)
+        if (skillType == Skill::RECT)
         {
             float width = skillMap[ObjectState::ATTACK]._width;
             float height = skillMap[ObjectState::ATTACK]._height;
