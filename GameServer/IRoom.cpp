@@ -160,6 +160,15 @@ void GameRoom::Tick()
             pkt.set_sum_kill(rqInfo.GetSumCount());
             SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_ROOMQUEST);
             BroadCast(sendBuffer);
+
+            MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
+            if (mapType == MapType::BOS)
+            {
+                for (auto session : _sessionList)
+                {
+                    OutSession(session);
+                }
+            }
         }
     }));
 }

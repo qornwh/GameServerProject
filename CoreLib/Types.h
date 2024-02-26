@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/smart_ptr/enable_shared_from_this.hpp>

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Session.h"
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/write.hpp>
@@ -72,7 +72,7 @@ void Session::OnRead(const boost::system::error_code err, size_t bytes_transferr
         }
         else
         {
-            if (!_recvBuffer.OnWrite(bytes_transferred))
+            if (!_recvBuffer.OnWrite(static_cast<int32>(bytes_transferred)))
             {
                 Disconnect();
                 return;

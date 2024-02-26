@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <shared_mutex>
 
 class Lock : public std::shared_mutex
