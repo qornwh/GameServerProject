@@ -100,7 +100,6 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
     if (GamePacketHandler::ParsePacketHandler(pkt, buffer, header->size - offset, offset))
     {
         auto& position = pkt.position();
-        // cout << position.x() << " : " << position.y() << " : " << position.z() << endl;
 
         // 유니티 왼손 법칙이라 이렇게 받는다.
         GetPlayer()->SetPosition(position.z(), position.x());
@@ -116,13 +115,6 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
 
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_MOVE);
         GetService()->BroadCast(sendBuffer);
-        // AsyncWrite(sendBuffer);
-
-        // 해당 함수는 보류다 바로바로 가야 되므로 strand처리를 제외한다.
-        // if (GRoomManger->getRoom(_roomId) != nullptr)
-        // {
-        //     GRoomManger->getRoom(_roomId)->BroadCast(sendBuffer);
-        // }
     }
 }
 
@@ -146,6 +138,10 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
             unit->set_hp(_player->GetHp());
             player->set_allocated_unit(unit);
             sendPkt.set_allocated_player(player);
+
+            // 초기 위치 설정
+            GetPlayer()->SetPosition(-15, 0);
+            GetPlayer()->SetRotate(0);
 
             SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
                 sendPkt, protocol::MessageCode::S_PLAYERDATA);
@@ -178,8 +174,7 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
         {
             int32 SkillCode = pkt.skill_code();
             int32 TargetCode = pkt.target_code();
-            cout << "targetCode : " << TargetCode << " skillCode : " << SkillCode << endl;
-
+            
             auto& position = pkt.position();
             GetPlayer()->SetPosition(position.z(), position.x());
             GetPlayer()->SetRotate(position.yaw());
@@ -230,6 +225,9 @@ void GameSession::ChangeRoomHandler(const boost::asio::mutable_buffer& buffer, P
         }
         else if (GRoomManger->getRoom(nextRoomId) != nullptr)
         {
+            // 초기 위치 설정
+            GetPlayer()->SetPosition(-20, 0);
+            GetPlayer()->SetRotate(0);
             GRoomManger->getRoom(nextRoomId)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
         }
     }

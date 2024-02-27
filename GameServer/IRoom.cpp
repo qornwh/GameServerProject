@@ -16,6 +16,13 @@ void GameRoom::EnterSession(GameSessionRef session)
         unit->set_code(session->GetPlayer()->GetCode());
         unit->set_type(session->GetPlayer()->GetType());
         unit->set_hp(session->GetPlayer()->GetHp());
+
+        protocol::Position* position = new protocol::Position;
+        position->set_x(session->GetPlayer()->GetPosition().Y);
+        position->set_y(0);
+        position->set_z(session->GetPlayer()->GetPosition().X);
+        position->set_yaw(session->GetPlayer()->GetRotate());
+        unit->set_allocated_position(position);
         player->set_allocated_unit(unit);
         sendPkt.set_allocated_player(player);
 
