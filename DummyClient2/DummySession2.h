@@ -18,13 +18,12 @@ public:
     int32 GetId() { return _id; }
 
     void OnWait();
-    void AsyncTestMessage(const boost::system::error_code& ec);
 
     void AsyncLoad();
 
     void OnConnect(const boost::system::error_code& error) override;
 
-    DummyPlayerInfoRef GetPawn() { return _playerInfo; }
+    DummyPlayerInfoRef GetInfo() { return _playerInfo; }
 
 private:
     int32 _id;
@@ -32,4 +31,6 @@ private:
     boost::uuids::random_generator generator;
 
     DummyPlayerInfoRef _playerInfo;
+
+    int32 _roomIdx = 0;
 };

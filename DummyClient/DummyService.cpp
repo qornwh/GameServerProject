@@ -77,7 +77,7 @@ void DummyService::AsyncSession()
     for (auto session : _sessions)
     {
         DummySessionRef dummySession = static_pointer_cast<DummySession>(session);
-        PawnRef pawn = dummySession->GetPawn();
+        PawnRef pawn = dummySession->GetInfo();
         if (pawn != nullptr)
         {
             if (_tick % 5 == 0)

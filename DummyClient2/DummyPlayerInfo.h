@@ -6,9 +6,9 @@
 #include <boost/smart_ptr/enable_shared_from_this.hpp>
 
 static boost::random::mt19937 rng;
-static boost::random::uniform_int_distribution<> dstX{2000, 5000};
-static boost::random::uniform_int_distribution<> dstY{2000, 5000};
-static boost::random::uniform_real_distribution<> rot{-1.f, 1.f};
+static boost::random::uniform_int_distribution<> dstX{-15, 15};
+static boost::random::uniform_int_distribution<> dstY{-22, 22};
+static boost::random::uniform_real_distribution<> rot{0, 360};
 
 struct Vector
 {
@@ -47,20 +47,23 @@ public:
 
     Vector& GetPostion();
     void SetPostion(Vector vec);
+    void UpdateRotate();
 
     bool IsUse() const { return _use; }
     void Start();
 
     void UpdateMapRange();
     bool IsMapRange(int32 mapNum);
+    void updatePosition();
 
 protected:
     Vector _position{0, 0, 0, 0};
 
-    float _scaleValue = 1.f;
-
 private:
     bool _use = false;
-    MapRange _monsterMap{0, 0, 0, 0};
-    MapRange _bossmap{0, 0, 0, 0};
+    MapRange _map{-25, -25, 25, 25};
+
+    float _increaseX = 0.f;
+    float _increaseY = 0.f;
+    float _speed = 5.f;
 };

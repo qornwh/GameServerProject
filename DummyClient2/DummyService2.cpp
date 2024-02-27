@@ -3,6 +3,9 @@
 #include "Session.h"
 #include "DummySession2.h"
 #include "DummyPlayerInfo.h"
+#include "DummyProto.pb.h"
+#include "GamePacketHandler.h"
+#include "../DummyClient/test.pb.h"
 
 DummyService::DummyService(boost::asio::io_context& io_context, std::string host, uint16 port)
     : Service(io_context, host, port),
@@ -61,47 +64,35 @@ void DummyService::AsyncSession()
     for (auto session : _sessions)
     {
         DummySessionRef dummySession = reinterpret_pointer_cast<DummySession>(session);
-        DummyPlayerInfoRef pawn = dummySession->GetPawn();
-        if (pawn != nullptr)
+        DummyPlayerInfoRef info = dummySession->GetInfo();
+        if (info != nullptr)
         {
             if (_tick % 3 == 0)
             {
-                // 3 초 일때 좌표 1번 업데이트 모든 세션에 달린 pawn
+                // 3 초 일때 1번씩 방향 업데이트
                 _tick = 0;
-                if (pawn != nullptr)
+                if (info != nullptr)
                 {
-                    if (!pawn->IsUse())
-                        pawn->Start();
+                    if (!info->IsUse())
+                        info->Start();
+                    
+                    info->UpdateRotate();
                 }
             }
 
             // 좌표 이동 업데이트
-            // rotate 방향으로 100씩 이동
-            // 100이동된 좌표 구하기.
-            {
-                // 튀어나가는지 체크
-                if (!pawn->IsMapRange(_mapNum))
-                {
-                    pawn->GetRotate().X = -1 * pawn->GetRotate().X;
-                    pawn->GetRotate().Y = -1 * pawn->GetRotate().Y;
-                    std::cout << "isMapRange !!!" << std::endl;
-                }
-                //
-                float _theta = atan2f(pawn->GetRotate().Y, pawn->GetRotate().X);
-                pawn->GetPostion().X += (100 * cosf(_theta));
-                pawn->GetPostion().Y += (100 * sinf(_theta));
-            }
+            info->updatePosition();
 
-            std::cout << "id : " << dummySession->GetId() << " x : " << pawn->GetPostion().X << " y : " << pawn->GetPostion().Y << std::endl;
-            if (pawn->GetPostion().X < 0 || pawn->GetPostion().Y < 0)
-                std::cout << "nonono!!!" << std::endl;
-
-            // broadCast 계속 하기!!
-            BS_Protocol::P_MOVE_PACKET pkt;
-            pkt.Position.X = static_cast<int32>(pawn->GetPostion().X);
-            pkt.Position.Y = static_cast<int32>(pawn->GetPostion().Y);
-            pkt.Position.Z = static_cast<int32>(pawn->GetPostion().Z);
-            SendBufferRef sendBuffer = PacketHandler::MakePacket(pkt);
+            // 일단 여기서도 유니티와 다르게 오른손 좌표계로 가본다...
+            protocol::SMove pkt;
+            pkt.set_is_monster(false);
+            protocol::Position *position = new protocol::Position();
+            position->set_x(info->GetPostion().Y);
+            position->set_z(info->GetPostion().X);
+            position->set_yaw(info->GetPostion().Yaw);
+            pkt.set_allocated_position(position);
+            
+            SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_MOVE);
             session->AsyncWrite(sendBuffer);
         }
     }

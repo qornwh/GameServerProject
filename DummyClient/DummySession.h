@@ -25,7 +25,7 @@ public:
 
     void OnConnect(const boost::system::error_code& error) override;
 
-    PawnRef GetPawn() { return _playerInfo; }
+    PawnRef GetInfo() { return _playerInfo; }
 
 private:
     int32 _id;

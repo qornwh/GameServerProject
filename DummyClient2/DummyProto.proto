@@ -1,0 +1,146 @@
+﻿syntax = "proto3";
+
+package protocol;
+
+enum MessageCode {
+    LOGIN = 0;
+    S_LOAD = 1; // 유저들 정보 전달
+    S_INSERTPLAYER = 2; // 추가되는 유저 정보
+    S_MOVE = 3; // 이동 
+    S_CHAT = 4; // 채팅
+    S_PLAYERDATA = 5; // 내 정보(추가) 
+    S_CLOSEPLAYER = 6; // 유저 종료
+    S_UNITSTATES = 7; // 여러 유닛(유저, 몬스터) 상태
+    C_PLAYERATTACK = 8; // 유저 공격
+    S_UNITATTACK = 9; // 유닛(유저, 몬스터) 공격
+    S_UNITDEMAGE = 10; // 유닛(유저, 몬스터) 히트, 데미지
+    S_UNITBUFF = 11; // 유닛(유저, 몬스터) 버프
+    S_ROOMQUEST = 12; // 룸 클리어 정보
+    C_MOVEPOTAL = 13; // 포탈 이동
+}
+
+// type
+// 0 : sward
+// 1 : archer
+// 2 : magician
+message Login {
+    string text = 1;
+    int32 type = 2;
+}
+
+message Position {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+    float yaw = 4;
+}
+
+message Unit {
+    uint32 type = 1;
+    uint32 hp = 2;
+    int32 code = 3;
+    Position position = 4;
+    string name = 5;
+}
+
+message Player {
+    Unit unit = 1;
+}
+
+message Monster {
+    Unit unit = 1;
+    uint32 state = 2;
+}
+
+message SLoad {
+    repeated Player player = 1;
+    repeated Monster monster = 2;
+    int32 room_id = 3;
+}
+
+message SInsertplayer {
+    Player player = 1;
+}
+
+message SMove {
+    int32 code = 1;
+    Position position = 2;
+    bool is_monster = 3;
+}
+
+message SChat {
+    uint32 type = 1;
+    int32 code = 2;
+    string text = 5;
+}
+
+message SPlayerData {
+    Player player = 1;
+}
+
+message SClosePlayer {
+    int32 code = 1;
+}
+
+message UnitState {
+    Monster monster = 1;
+    Player player = 2;
+    int32 demage = 4;
+    int32 heal = 5;
+    bool is_monster = 10;
+}
+
+message SUnitStates {
+    repeated UnitState unit_state = 1;
+}
+
+message Attack {
+    int32 code = 1;
+    int32 skill_code = 2;
+    bool is_monster = 3;
+}
+
+message Buff {
+    int32 code = 1;
+    int32 skill_code = 2;
+    bool is_monster = 3;
+    int32 heal = 4;
+    int32 hp = 5;
+}
+
+message CPlayerAttack {
+    int32 code = 1;
+    int32 skill_code = 2;
+    int32 target_code = 3;
+    Position position = 4;
+}
+
+message SUnitAttack {
+    repeated Attack attack = 1;
+}
+
+message SUnitBuff {
+    repeated Buff buff = 1;
+}
+
+// hit
+message Demage {
+    int32 code = 1;
+    int32 demage = 2;
+    bool is_monster = 3;
+}
+
+message SUnitDemage {
+    Demage demage = 1;
+}
+
+message SRoomQuest {
+    bool is_clear = 1;
+    int32 kill_count = 2;
+    int32 sum_kill = 3;
+}
+
+message CMovePotal {
+    int32 pre_room_id = 1;
+    int32 next_room_id = 2;
+}

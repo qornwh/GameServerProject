@@ -4,6 +4,8 @@
 #include <boost/make_shared.hpp>
 
 #include "DummyPlayerInfo.h"
+#include "DummyProto.pb.h"
+#include "GamePacketHandler.h"
 
 DummySession::DummySession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep)
     : Session(io_context, ep)
@@ -32,26 +34,15 @@ void DummySession::OnWait()
 {
 }
 
-void DummySession::AsyncTestMessage(const boost::system::error_code& ec)
-{
-    // 메시지 만들고 async_write
-    // Protocol::TestPlayerInfo info;
-    // info.set_type(Protocol::Type::TESTPLAYER);
-    // info.set_id(Protocol::Type::TESTPLAYER);
-    // info.set_type(Protocol::Type::TESTPLAYER);
-}
-
 void DummySession::AsyncLoad()
 {
-    BS_Protocol::P_LOGIN_PAKCET pkt;
-    std::wstring wsId = L"";
-    wsId += std::to_wstring(_id);
+    protocol::Login pkt;
+    string wsId = "dummy";
+    wsId += _id;
+    pkt.set_text(wsId);
+    pkt.set_type(_id % 2);
 
-    memcpy(pkt.Id.data(), wsId.data(), wsId.size() * 2);
-    pkt.IdLen = wsId.size() * 2;
-    pkt.Type = _id % 3;
-    cout << "type : " << _id % 3 << "  TPye : " << pkt.Type << endl;
-    SendBufferRef sendBuffer = PacketHandler::MakePacket(pkt);
+    SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::LOGIN);
     AsyncWrite(sendBuffer);
 }
 
