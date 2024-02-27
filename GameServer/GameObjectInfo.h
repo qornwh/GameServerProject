@@ -102,14 +102,14 @@ public:
     int32 GetTarget() { return _targetCode; }
 
     virtual void Move();
-    void updatePrePosition(bool isTargeting);
+    void updatePrePosition();
     virtual void MoveTarget(GamePlayerInfoRef target);
     bool CheckAttackTarget(GamePlayerInfoRef target);
 
     virtual void UpdateYaw();
     virtual void UpdateYaw(float theta);
 
-    Vector2& GetPrePosition() { return _prePosition; }
+    Vector2& GetNextPosition() { return _nextPosition; }
     float GetRangeX() { return _increaseX; }
     float GetRangeZ() { return _increaseY; }
 
@@ -130,9 +130,9 @@ private:
     float _increaseX = 0;
     float _increaseY = 0;
     float _preIncreaseValue = 0;
-
-    // 이전 위치
-    Vector2 _prePosition{0, 0};
+    
+    // 이동될 위치
+    Vector2 _nextPosition{0, 0};
 
     boost::random::uniform_int_distribution<> genYaw;
 

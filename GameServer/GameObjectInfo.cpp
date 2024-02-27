@@ -116,7 +116,6 @@ void GameMosterInfo::Update()
         break;
     case ObjectState::MOVE:
         {
-            bool onTargeting = false;
             if (AddMoveCounter() == 0)
             {
                 protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
@@ -133,7 +132,6 @@ void GameMosterInfo::Update()
                     if (room->GetGameMap()->GetMonsterMapInfo()->InRect(pos.X, pos.Y))
                     {
                         MoveTarget(room->GetPlayer(_targetCode));
-                        onTargeting = true;
                     }
                     else
                     {
@@ -144,17 +142,16 @@ void GameMosterInfo::Update()
                 {
                     Move();
                 }
-                room->GetGameMap()->GetMonsterMapInfo()->InSetRect(GetPosition().X, GetPosition().Y);
-                position->set_x(GetPosition().Y);
+                room->GetGameMap()->GetMonsterMapInfo()->InSetRect(_nextPosition.X, _nextPosition.Y);
+                position->set_x(_nextPosition.Y);
                 position->set_y(0);
-                position->set_z(GetPosition().X);
+                position->set_z(_nextPosition.X);
                 position->set_yaw(GetRotate());
                 unit->set_allocated_position(position);
                 monster->set_allocated_unit(unit);
                 childPkt->set_allocated_monster(monster);
             }
-            if (!onTargeting)
-                updatePrePosition();
+            updatePrePosition();
         }
         break;
     case ObjectState::ATTACK:
@@ -278,28 +275,32 @@ void GameMosterInfo::SetTarget(int32 uuid)
 
 void GameMosterInfo::Move()
 {
-    _prePosition = GetPosition();
+    // 타겟지점 이동
+    SetPosition(_nextPosition);
+
     if (_YawCounter.Add() == 0)
     {
         UpdateYaw();
     }
 
     // 기본 거리 3
-    SetPosition(GetPosition().X + (_increaseX * _speed), GetPosition().Y + (_increaseY * _speed));
+    _nextPosition.X = GetPosition().X + (_increaseX * _speed);
+    _nextPosition.Y = GetPosition().Y + (_increaseY * _speed);
 }
 
-void GameMosterInfo::updatePrePosition(bool isTargeting)
+void GameMosterInfo::updatePrePosition()
 {
-    if (!isTargeting)
+    // 틱동안 이동한 거리를 업데이트 해야 몬스터에 타격이 제대로 들어갈수 있다.
+    float dist = Vector2::Magnitude(GetPosition() - _nextPosition);
+
+    if (dist >= _preIncreaseValue)
     {
+        SetPosition(GetPosition().X + _increaseX * _preIncreaseValue,
+                    GetPosition().Y + (_increaseY * _preIncreaseValue));
     }
     else
     {
-        _prePosition.X += _increaseX * _preIncreaseValue;
-        _prePosition.Y += _increaseY * _preIncreaseValue;
-        // 틱동안 이동한 거리를 업데이트 해야 몬스터에 타격이 제대로 들어갈수 있다.
-        SetPosition(_prePosition.X, _prePosition.Y);
-        GetGameRoom()->GetGameMap()->GetMonsterMapInfo()->InSetRect(_prePosition.X, _prePosition.Y);
+        SetPosition(_nextPosition);
     }
 }
 
@@ -316,18 +317,20 @@ void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
     else
     {
         // 타겟지점 이동
-        _prePosition = GetPosition();
+        SetPosition(_nextPosition);
 
         // 기본 거리 3 - 일단 하드코딩 0.8은 몬스터 콜라이더 반지름 + 플레이어 콜라이더 반지름 + 0.2 좀 떨어지도록
         float dist = Vector2::Magnitude(_collider.GetPosition() - target->GetPosition()) - 1.f;
 
         if (dist > _speed)
         {
-            SetPosition(GetPosition().X + (_increaseX * _speed), GetPosition().Y + (_increaseY * _speed));
+            _nextPosition.X = GetPosition().X + (_increaseX * _speed);
+            _nextPosition.Y = GetPosition().Y + (_increaseY * _speed);
         }
         else
         {
-            SetPosition(GetPosition().X + (_increaseX * dist), GetPosition().Y + (_increaseY * dist));
+            _nextPosition.X = GetPosition().X + (_increaseX * dist);
+            _nextPosition.Y = GetPosition().Y + (_increaseY * dist);
         }
     }
 }
@@ -431,7 +434,7 @@ int32 GameMosterInfo::AddDieCounter(int count)
     if (value == _DieCounter.GetTickValue() - 1)
     {
         SetPosition(_startX, _startY);
-        _prePosition = _collider.GetPosition();
+        _nextPosition = _collider.GetPosition();
         _increaseX = 0;
         _increaseY = 0;
         _hp = 100;
@@ -453,7 +456,7 @@ GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 typ
 {
     _gameSession = gameSession;
 }
- 
+
 GamePlayerInfo::~GamePlayerInfo()
 {
     cout << "close player info" << endl;
@@ -467,7 +470,7 @@ void GamePlayerInfo::Update()
     GameRoomRef room = GRoomManger->getRoom(_gameSession.lock()->GetRoomId());
     if (room == nullptr)
         return;
-    
+
     if (_attacked)
     {
         int32 targetCode = GetTarget();
