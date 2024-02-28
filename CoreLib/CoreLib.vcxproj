@@ -176,7 +176,6 @@
     <ClInclude Include="ThreadManager.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="SendBuffer.h" />
-    <ClInclude Include="UUIDGen.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreGlobal.cpp" />
@@ -193,7 +192,6 @@
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="ThreadManager.cpp" />
     <ClCompile Include="SendBuffer.cpp" />
-    <ClCompile Include="UUIDGen.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

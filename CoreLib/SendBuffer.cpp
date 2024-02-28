@@ -63,14 +63,12 @@ SendBufferManager::SendBufferManager()
 
 SendBufferManager::~SendBufferManager()
 {
-    std::cout << "스레드 소멸 될때 죽어라 제발 !!!!" << std::endl;
 }
 
 SendBufferRef SendBufferManager::Open(uint32 size)
 {
     SendBufferChunkRef chunk;
     {
-        // WriteLockGuard wl(lock, "write SendBufferManager::Open");
         if (_chunks.empty())
         {
             chunk = _chunks.emplace_back();
@@ -79,7 +77,7 @@ SendBufferRef SendBufferManager::Open(uint32 size)
         else
             chunk = CreateChunk();
     }
-    // crash _use == true
+
     if (chunk)
     {
         chunk->Reset();
@@ -91,14 +89,8 @@ SendBufferRef SendBufferManager::Open(uint32 size)
 
 void SendBufferManager::ReleaseBuffer(SendBufferChunk* chunk)
 {
-    {
-        // WriteLockGuard wl(lock, "write SendBufferManager::ReleaseBuffer");
-        // 여기서 다시 shared_ptr을 생성한다.
-        // TSL마다 버퍼 만들기로 해본다. 그래서 lock이 필요 x
-        SendBufferChunkRef sendBufferChunk = SendBufferChunkRef(chunk, ReleaseBuffer);
-        TLS_SendBufferManager->_chunks.push_back(sendBufferChunk);
-        // std::cout << "chunk ref count : " << sendBufferChunk.use_count() << std::endl;
-    }
+    SendBufferChunkRef sendBufferChunk = SendBufferChunkRef(chunk, ReleaseBuffer);
+    TLS_SendBufferManager->_chunks.push_back(sendBufferChunk);
 }
 
 SendBufferChunkRef SendBufferManager::CreateChunk() const

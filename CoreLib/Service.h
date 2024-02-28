@@ -42,7 +42,6 @@ public:
 
     void run() const;
 
-    // protected: // 일단 room에서 스트랜드 생성 되야되!!!
     boost::asio::io_context& GetIoContext() const { return _ioContext; }
     boost::asio::ip::tcp::endpoint& GetEndPoint() { return _ep; }
     boost::system::error_code& GetErrorCode() { return _ec; }

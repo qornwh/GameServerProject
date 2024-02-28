@@ -3,7 +3,7 @@
 
 class RecvBuffer
 {
-    enum { BUFFER_COUNT = 10 }; // 10배 이상 크게
+    enum { BUFFER_COUNT = 10 }; 
 
 public:
     RecvBuffer(int32 bufferSize);
