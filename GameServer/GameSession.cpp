@@ -196,6 +196,12 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
                 attackPkt->set_code(GetPlayer()->GetCode());
                 attackPkt->set_is_monster(false);
                 attackPkt->set_skill_code(SkillCode);
+                protocol::Position* playerPosition = new protocol::Position;
+                playerPosition->set_x(position.x());
+                playerPosition->set_y(position.y());
+                playerPosition->set_z(position.z());
+                playerPosition->set_yaw(position.yaw());
+                attackPkt->set_allocated_position(playerPosition);
 
                 SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
                     sendPkt, protocol::MessageCode::S_UNITATTACK);

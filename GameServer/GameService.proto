@@ -96,6 +96,7 @@ message Attack {
     int32 code = 1;
     int32 skill_code = 2;
     bool is_monster = 3;
+    Position position = 4;
 }
 
 message Buff {
