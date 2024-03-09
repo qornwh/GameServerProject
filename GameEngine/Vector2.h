@@ -41,9 +41,9 @@ struct Vector2
     }
 
     // 벡터 외적 공식 사용
-    static float CrossProduct(Vector2 a, Vector2 b)
+    static float crossProductAngle(Vector2 a, Vector2 b)
     {
-        return a.X * b.Y + b.X * a.Y;
+        return a.X * b.Y - b.X * a.Y;
     }
 
     // 벡터 크기
@@ -72,6 +72,7 @@ struct Vector2
     static float CalculateAngle(Vector2& a, Vector2& b)
     {
         Vector2 sub = b - a;
+        //정면벡터를 쓴 이유는 기준으로 잡기 위해 마지막에 나온 각도를 더하는게 아닌 set을 하기때문
         Vector2 forward(1, 0);
         float dot = DotProduct(NormalizeVector(sub), forward);
         // float mag1 = magnitude(x1, y1);
@@ -84,7 +85,7 @@ struct Vector2
         float radian = acos(dot);
         float angleRad = GameEngine::MathUtils::RadianToDegree(radian);
 
-        if (CrossProduct(forward, sub) > 0)
+        if (crossProductAngle(forward, sub) > 0)
         {
             return angleRad;
         }
