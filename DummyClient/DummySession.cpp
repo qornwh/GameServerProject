@@ -49,7 +49,7 @@ void DummySession::AsyncLoad()
 #elif AMODE == 1
     protocol::Login pkt;
     string wsId = "dummy";
-    wsId += _id;
+    wsId += std::to_string(_id);
     pkt.set_text(wsId);
     pkt.set_type(_id % 2);
 
