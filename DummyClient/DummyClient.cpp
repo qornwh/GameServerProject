@@ -2,21 +2,25 @@
 #include <boost/make_shared.hpp>
 #include "DummyService.h"
 #include "ThreadManager.h"
-#include "test.pb.h"
+#include "pch.h"
+
 using DummyServiceRef = boost::shared_ptr<DummyService>;
 
 int main()
 {
-    auto count = std::thread::hardware_concurrency() * 2;
-    std::cout << "core : " << count << std::endl;
     boost::asio::io_context io_context;
 
+#if AMODE == 0
     std::string address = "172.30.1.53";
     uint16 port = 12127;
+#elif AMODE == 1 
+    std::string address = "127.0.0.1";
+    uint16 port = 12128;
+#endif
 
     GThreadManager->CreateThread([&io_context, &address, &port]()
         {
-            DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 3);
+            DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 10);
             if (!service->Start())
             {
                 // crash!!
@@ -26,17 +30,17 @@ int main()
         }
     );
     
-    boost::core::detail::Sleep(1000 * 4);
-    DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 1);
-
-    ThreadManager tm;
-    tm.ThreadTLS();
-    if (!service->Start())
-    {
-        // crash!!
-        return 0;
-    }
-    service->run();
+    // boost::core::detail::Sleep(1000 * 10);
+    // DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 10);
+    //
+    // ThreadManager tm;
+    // tm.ThreadTLS();
+    // if (!service->Start())
+    // {
+    //     // crash!!
+    //     return 0;
+    // }
+    // service->run();
 
     while (true)
     {

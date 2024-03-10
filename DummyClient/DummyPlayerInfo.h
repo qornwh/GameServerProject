@@ -1,14 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/random/uniform_real_distribution.hpp>
 #include <boost/smart_ptr/enable_shared_from_this.hpp>
-
-static boost::random::mt19937 rng;
-static boost::random::uniform_int_distribution<> dstX{-15, 15};
-static boost::random::uniform_int_distribution<> dstY{-22, 22};
-static boost::random::uniform_real_distribution<> rot{0, 360};
 
 struct Vector
 {
@@ -61,7 +53,7 @@ protected:
 
 private:
     bool _use = false;
-    MapRange _map{-25, -25, 25, 25};
+    MapRange _map{0, 0, 0, 0};
 
     float _increaseX = 0.f;
     float _increaseY = 0.f;

@@ -2,6 +2,19 @@
 
 DummyPlayerInfo::DummyPlayerInfo()
 {
+#if AMODE == 0
+    _speed = 400.f;
+    _map.StartX = -2400;
+    _map.StartY = -2400;
+    _map.EndX = 2400;
+    _map.EndY = 2400;
+#elif AMODE == 1
+    _speed = 5.f;
+    _map.StartX = -25;
+    _map.StartY = -25;
+    _map.EndX = 25;
+    _map.EndY = 25;
+#endif
 }
 
 DummyPlayerInfo::~DummyPlayerInfo()
@@ -22,8 +35,8 @@ void DummyPlayerInfo::UpdateRotate()
 {
     _position.Yaw = rot(rng);
 
-    _increaseX = cosf(_position.Yaw * 3.14f / 180.f) * (_speed / 5.f);
-    _increaseY = sinf(_position.Yaw * 3.14f / 180.f) * (_speed / 5.f);
+    _increaseX = cosf(_position.Yaw * 3.14f / 180.f) * _speed;
+    _increaseY = sinf(_position.Yaw * 3.14f / 180.f) * _speed;
 }
 
 void DummyPlayerInfo::Start()

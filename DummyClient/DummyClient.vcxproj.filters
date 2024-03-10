@@ -5,13 +5,24 @@
     <ClCompile Include="DummyService.cpp" />
     <ClCompile Include="DummySession.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="test.pb.cc" />
+    <ClCompile Include="DummyProto.pb.cc" />
+    <ClCompile Include="Packet.cpp" />
+    <ClCompile Include="PacketHandler.cpp" />
+    <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="DummyPlayerInfo.cpp" />
+    <ClCompile Include="DummyUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DummyService.h" />
     <ClInclude Include="DummySession.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="test.pb.h" />
+    <ClInclude Include="DummyProto.pb.h" />
+    <ClInclude Include="Packet.h" />
+    <ClInclude Include="PacketHandler.h" />
+    <ClInclude Include="Pawn.h" />
+    <ClInclude Include="DummyPlayerInfo.h" />
+    <ClInclude Include="GamePacketHandler.h" />
+    <ClInclude Include="DummyUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="test.proto" />

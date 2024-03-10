@@ -67,7 +67,6 @@ void Session::OnRead(const boost::system::error_code err, size_t bytes_transferr
         // TODO : recv 처리
         if (bytes_transferred == 0)
         {
-            // 룸에서 모두 탈출
             Disconnect();
         }
         else
@@ -96,8 +95,6 @@ void Session::OnRead(const boost::system::error_code err, size_t bytes_transferr
     {
         // TODO : error 처리
         std::cout << "OnRead error code: " << err.value() << ", msg: " << err.message() << std::endl;
-
-        // 룸에서 모두 탈출
         Disconnect();
     }
 }
