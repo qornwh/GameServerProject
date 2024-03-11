@@ -20,7 +20,7 @@ int main()
 
     GThreadManager->CreateThread([&io_context, &address, &port]()
         {
-            DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 10);
+            DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 100);
             if (!service->Start())
             {
                 // crash!!

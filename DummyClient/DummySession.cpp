@@ -13,6 +13,8 @@ DummySession::DummySession(boost::asio::io_context& io_context, const boost::asi
     static atomic<int32> id = 0;
     _playerInfo = boost::make_shared<DummyPlayerInfo>();
     _id = id.fetch_add(1);
+
+    _playerInfo->Start();
 }
 
 DummySession::~DummySession()
@@ -52,6 +54,12 @@ void DummySession::AsyncLoad()
     wsId += std::to_string(_id);
     pkt.set_text(wsId);
     pkt.set_type(_id % 2);
+    pkt.set_is_dummy(true);
+    protocol::Position* position = new protocol::Position();
+    position->set_x(_playerInfo->GetPostion().Y);
+    position->set_z(_playerInfo->GetPostion().X);
+    position->set_yaw(_playerInfo->GetPostion().Yaw);
+    pkt.set_allocated_position(position);
 
     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::LOGIN);
 #endif
