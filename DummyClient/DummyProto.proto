@@ -26,6 +26,9 @@ enum MessageCode {
 message Login {
     string text = 1;
     int32 type = 2;
+    // 아래는 더미클라만 사용
+    Position position = 4;
+    bool is_dummy = 101;
 }
 
 message Position {

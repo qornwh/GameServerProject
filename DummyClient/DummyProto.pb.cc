@@ -24,7 +24,9 @@ namespace protocol {
 PROTOBUF_CONSTEXPR Login::Login(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.text_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.type_)*/0
+  , /*decltype(_impl_.is_dummy_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct LoginDefaultTypeInternal {
   PROTOBUF_CONSTEXPR LoginDefaultTypeInternal()
@@ -354,6 +356,8 @@ const uint32_t TableStruct_DummyProto_2eproto::offsets[] PROTOBUF_SECTION_VARIAB
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.text_),
   PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.type_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.position_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.is_dummy_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::Position, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -536,27 +540,27 @@ const uint32_t TableStruct_DummyProto_2eproto::offsets[] PROTOBUF_SECTION_VARIAB
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::protocol::Login)},
-  { 8, -1, -1, sizeof(::protocol::Position)},
-  { 18, -1, -1, sizeof(::protocol::Unit)},
-  { 29, -1, -1, sizeof(::protocol::Player)},
-  { 36, -1, -1, sizeof(::protocol::Monster)},
-  { 44, -1, -1, sizeof(::protocol::SLoad)},
-  { 53, -1, -1, sizeof(::protocol::SInsertplayer)},
-  { 60, -1, -1, sizeof(::protocol::SMove)},
-  { 69, -1, -1, sizeof(::protocol::SChat)},
-  { 78, -1, -1, sizeof(::protocol::SPlayerData)},
-  { 85, -1, -1, sizeof(::protocol::SClosePlayer)},
-  { 92, -1, -1, sizeof(::protocol::UnitState)},
-  { 103, -1, -1, sizeof(::protocol::SUnitStates)},
-  { 110, -1, -1, sizeof(::protocol::Attack)},
-  { 119, -1, -1, sizeof(::protocol::Buff)},
-  { 130, -1, -1, sizeof(::protocol::CPlayerAttack)},
-  { 140, -1, -1, sizeof(::protocol::SUnitAttack)},
-  { 147, -1, -1, sizeof(::protocol::SUnitBuff)},
-  { 154, -1, -1, sizeof(::protocol::Demage)},
-  { 163, -1, -1, sizeof(::protocol::SUnitDemage)},
-  { 170, -1, -1, sizeof(::protocol::SRoomQuest)},
-  { 179, -1, -1, sizeof(::protocol::CMovePotal)},
+  { 10, -1, -1, sizeof(::protocol::Position)},
+  { 20, -1, -1, sizeof(::protocol::Unit)},
+  { 31, -1, -1, sizeof(::protocol::Player)},
+  { 38, -1, -1, sizeof(::protocol::Monster)},
+  { 46, -1, -1, sizeof(::protocol::SLoad)},
+  { 55, -1, -1, sizeof(::protocol::SInsertplayer)},
+  { 62, -1, -1, sizeof(::protocol::SMove)},
+  { 71, -1, -1, sizeof(::protocol::SChat)},
+  { 80, -1, -1, sizeof(::protocol::SPlayerData)},
+  { 87, -1, -1, sizeof(::protocol::SClosePlayer)},
+  { 94, -1, -1, sizeof(::protocol::UnitState)},
+  { 105, -1, -1, sizeof(::protocol::SUnitStates)},
+  { 112, -1, -1, sizeof(::protocol::Attack)},
+  { 121, -1, -1, sizeof(::protocol::Buff)},
+  { 132, -1, -1, sizeof(::protocol::CPlayerAttack)},
+  { 142, -1, -1, sizeof(::protocol::SUnitAttack)},
+  { 149, -1, -1, sizeof(::protocol::SUnitBuff)},
+  { 156, -1, -1, sizeof(::protocol::Demage)},
+  { 165, -1, -1, sizeof(::protocol::SUnitDemage)},
+  { 172, -1, -1, sizeof(::protocol::SRoomQuest)},
+  { 181, -1, -1, sizeof(::protocol::CMovePotal)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -585,53 +589,55 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_DummyProto_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\020DummyProto.proto\022\010protocol\"#\n\005Login\022\014\n"
-  "\004text\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\"8\n\010Position\022\t\n"
-  "\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\022\013\n\003yaw\030\004 "
-  "\001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\022\014\n"
-  "\004code\030\003 \001(\005\022$\n\010position\030\004 \001(\0132\022.protocol"
-  ".Position\022\014\n\004name\030\005 \001(\t\"&\n\006Player\022\034\n\004uni"
-  "t\030\001 \001(\0132\016.protocol.Unit\"6\n\007Monster\022\034\n\004un"
-  "it\030\001 \001(\0132\016.protocol.Unit\022\r\n\005state\030\002 \001(\r\""
-  "^\n\005SLoad\022 \n\006player\030\001 \003(\0132\020.protocol.Play"
-  "er\022\"\n\007monster\030\002 \003(\0132\021.protocol.Monster\022\017"
-  "\n\007room_id\030\003 \001(\005\"1\n\rSInsertplayer\022 \n\006play"
-  "er\030\001 \001(\0132\020.protocol.Player\"O\n\005SMove\022\014\n\004c"
-  "ode\030\001 \001(\005\022$\n\010position\030\002 \001(\0132\022.protocol.P"
-  "osition\022\022\n\nis_monster\030\003 \001(\010\"1\n\005SChat\022\014\n\004"
-  "type\030\001 \001(\r\022\014\n\004code\030\002 \001(\005\022\014\n\004text\030\005 \001(\t\"/"
-  "\n\013SPlayerData\022 \n\006player\030\001 \001(\0132\020.protocol"
-  ".Player\"\034\n\014SClosePlayer\022\014\n\004code\030\001 \001(\005\"\203\001"
-  "\n\tUnitState\022\"\n\007monster\030\001 \001(\0132\021.protocol."
-  "Monster\022 \n\006player\030\002 \001(\0132\020.protocol.Playe"
-  "r\022\016\n\006demage\030\004 \001(\005\022\014\n\004heal\030\005 \001(\005\022\022\n\nis_mo"
-  "nster\030\n \001(\010\"6\n\013SUnitStates\022\'\n\nunit_state"
-  "\030\001 \003(\0132\023.protocol.UnitState\">\n\006Attack\022\014\n"
-  "\004code\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\022\n\nis_mo"
-  "nster\030\003 \001(\010\"V\n\004Buff\022\014\n\004code\030\001 \001(\005\022\022\n\nski"
-  "ll_code\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\022\014\n\004hea"
-  "l\030\004 \001(\005\022\n\n\002hp\030\005 \001(\005\"l\n\rCPlayerAttack\022\014\n\004"
-  "code\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\023\n\013target"
-  "_code\030\003 \001(\005\022$\n\010position\030\004 \001(\0132\022.protocol"
-  ".Position\"/\n\013SUnitAttack\022 \n\006attack\030\001 \003(\013"
-  "2\020.protocol.Attack\")\n\tSUnitBuff\022\034\n\004buff\030"
-  "\001 \003(\0132\016.protocol.Buff\":\n\006Demage\022\014\n\004code\030"
-  "\001 \001(\005\022\016\n\006demage\030\002 \001(\005\022\022\n\nis_monster\030\003 \001("
-  "\010\"/\n\013SUnitDemage\022 \n\006demage\030\001 \001(\0132\020.proto"
-  "col.Demage\"D\n\nSRoomQuest\022\020\n\010is_clear\030\001 \001"
-  "(\010\022\022\n\nkill_count\030\002 \001(\005\022\020\n\010sum_kill\030\003 \001(\005"
-  "\"7\n\nCMovePotal\022\023\n\013pre_room_id\030\001 \001(\005\022\024\n\014n"
-  "ext_room_id\030\002 \001(\005*\361\001\n\013MessageCode\022\t\n\005LOG"
-  "IN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_INSERTPLAYER\020\002\022\n\n\006"
-  "S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n\014S_PLAYERDATA\020\005\022\021"
-  "\n\rS_CLOSEPLAYER\020\006\022\020\n\014S_UNITSTATES\020\007\022\022\n\016C"
-  "_PLAYERATTACK\020\010\022\020\n\014S_UNITATTACK\020\t\022\020\n\014S_U"
-  "NITDEMAGE\020\n\022\016\n\nS_UNITBUFF\020\013\022\017\n\013S_ROOMQUE"
-  "ST\020\014\022\017\n\013C_MOVEPOTAL\020\rb\006proto3"
+  "\n\020DummyProto.proto\022\010protocol\"[\n\005Login\022\014\n"
+  "\004text\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022$\n\010position\030\004 "
+  "\001(\0132\022.protocol.Position\022\020\n\010is_dummy\030e \001("
+  "\010\"8\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z"
+  "\030\003 \001(\002\022\013\n\003yaw\030\004 \001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001("
+  "\r\022\n\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\005\022$\n\010position\030"
+  "\004 \001(\0132\022.protocol.Position\022\014\n\004name\030\005 \001(\t\""
+  "&\n\006Player\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\""
+  "6\n\007Monster\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit"
+  "\022\r\n\005state\030\002 \001(\r\"^\n\005SLoad\022 \n\006player\030\001 \003(\013"
+  "2\020.protocol.Player\022\"\n\007monster\030\002 \003(\0132\021.pr"
+  "otocol.Monster\022\017\n\007room_id\030\003 \001(\005\"1\n\rSInse"
+  "rtplayer\022 \n\006player\030\001 \001(\0132\020.protocol.Play"
+  "er\"O\n\005SMove\022\014\n\004code\030\001 \001(\005\022$\n\010position\030\002 "
+  "\001(\0132\022.protocol.Position\022\022\n\nis_monster\030\003 "
+  "\001(\010\"1\n\005SChat\022\014\n\004type\030\001 \001(\r\022\014\n\004code\030\002 \001(\005"
+  "\022\014\n\004text\030\005 \001(\t\"/\n\013SPlayerData\022 \n\006player\030"
+  "\001 \001(\0132\020.protocol.Player\"\034\n\014SClosePlayer\022"
+  "\014\n\004code\030\001 \001(\005\"\203\001\n\tUnitState\022\"\n\007monster\030\001"
+  " \001(\0132\021.protocol.Monster\022 \n\006player\030\002 \001(\0132"
+  "\020.protocol.Player\022\016\n\006demage\030\004 \001(\005\022\014\n\004hea"
+  "l\030\005 \001(\005\022\022\n\nis_monster\030\n \001(\010\"6\n\013SUnitStat"
+  "es\022\'\n\nunit_state\030\001 \003(\0132\023.protocol.UnitSt"
+  "ate\">\n\006Attack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_cod"
+  "e\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\"V\n\004Buff\022\014\n\004c"
+  "ode\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\022\n\nis_mons"
+  "ter\030\003 \001(\010\022\014\n\004heal\030\004 \001(\005\022\n\n\002hp\030\005 \001(\005\"l\n\rC"
+  "PlayerAttack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_code"
+  "\030\002 \001(\005\022\023\n\013target_code\030\003 \001(\005\022$\n\010position\030"
+  "\004 \001(\0132\022.protocol.Position\"/\n\013SUnitAttack"
+  "\022 \n\006attack\030\001 \003(\0132\020.protocol.Attack\")\n\tSU"
+  "nitBuff\022\034\n\004buff\030\001 \003(\0132\016.protocol.Buff\":\n"
+  "\006Demage\022\014\n\004code\030\001 \001(\005\022\016\n\006demage\030\002 \001(\005\022\022\n"
+  "\nis_monster\030\003 \001(\010\"/\n\013SUnitDemage\022 \n\006dema"
+  "ge\030\001 \001(\0132\020.protocol.Demage\"D\n\nSRoomQuest"
+  "\022\020\n\010is_clear\030\001 \001(\010\022\022\n\nkill_count\030\002 \001(\005\022\020"
+  "\n\010sum_kill\030\003 \001(\005\"7\n\nCMovePotal\022\023\n\013pre_ro"
+  "om_id\030\001 \001(\005\022\024\n\014next_room_id\030\002 \001(\005*\361\001\n\013Me"
+  "ssageCode\022\t\n\005LOGIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_IN"
+  "SERTPLAYER\020\002\022\n\n\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n\014"
+  "S_PLAYERDATA\020\005\022\021\n\rS_CLOSEPLAYER\020\006\022\020\n\014S_U"
+  "NITSTATES\020\007\022\022\n\016C_PLAYERATTACK\020\010\022\020\n\014S_UNI"
+  "TATTACK\020\t\022\020\n\014S_UNITDEMAGE\020\n\022\016\n\nS_UNITBUF"
+  "F\020\013\022\017\n\013S_ROOMQUEST\020\014\022\017\n\013C_MOVEPOTAL\020\rb\006p"
+  "roto3"
   ;
 static ::_pbi::once_flag descriptor_table_DummyProto_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_DummyProto_2eproto = {
-    false, false, 1709, descriptor_table_protodef_DummyProto_2eproto,
+    false, false, 1765, descriptor_table_protodef_DummyProto_2eproto,
     "DummyProto.proto",
     &descriptor_table_DummyProto_2eproto_once, nullptr, 0, 22,
     schemas, file_default_instances, TableStruct_DummyProto_2eproto::offsets,
@@ -676,8 +682,13 @@ bool MessageCode_IsValid(int value) {
 
 class Login::_Internal {
  public:
+  static const ::protocol::Position& position(const Login* msg);
 };
 
+const ::protocol::Position&
+Login::_Internal::position(const Login* msg) {
+  return *msg->_impl_.position_;
+}
 Login::Login(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -689,7 +700,9 @@ Login::Login(const Login& from)
   Login* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.text_){}
+    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.type_){}
+    , decltype(_impl_.is_dummy_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -701,7 +714,12 @@ Login::Login(const Login& from)
     _this->_impl_.text_.Set(from._internal_text(), 
       _this->GetArenaForAllocation());
   }
-  _this->_impl_.type_ = from._impl_.type_;
+  if (from._internal_has_position()) {
+    _this->_impl_.position_ = new ::protocol::Position(*from._impl_.position_);
+  }
+  ::memcpy(&_impl_.type_, &from._impl_.type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.is_dummy_) -
+    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.is_dummy_));
   // @@protoc_insertion_point(copy_constructor:protocol.Login)
 }
 
@@ -711,7 +729,9 @@ inline void Login::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.text_){}
+    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.type_){0}
+    , decltype(_impl_.is_dummy_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.text_.InitDefault();
@@ -732,6 +752,7 @@ Login::~Login() {
 inline void Login::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.text_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.position_;
 }
 
 void Login::SetCachedSize(int size) const {
@@ -745,7 +766,13 @@ void Login::Clear() {
   (void) cached_has_bits;
 
   _impl_.text_.ClearToEmpty();
-  _impl_.type_ = 0;
+  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
+    delete _impl_.position_;
+  }
+  _impl_.position_ = nullptr;
+  ::memset(&_impl_.type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.is_dummy_) -
+      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.is_dummy_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -769,6 +796,22 @@ const char* Login::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           _impl_.type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .protocol.Position position = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_position(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool is_dummy = 101;
+      case 101:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.is_dummy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -818,6 +861,19 @@ uint8_t* Login::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_type(), target);
   }
 
+  // .protocol.Position position = 4;
+  if (this->_internal_has_position()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::position(this),
+        _Internal::position(this).GetCachedSize(), target, stream);
+  }
+
+  // bool is_dummy = 101;
+  if (this->_internal_is_dummy() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(101, this->_internal_is_dummy(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -841,9 +897,21 @@ size_t Login::ByteSizeLong() const {
         this->_internal_text());
   }
 
+  // .protocol.Position position = 4;
+  if (this->_internal_has_position()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.position_);
+  }
+
   // int32 type = 2;
   if (this->_internal_type() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_type());
+  }
+
+  // bool is_dummy = 101;
+  if (this->_internal_is_dummy() != 0) {
+    total_size += 2 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -867,8 +935,15 @@ void Login::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF
   if (!from._internal_text().empty()) {
     _this->_internal_set_text(from._internal_text());
   }
+  if (from._internal_has_position()) {
+    _this->_internal_mutable_position()->::protocol::Position::MergeFrom(
+        from._internal_position());
+  }
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
+  }
+  if (from._internal_is_dummy() != 0) {
+    _this->_internal_set_is_dummy(from._internal_is_dummy());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -893,7 +968,12 @@ void Login::InternalSwap(Login* other) {
       &_impl_.text_, lhs_arena,
       &other->_impl_.text_, rhs_arena
   );
-  swap(_impl_.type_, other->_impl_.type_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(Login, _impl_.is_dummy_)
+      + sizeof(Login::_impl_.is_dummy_)
+      - PROTOBUF_FIELD_OFFSET(Login, _impl_.position_)>(
+          reinterpret_cast<char*>(&_impl_.position_),
+          reinterpret_cast<char*>(&other->_impl_.position_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Login::GetMetadata() const {
