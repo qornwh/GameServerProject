@@ -140,8 +140,18 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
             sendPkt.set_allocated_player(player);
 
             // 초기 위치 설정
-            GetPlayer()->SetPosition(-15, 0);
-            GetPlayer()->SetRotate(0);
+            if (!readPkt.is_dummy())
+            {
+                GetPlayer()->SetPosition(-15, 0);
+                GetPlayer()->SetRotate(0);
+            }
+            else
+            {
+                // 더미 클라이언트만 !!!
+                auto& position = readPkt.position();
+                GetPlayer()->SetPosition(position.z(), position.x());
+                GetPlayer()->SetRotate(position.yaw());
+            }
 
             SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
                 sendPkt, protocol::MessageCode::S_PLAYERDATA);
