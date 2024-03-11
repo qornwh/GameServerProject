@@ -24,8 +24,9 @@ namespace protocol {
 PROTOBUF_CONSTEXPR Login::Login(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.type_)*/0
-  , /*decltype(_impl_.hp_)*/0
+  , /*decltype(_impl_.is_dummy_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct LoginDefaultTypeInternal {
   PROTOBUF_CONSTEXPR LoginDefaultTypeInternal()
@@ -369,7 +370,8 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.name_),
   PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.type_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.hp_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.position_),
+  PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.is_dummy_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::Position, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -560,28 +562,28 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::protocol::Login)},
-  { 9, -1, -1, sizeof(::protocol::Position)},
-  { 19, -1, -1, sizeof(::protocol::Unit)},
-  { 30, -1, -1, sizeof(::protocol::Player)},
-  { 37, -1, -1, sizeof(::protocol::Monster)},
-  { 45, -1, -1, sizeof(::protocol::SLoad)},
-  { 54, -1, -1, sizeof(::protocol::SInsertplayer)},
-  { 61, -1, -1, sizeof(::protocol::SMove)},
-  { 70, -1, -1, sizeof(::protocol::SChat)},
-  { 79, -1, -1, sizeof(::protocol::SPlayerData)},
-  { 86, -1, -1, sizeof(::protocol::SClosePlayer)},
-  { 93, -1, -1, sizeof(::protocol::UnitState)},
-  { 104, -1, -1, sizeof(::protocol::SUnitStates)},
-  { 111, -1, -1, sizeof(::protocol::Attack)},
-  { 121, -1, -1, sizeof(::protocol::Buff)},
-  { 132, -1, -1, sizeof(::protocol::CPlayerAttack)},
-  { 142, -1, -1, sizeof(::protocol::SUnitAttack)},
-  { 149, -1, -1, sizeof(::protocol::SUnitBuff)},
-  { 156, -1, -1, sizeof(::protocol::Demage)},
-  { 165, -1, -1, sizeof(::protocol::SUnitDemage)},
-  { 172, -1, -1, sizeof(::protocol::SRoomQuest)},
-  { 181, -1, -1, sizeof(::protocol::CMovePotal)},
-  { 189, -1, -1, sizeof(::protocol::SEndGame)},
+  { 10, -1, -1, sizeof(::protocol::Position)},
+  { 20, -1, -1, sizeof(::protocol::Unit)},
+  { 31, -1, -1, sizeof(::protocol::Player)},
+  { 38, -1, -1, sizeof(::protocol::Monster)},
+  { 46, -1, -1, sizeof(::protocol::SLoad)},
+  { 55, -1, -1, sizeof(::protocol::SInsertplayer)},
+  { 62, -1, -1, sizeof(::protocol::SMove)},
+  { 71, -1, -1, sizeof(::protocol::SChat)},
+  { 80, -1, -1, sizeof(::protocol::SPlayerData)},
+  { 87, -1, -1, sizeof(::protocol::SClosePlayer)},
+  { 94, -1, -1, sizeof(::protocol::UnitState)},
+  { 105, -1, -1, sizeof(::protocol::SUnitStates)},
+  { 112, -1, -1, sizeof(::protocol::Attack)},
+  { 122, -1, -1, sizeof(::protocol::Buff)},
+  { 133, -1, -1, sizeof(::protocol::CPlayerAttack)},
+  { 143, -1, -1, sizeof(::protocol::SUnitAttack)},
+  { 150, -1, -1, sizeof(::protocol::SUnitBuff)},
+  { 157, -1, -1, sizeof(::protocol::Demage)},
+  { 166, -1, -1, sizeof(::protocol::SUnitDemage)},
+  { 173, -1, -1, sizeof(::protocol::SRoomQuest)},
+  { 182, -1, -1, sizeof(::protocol::CMovePotal)},
+  { 190, -1, -1, sizeof(::protocol::SEndGame)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -611,56 +613,57 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\021GameService.proto\022\010protocol\"/\n\005Login\022\014"
-  "\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\n\n\002hp\030d \001(\005\"8"
-  "\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 "
-  "\001(\002\022\013\n\003yaw\030\004 \001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001(\r\022\n"
-  "\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\005\022$\n\010position\030\004 \001"
-  "(\0132\022.protocol.Position\022\014\n\004name\030\005 \001(\t\"&\n\006"
-  "Player\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\"6\n\007"
-  "Monster\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit\022\r\n"
-  "\005state\030\002 \001(\r\"^\n\005SLoad\022 \n\006player\030\001 \003(\0132\020."
-  "protocol.Player\022\"\n\007monster\030\002 \003(\0132\021.proto"
-  "col.Monster\022\017\n\007room_id\030\003 \001(\005\"1\n\rSInsertp"
-  "layer\022 \n\006player\030\001 \001(\0132\020.protocol.Player\""
-  "O\n\005SMove\022\014\n\004code\030\001 \001(\005\022$\n\010position\030\002 \001(\013"
-  "2\022.protocol.Position\022\022\n\nis_monster\030\003 \001(\010"
-  "\"1\n\005SChat\022\014\n\004type\030\001 \001(\r\022\014\n\004code\030\002 \001(\005\022\014\n"
-  "\004text\030\005 \001(\t\"/\n\013SPlayerData\022 \n\006player\030\001 \001"
-  "(\0132\020.protocol.Player\"\034\n\014SClosePlayer\022\014\n\004"
-  "code\030\001 \001(\005\"\203\001\n\tUnitState\022\"\n\007monster\030\001 \001("
-  "\0132\021.protocol.Monster\022 \n\006player\030\002 \001(\0132\020.p"
-  "rotocol.Player\022\016\n\006demage\030\004 \001(\005\022\014\n\004heal\030\005"
-  " \001(\005\022\022\n\nis_monster\030\n \001(\010\"6\n\013SUnitStates\022"
-  "\'\n\nunit_state\030\001 \003(\0132\023.protocol.UnitState"
-  "\"d\n\006Attack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_code\030\002"
-  " \001(\005\022\022\n\nis_monster\030\003 \001(\010\022$\n\010position\030\004 \001"
-  "(\0132\022.protocol.Position\"V\n\004Buff\022\014\n\004code\030\001"
-  " \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\022\n\nis_monster\030\003"
-  " \001(\010\022\014\n\004heal\030\004 \001(\005\022\n\n\002hp\030\005 \001(\005\"l\n\rCPlaye"
-  "rAttack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_code\030\002 \001("
-  "\005\022\023\n\013target_code\030\003 \001(\005\022$\n\010position\030\004 \001(\013"
-  "2\022.protocol.Position\"/\n\013SUnitAttack\022 \n\006a"
-  "ttack\030\001 \003(\0132\020.protocol.Attack\")\n\tSUnitBu"
-  "ff\022\034\n\004buff\030\001 \003(\0132\016.protocol.Buff\":\n\006Dema"
-  "ge\022\014\n\004code\030\001 \001(\005\022\016\n\006demage\030\002 \001(\005\022\022\n\nis_m"
-  "onster\030\003 \001(\010\"/\n\013SUnitDemage\022 \n\006demage\030\001 "
-  "\001(\0132\020.protocol.Demage\"D\n\nSRoomQuest\022\020\n\010i"
-  "s_clear\030\001 \001(\010\022\022\n\nkill_count\030\002 \001(\005\022\020\n\010sum"
-  "_kill\030\003 \001(\005\"7\n\nCMovePotal\022\023\n\013pre_room_id"
-  "\030\001 \001(\005\022\024\n\014next_room_id\030\002 \001(\005\"\034\n\010SEndGame"
-  "\022\020\n\010end_game\030\001 \001(\010*\200\002\n\013MessageCode\022\t\n\005LO"
-  "GIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_INSERTPLAYER\020\002\022\n\n"
-  "\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n\014S_PLAYERDATA\020\005\022"
-  "\021\n\rS_CLOSEPLAYER\020\006\022\020\n\014S_UNITSTATES\020\007\022\022\n\016"
-  "C_PLAYERATTACK\020\010\022\020\n\014S_UNITATTACK\020\t\022\020\n\014S_"
-  "UNITDEMAGE\020\n\022\016\n\nS_UNITBUFF\020\013\022\017\n\013S_ROOMQU"
-  "EST\020\014\022\017\n\013C_MOVEPOTAL\020\r\022\r\n\tS_ENDGAME\020\016b\006p"
-  "roto3"
+  "\n\021GameService.proto\022\010protocol\"[\n\005Login\022\014"
+  "\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022$\n\010position\030\004"
+  " \001(\0132\022.protocol.Position\022\020\n\010is_dummy\030e \001"
+  "(\010\"8\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001"
+  "z\030\003 \001(\002\022\013\n\003yaw\030\004 \001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001"
+  "(\r\022\n\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\005\022$\n\010position"
+  "\030\004 \001(\0132\022.protocol.Position\022\014\n\004name\030\005 \001(\t"
+  "\"&\n\006Player\022\034\n\004unit\030\001 \001(\0132\016.protocol.Unit"
+  "\"6\n\007Monster\022\034\n\004unit\030\001 \001(\0132\016.protocol.Uni"
+  "t\022\r\n\005state\030\002 \001(\r\"^\n\005SLoad\022 \n\006player\030\001 \003("
+  "\0132\020.protocol.Player\022\"\n\007monster\030\002 \003(\0132\021.p"
+  "rotocol.Monster\022\017\n\007room_id\030\003 \001(\005\"1\n\rSIns"
+  "ertplayer\022 \n\006player\030\001 \001(\0132\020.protocol.Pla"
+  "yer\"O\n\005SMove\022\014\n\004code\030\001 \001(\005\022$\n\010position\030\002"
+  " \001(\0132\022.protocol.Position\022\022\n\nis_monster\030\003"
+  " \001(\010\"1\n\005SChat\022\014\n\004type\030\001 \001(\r\022\014\n\004code\030\002 \001("
+  "\005\022\014\n\004text\030\005 \001(\t\"/\n\013SPlayerData\022 \n\006player"
+  "\030\001 \001(\0132\020.protocol.Player\"\034\n\014SClosePlayer"
+  "\022\014\n\004code\030\001 \001(\005\"\203\001\n\tUnitState\022\"\n\007monster\030"
+  "\001 \001(\0132\021.protocol.Monster\022 \n\006player\030\002 \001(\013"
+  "2\020.protocol.Player\022\016\n\006demage\030\004 \001(\005\022\014\n\004he"
+  "al\030\005 \001(\005\022\022\n\nis_monster\030\n \001(\010\"6\n\013SUnitSta"
+  "tes\022\'\n\nunit_state\030\001 \003(\0132\023.protocol.UnitS"
+  "tate\"d\n\006Attack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_co"
+  "de\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\022$\n\010position"
+  "\030\004 \001(\0132\022.protocol.Position\"V\n\004Buff\022\014\n\004co"
+  "de\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\022\n\nis_monst"
+  "er\030\003 \001(\010\022\014\n\004heal\030\004 \001(\005\022\n\n\002hp\030\005 \001(\005\"l\n\rCP"
+  "layerAttack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_code\030"
+  "\002 \001(\005\022\023\n\013target_code\030\003 \001(\005\022$\n\010position\030\004"
+  " \001(\0132\022.protocol.Position\"/\n\013SUnitAttack\022"
+  " \n\006attack\030\001 \003(\0132\020.protocol.Attack\")\n\tSUn"
+  "itBuff\022\034\n\004buff\030\001 \003(\0132\016.protocol.Buff\":\n\006"
+  "Demage\022\014\n\004code\030\001 \001(\005\022\016\n\006demage\030\002 \001(\005\022\022\n\n"
+  "is_monster\030\003 \001(\010\"/\n\013SUnitDemage\022 \n\006demag"
+  "e\030\001 \001(\0132\020.protocol.Demage\"D\n\nSRoomQuest\022"
+  "\020\n\010is_clear\030\001 \001(\010\022\022\n\nkill_count\030\002 \001(\005\022\020\n"
+  "\010sum_kill\030\003 \001(\005\"7\n\nCMovePotal\022\023\n\013pre_roo"
+  "m_id\030\001 \001(\005\022\024\n\014next_room_id\030\002 \001(\005\"\034\n\010SEnd"
+  "Game\022\020\n\010end_game\030\001 \001(\010*\200\002\n\013MessageCode\022\t"
+  "\n\005LOGIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_INSERTPLAYER\020"
+  "\002\022\n\n\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n\014S_PLAYERDAT"
+  "A\020\005\022\021\n\rS_CLOSEPLAYER\020\006\022\020\n\014S_UNITSTATES\020\007"
+  "\022\022\n\016C_PLAYERATTACK\020\010\022\020\n\014S_UNITATTACK\020\t\022\020"
+  "\n\014S_UNITDEMAGE\020\n\022\016\n\nS_UNITBUFF\020\013\022\017\n\013S_RO"
+  "OMQUEST\020\014\022\017\n\013C_MOVEPOTAL\020\r\022\r\n\tS_ENDGAME\020"
+  "\016b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GameService_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GameService_2eproto = {
-    false, false, 1805, descriptor_table_protodef_GameService_2eproto,
+    false, false, 1849, descriptor_table_protodef_GameService_2eproto,
     "GameService.proto",
     &descriptor_table_GameService_2eproto_once, nullptr, 0, 23,
     schemas, file_default_instances, TableStruct_GameService_2eproto::offsets,
@@ -706,8 +709,13 @@ bool MessageCode_IsValid(int value) {
 
 class Login::_Internal {
  public:
+  static const ::protocol::Position& position(const Login* msg);
 };
 
+const ::protocol::Position&
+Login::_Internal::position(const Login* msg) {
+  return *msg->_impl_.position_;
+}
 Login::Login(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -719,8 +727,9 @@ Login::Login(const Login& from)
   Login* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.name_){}
+    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.type_){}
-    , decltype(_impl_.hp_){}
+    , decltype(_impl_.is_dummy_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -732,9 +741,12 @@ Login::Login(const Login& from)
     _this->_impl_.name_.Set(from._internal_name(), 
       _this->GetArenaForAllocation());
   }
+  if (from._internal_has_position()) {
+    _this->_impl_.position_ = new ::protocol::Position(*from._impl_.position_);
+  }
   ::memcpy(&_impl_.type_, &from._impl_.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.hp_) -
-    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.hp_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.is_dummy_) -
+    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.is_dummy_));
   // @@protoc_insertion_point(copy_constructor:protocol.Login)
 }
 
@@ -744,8 +756,9 @@ inline void Login::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.name_){}
+    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.type_){0}
-    , decltype(_impl_.hp_){0}
+    , decltype(_impl_.is_dummy_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
@@ -766,6 +779,7 @@ Login::~Login() {
 inline void Login::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.name_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.position_;
 }
 
 void Login::SetCachedSize(int size) const {
@@ -779,9 +793,13 @@ void Login::Clear() {
   (void) cached_has_bits;
 
   _impl_.name_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
+    delete _impl_.position_;
+  }
+  _impl_.position_ = nullptr;
   ::memset(&_impl_.type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.hp_) -
-      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.hp_));
+      reinterpret_cast<char*>(&_impl_.is_dummy_) -
+      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.is_dummy_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -809,10 +827,18 @@ const char* Login::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
         } else
           goto handle_unusual;
         continue;
-      // int32 hp = 100;
-      case 100:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
-          _impl_.hp_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+      // .protocol.Position position = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_position(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool is_dummy = 101;
+      case 101:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.is_dummy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -862,10 +888,17 @@ uint8_t* Login::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_type(), target);
   }
 
-  // int32 hp = 100;
-  if (this->_internal_hp() != 0) {
+  // .protocol.Position position = 4;
+  if (this->_internal_has_position()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(4, _Internal::position(this),
+        _Internal::position(this).GetCachedSize(), target, stream);
+  }
+
+  // bool is_dummy = 101;
+  if (this->_internal_is_dummy() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteInt32ToArray(100, this->_internal_hp(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(101, this->_internal_is_dummy(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -891,16 +924,21 @@ size_t Login::ByteSizeLong() const {
         this->_internal_name());
   }
 
+  // .protocol.Position position = 4;
+  if (this->_internal_has_position()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.position_);
+  }
+
   // int32 type = 2;
   if (this->_internal_type() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_type());
   }
 
-  // int32 hp = 100;
-  if (this->_internal_hp() != 0) {
-    total_size += 2 +
-      ::_pbi::WireFormatLite::Int32Size(
-        this->_internal_hp());
+  // bool is_dummy = 101;
+  if (this->_internal_is_dummy() != 0) {
+    total_size += 2 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -924,11 +962,15 @@ void Login::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF
   if (!from._internal_name().empty()) {
     _this->_internal_set_name(from._internal_name());
   }
+  if (from._internal_has_position()) {
+    _this->_internal_mutable_position()->::protocol::Position::MergeFrom(
+        from._internal_position());
+  }
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
   }
-  if (from._internal_hp() != 0) {
-    _this->_internal_set_hp(from._internal_hp());
+  if (from._internal_is_dummy() != 0) {
+    _this->_internal_set_is_dummy(from._internal_is_dummy());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -954,11 +996,11 @@ void Login::InternalSwap(Login* other) {
       &other->_impl_.name_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Login, _impl_.hp_)
-      + sizeof(Login::_impl_.hp_)
-      - PROTOBUF_FIELD_OFFSET(Login, _impl_.type_)>(
-          reinterpret_cast<char*>(&_impl_.type_),
-          reinterpret_cast<char*>(&other->_impl_.type_));
+      PROTOBUF_FIELD_OFFSET(Login, _impl_.is_dummy_)
+      + sizeof(Login::_impl_.is_dummy_)
+      - PROTOBUF_FIELD_OFFSET(Login, _impl_.position_)>(
+          reinterpret_cast<char*>(&_impl_.position_),
+          reinterpret_cast<char*>(&other->_impl_.position_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Login::GetMetadata() const {

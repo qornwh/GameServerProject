@@ -305,8 +305,9 @@ class Login final :
 
   enum : int {
     kNameFieldNumber = 1,
+    kPositionFieldNumber = 4,
     kTypeFieldNumber = 2,
-    kHpFieldNumber = 100,
+    kIsDummyFieldNumber = 101,
   };
   // string name = 1;
   void clear_name();
@@ -322,6 +323,24 @@ class Login final :
   std::string* _internal_mutable_name();
   public:
 
+  // .protocol.Position position = 4;
+  bool has_position() const;
+  private:
+  bool _internal_has_position() const;
+  public:
+  void clear_position();
+  const ::protocol::Position& position() const;
+  PROTOBUF_NODISCARD ::protocol::Position* release_position();
+  ::protocol::Position* mutable_position();
+  void set_allocated_position(::protocol::Position* position);
+  private:
+  const ::protocol::Position& _internal_position() const;
+  ::protocol::Position* _internal_mutable_position();
+  public:
+  void unsafe_arena_set_allocated_position(
+      ::protocol::Position* position);
+  ::protocol::Position* unsafe_arena_release_position();
+
   // int32 type = 2;
   void clear_type();
   int32_t type() const;
@@ -331,13 +350,13 @@ class Login final :
   void _internal_set_type(int32_t value);
   public:
 
-  // int32 hp = 100;
-  void clear_hp();
-  int32_t hp() const;
-  void set_hp(int32_t value);
+  // bool is_dummy = 101;
+  void clear_is_dummy();
+  bool is_dummy() const;
+  void set_is_dummy(bool value);
   private:
-  int32_t _internal_hp() const;
-  void _internal_set_hp(int32_t value);
+  bool _internal_is_dummy() const;
+  void _internal_set_is_dummy(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:protocol.Login)
@@ -349,8 +368,9 @@ class Login final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+    ::protocol::Position* position_;
     int32_t type_;
-    int32_t hp_;
+    bool is_dummy_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -4210,24 +4230,114 @@ inline void Login::set_type(int32_t value) {
   // @@protoc_insertion_point(field_set:protocol.Login.type)
 }
 
-// int32 hp = 100;
-inline void Login::clear_hp() {
-  _impl_.hp_ = 0;
+// .protocol.Position position = 4;
+inline bool Login::_internal_has_position() const {
+  return this != internal_default_instance() && _impl_.position_ != nullptr;
 }
-inline int32_t Login::_internal_hp() const {
-  return _impl_.hp_;
+inline bool Login::has_position() const {
+  return _internal_has_position();
 }
-inline int32_t Login::hp() const {
-  // @@protoc_insertion_point(field_get:protocol.Login.hp)
-  return _internal_hp();
+inline void Login::clear_position() {
+  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
+    delete _impl_.position_;
+  }
+  _impl_.position_ = nullptr;
 }
-inline void Login::_internal_set_hp(int32_t value) {
+inline const ::protocol::Position& Login::_internal_position() const {
+  const ::protocol::Position* p = _impl_.position_;
+  return p != nullptr ? *p : reinterpret_cast<const ::protocol::Position&>(
+      ::protocol::_Position_default_instance_);
+}
+inline const ::protocol::Position& Login::position() const {
+  // @@protoc_insertion_point(field_get:protocol.Login.position)
+  return _internal_position();
+}
+inline void Login::unsafe_arena_set_allocated_position(
+    ::protocol::Position* position) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.position_);
+  }
+  _impl_.position_ = position;
+  if (position) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protocol.Login.position)
+}
+inline ::protocol::Position* Login::release_position() {
   
-  _impl_.hp_ = value;
+  ::protocol::Position* temp = _impl_.position_;
+  _impl_.position_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
 }
-inline void Login::set_hp(int32_t value) {
-  _internal_set_hp(value);
-  // @@protoc_insertion_point(field_set:protocol.Login.hp)
+inline ::protocol::Position* Login::unsafe_arena_release_position() {
+  // @@protoc_insertion_point(field_release:protocol.Login.position)
+  
+  ::protocol::Position* temp = _impl_.position_;
+  _impl_.position_ = nullptr;
+  return temp;
+}
+inline ::protocol::Position* Login::_internal_mutable_position() {
+  
+  if (_impl_.position_ == nullptr) {
+    auto* p = CreateMaybeMessage<::protocol::Position>(GetArenaForAllocation());
+    _impl_.position_ = p;
+  }
+  return _impl_.position_;
+}
+inline ::protocol::Position* Login::mutable_position() {
+  ::protocol::Position* _msg = _internal_mutable_position();
+  // @@protoc_insertion_point(field_mutable:protocol.Login.position)
+  return _msg;
+}
+inline void Login::set_allocated_position(::protocol::Position* position) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.position_;
+  }
+  if (position) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(position);
+    if (message_arena != submessage_arena) {
+      position = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, position, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.position_ = position;
+  // @@protoc_insertion_point(field_set_allocated:protocol.Login.position)
+}
+
+// bool is_dummy = 101;
+inline void Login::clear_is_dummy() {
+  _impl_.is_dummy_ = false;
+}
+inline bool Login::_internal_is_dummy() const {
+  return _impl_.is_dummy_;
+}
+inline bool Login::is_dummy() const {
+  // @@protoc_insertion_point(field_get:protocol.Login.is_dummy)
+  return _internal_is_dummy();
+}
+inline void Login::_internal_set_is_dummy(bool value) {
+  
+  _impl_.is_dummy_ = value;
+}
+inline void Login::set_is_dummy(bool value) {
+  _internal_set_is_dummy(value);
+  // @@protoc_insertion_point(field_set:protocol.Login.is_dummy)
 }
 
 // -------------------------------------------------------------------

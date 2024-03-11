@@ -23,7 +23,9 @@ enum MessageCode {
 message Login {
     string name = 1;
     int32 type = 2;
-    int32 hp = 100;
+    // 아래는 더미클라만 사용
+    Position position = 4;
+    bool is_dummy = 101;
 }
 
 message Position {
