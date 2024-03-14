@@ -67,7 +67,6 @@ public:
 
 private:
     vector<SendBufferChunkRef> _chunks;
-    Lock lock;
 };
 
 /*
