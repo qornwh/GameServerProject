@@ -40,16 +40,14 @@ const uint16 EndPointUtil::GetPort()
 Service::Service(boost::asio::io_context& io_context, uint16 port, int32 maxSessionCount) :
     _maxSessionCount(maxSessionCount),
     _ep(boost::asio::ip::tcp::v4(), port),
-    _ioContext(io_context),
-    _acceptor(io_context, GetEndPoint())
+    _ioContext(io_context)
 {
 }
 
 Service::Service(boost::asio::io_context& io_context, std::string host, uint16 port, int32 maxSessionCount) :
     _maxSessionCount(maxSessionCount),
     _ep(boost::asio::ip::make_address(host), port),
-    _ioContext(io_context),
-    _acceptor(io_context, GetEndPoint())
+    _ioContext(io_context)
 {
 }
 
@@ -83,16 +81,6 @@ void Service::BroadCast(SendBufferRef sendBuffer)
 
 void Service::RegistAccept()
 {
-    SessionRef session = CreateSession();
-    auto ptr = shared_from_this();
-    _acceptor.async_accept(session->GetSocket(),
-                           [ptr, session](const boost::system::error_code& ec)
-                           {
-                               session->OnConnect(ec);
-                               session->SetService(ptr);
-                               ptr->AddSessionRef(session);
-                               ptr->RegistAccept();
-                           });
 }
 
 void Service::run() const

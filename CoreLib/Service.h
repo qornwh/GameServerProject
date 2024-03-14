@@ -56,7 +56,6 @@ private:
     boost::system::error_code _ec;
 
 protected:
-    boost::asio::ip::tcp::acceptor _acceptor;
     std::set<SessionRef> _sessions;
     Lock lock;
 };
