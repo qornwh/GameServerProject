@@ -106,3 +106,7 @@ void DummyService::AsyncSession()
     _tick++;
     StartTimer();
 }
+
+void DummyService::RegistAccept()
+{
+}

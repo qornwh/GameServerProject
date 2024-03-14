@@ -19,6 +19,8 @@ public:
     void StartTimer();
     void AsyncSession();
 
+    void RegistAccept() override;
+
 private:
     boost::asio::strand<boost::asio::io_context::executor_type> _strand;
     boost::asio::steady_timer _timer;
