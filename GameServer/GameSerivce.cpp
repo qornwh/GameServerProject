@@ -7,22 +7,16 @@
 
 
 GameService::GameService(boost::asio::io_context& io_context, uint16 port,
-                         int32 _maxSessionCount) : Service(io_context, port, _maxSessionCount),
-                                                   _acceptor(io_context, GetEndPoint())
+                         int32 _maxSessionCount) : Service(io_context, port, _maxSessionCount)
 {
 }
 
 GameService::GameService(boost::asio::io_context& io_context, std::string host, uint16 port,
-                         int32 _maxSessionCount) : Service(io_context, host, port, _maxSessionCount),
-                                                   _acceptor(io_context, GetEndPoint())
+                         int32 _maxSessionCount) : Service(io_context, host, port, _maxSessionCount)
 {
 }
 
 GameService::~GameService()
-{
-}
-
-void GameService::InitRoom()
 {
 }
 
@@ -36,23 +30,13 @@ SessionRef GameService::CreateSession()
 bool GameService::Start()
 {
     cout << "Start Service !!!" << endl;
-    InitRoom();
     RegistAccept();
     return true;
 }
 
 void GameService::RegistAccept()
 {
-    SessionRef session = CreateSession();
-    auto ptr = shared_from_this();
-    _acceptor.async_accept(session->GetSocket(),
-                           [ptr, session](const boost::system::error_code& ec)
-                           {
-                               session->OnConnect(ec);
-                               session->SetService(ptr);
-                               ptr->AddSessionRef(session);
-                               ptr->RegistAccept();
-                           });
+    Service::RegistAccept();
 }
 
 void GameService::BroadCast(SendBufferRef sendBuffer)

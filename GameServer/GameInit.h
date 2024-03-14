@@ -24,6 +24,10 @@ public:
             openFile.close();
             json = GameUtils::JsonParser::GetStrParser(jsonStr);
         }
+        else
+        {
+            cout << "not exist config.json.." << endl;
+        }
 
         boost::json::value objJson = GameUtils::JsonParser::Parser("units", json);
         boost::json::value playerJson = GameUtils::JsonParser::Parser("players", objJson);

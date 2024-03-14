@@ -18,10 +18,4 @@ public:
     void BroadCast(SendBufferRef sendBuffer);
     
     void ReleaseSessionMesssage(SessionRef session) override;
-
-private:
-    void InitRoom();
-    
-private:
-    boost::asio::ip::tcp::acceptor _acceptor;
 };

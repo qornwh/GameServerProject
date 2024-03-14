@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "pch.h"
-
 #include <set>
-
 #include "ReadWriteLock.h"
 
 struct EndPointUtil
@@ -58,7 +56,7 @@ private:
     boost::system::error_code _ec;
 
 protected:
+    boost::asio::ip::tcp::acceptor _acceptor;
     std::set<SessionRef> _sessions;
-
     Lock lock;
 };
