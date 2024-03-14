@@ -51,7 +51,6 @@ void Session::AsyncRead()
     _socket.async_read_some(
         // 이거 데이터 한계가 있다. => 아니다 size_t 자료형 크기다 ㅅㅂ 와 이거 1시간 날림
         boost::asio::buffer(_buffer, _recvBufferSize),
-        // boost::asio::buffer(_TESTrecvBuffer, 4096),
         [ptr](const boost::system::error_code ec, const size_t bytes_transferred)
         {
             ptr->OnRead(ec, bytes_transferred);

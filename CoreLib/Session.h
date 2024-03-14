@@ -41,6 +41,5 @@ private:
 
     Lock lock;
 
-    char _TESTrecvBuffer[4096];
 	Atomic<bool> _connected{ false };
 };
