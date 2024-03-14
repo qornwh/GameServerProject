@@ -102,7 +102,6 @@ void Session::AsyncWrite()
 {
     std::vector<boost::asio::const_buffer> buffers;
     {
-        WriteLockGuard wl(lock, "write");
         for (auto buffer : _sendBuffers)
         {
             buffers.emplace_back(boost::asio::buffer(buffer->Buffer(), buffer->WriteSize()));
@@ -115,7 +114,6 @@ void Session::AsyncWrite()
         [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
         {
             ptr->OnWrite(ec, bytes_transferred);
-            WriteLockGuard wl(ptr->lock, "write");
             ptr->_sendBuffers.clear();
             // std::cout << "sendbuffer size !!! : " << bytes_transferred << std::endl;
             // 세션 shared_ptr관리 필요?? disconnected될때 끊길 확률 있다
@@ -137,7 +135,6 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
 {
     std::vector<boost::asio::const_buffer> buffers;
     {
-        WriteLockGuard wl(lock, "write");
         _sendBuffers.emplace_back(sendBuffer);
         for (auto buffer : _sendBuffers)
         {
@@ -151,7 +148,6 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
         [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
         {
             ptr->OnWrite(ec, bytes_transferred);
-            WriteLockGuard wl(ptr->lock, "write");
             ptr->_sendBuffers.clear();
             // std::cout << "sendbuffer size !!! : " << bytes_transferred << std::endl;
             // 세션 shared_ptr관리 필요?? disconnected될때 끊길 확률 있다
@@ -190,6 +186,5 @@ void Session::Disconnect()
 
 void Session::AddWriteBuffer(SendBufferRef sendBuffer)
 {
-    WriteLockGuard wl(lock, "write");
     _sendBuffers.emplace_back(sendBuffer);
 }

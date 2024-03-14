@@ -39,7 +39,5 @@ private:
 
     boost::weak_ptr<Service> _serviceRef;
 
-    Lock lock;
-
 	Atomic<bool> _connected{ false };
 };

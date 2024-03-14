@@ -52,7 +52,6 @@ void GameService::RegistAccept()
 
 void GameService::BroadCast(SendBufferRef sendBuffer)
 {
-    ReadLockGuard read(lock, "read");
     for (const auto session : GetSession())
     {
         if (session->IsConnected())

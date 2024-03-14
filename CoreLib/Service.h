@@ -57,5 +57,4 @@ private:
 
 protected:
     std::set<SessionRef> _sessions;
-    Lock lock;
 };
