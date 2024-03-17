@@ -15,7 +15,7 @@ class Shape
 public:
     Shape();
     Shape(float x, float y);
-    virtual ~Shape() {};
+    virtual ~Shape() {}
 
     Vector2& GetCenter() { return _center; }
     virtual ShapeType GetType() { return _type; }
@@ -24,8 +24,8 @@ public:
     {
     }
 
-    virtual std::vector<Vector2>& GetVertexs(float rot) { return _vertexs; }
 
+    virtual std::vector<Vector2>& GetVertexs(float rot) { return _vertexs; }
 protected:
     ShapeType _type = ShapeType::CIRCLE;
     std::vector<Vector2> _vertexs;
@@ -40,7 +40,7 @@ public:
 
     ~Circle()
     {
-    };
+    }
 
     float GetRadius() { return _radius; }
     void Update();
@@ -57,7 +57,7 @@ public:
 
     ~Rectangle()
     {
-    };
+    }
     // 직사각형인 경우 정점이 4개지만 축에 정렬해 2번만 해도됨!!!
 
     float GetWidth() { return _width; }
@@ -69,8 +69,8 @@ public:
         _vertexs[0].X = _width * GameEngine::MathUtils::GetCos(rot) / 2;
         _vertexs[0].Y = _width * GameEngine::MathUtils::GetSin(rot) / 2;
 
-        _vertexs[0].X = _height * GameEngine::MathUtils::GetCos(rot - 90) / 2;
-        _vertexs[0].Y = _height * GameEngine::MathUtils::GetSin(rot - 90) / 2;
+        _vertexs[1].X = _height * GameEngine::MathUtils::GetCos(rot - 90) / 2;
+        _vertexs[1].Y = _height * GameEngine::MathUtils::GetSin(rot - 90) / 2;
 
         return _vertexs;
     }

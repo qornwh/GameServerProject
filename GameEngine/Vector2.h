@@ -61,12 +61,6 @@ struct Vector2
         else
             return Vector2(0, 0);
     }
-
-    // 벡터 외적 공식 사용
-    static float CrossProduct(float x1, float y1, float x2, float y2)
-    {
-        return x1 * y2 - x2 * y1;
-    }
     
     // 2점 사이각 구한는 함수
     static float CalculateAngle(Vector2& a, Vector2& b)
@@ -75,13 +69,6 @@ struct Vector2
         //정면벡터를 쓴 이유는 기준으로 잡기 위해 마지막에 나온 각도를 더하는게 아닌 set을 하기때문
         Vector2 forward(1, 0);
         float dot = DotProduct(NormalizeVector(sub), forward);
-        // float mag1 = magnitude(x1, y1);
-        // float mag2 = magnitude(x2, y2);
-
-        // 두 벡터의 내적의 크기와 벡터의 크기를 이용하여 각도 계산
-        // float angleCos = dot / (mag1 * mag2);
-
-        // acos 함수를 사용하여 라디안으로 변환된 각도를 계산
         float radian = acos(dot);
         float angleRad = GameEngine::MathUtils::RadianToDegree(radian);
 

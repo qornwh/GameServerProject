@@ -77,23 +77,24 @@ bool Collider::IsTrigger(Collider& other)
             {
                 // 사각형 사각형
                 // 1. 각 rect를 중심점을 기준으로 x,y 축을 잡고 하게 되면, 사실상 단위 벡터가 (1, 0) (0, 1)이되므로
-                // x좌표의 값, y좌표의 값과 기준이된 width /2, height /2 보다 dist가 작은 지 판단.
+                // x좌표의 값, y좌표의 값과 기준이된 width /2, height /2 보다 dist가 작은 지 판단. => 이유는 width, height축으로하면 꼭지점 으로 투영됨.
+                // 그래서 그길이 2개를 더해서 2점사이보다. 크면 교차된거임.
                 // 2. 그냥 좌표 변환 없이 각 rect 법선벡터 구해서 단위벡터 만들어서 내적으로 구한다. 그후 dist 비교 판단
+                // 3. 외적을 절대값으로 하는이유는 음수로 나와선 안된다.
 
                 Vector2 dist = (_position + _shape->GetCenter()) - (other.GetPosition() + other.GetShape().GetCenter());
                 std::vector<Collider*> arr = {this, &other};
 
                 for (auto& collider : arr) // 실제론 2개
                 {
-                    float sum = 0.f;
-
-                    for (auto& vertex : collider->GetShape().GetVertexs(collider->GetRotate())) // 4개
+                    for (auto& vertex : collider->GetShape().GetVertexs(collider->GetRotate())) // 2 * 2 = 4개
                     {
+                        float sum = 0.f;
                         Vector2 nomal = Vector2::NormalizeVector(vertex);
 
                         for (auto collider2 : arr) // 실제론 2개
                         {
-                            for (auto vertex2 : collider2->GetShape().GetVertexs(collider2->GetRotate()))
+                            for (auto vertex2 : collider2->GetShape().GetVertexs(collider2->GetRotate())) // 2 * 2 = 4개
                             {
                                 sum += Vector2::AbsDotProduct(vertex2, nomal);
                             }
