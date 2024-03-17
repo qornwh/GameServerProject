@@ -465,8 +465,9 @@ GamePlayerInfo::~GamePlayerInfo()
 void GamePlayerInfo::Update()
 {
     // GameObjectInfo::Update();
-
-    // 플레이어는 맵별로 바뀌므로 GameObjectInfo의 room 사용 x
+    if (_gameSession.lock() == nullptr)
+        return;
+    
     GameRoomRef room = GRoomManger->getRoom(_gameSession.lock()->GetRoomId());
     if (room == nullptr)
         return;
