@@ -27,11 +27,11 @@ int main()
 
     GameServiceRef service = boost::make_shared<GameService>(io_context, port);
 
-    // GThreadManager->CreateThread([&service]()
-    //     {
-    //         service->run();
-    //     }
-    // );
+    GThreadManager->CreateThread([&service]()
+        {
+            service->run();
+        }
+    );
 
     if (!service->Start())
     {
