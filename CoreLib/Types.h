@@ -10,7 +10,7 @@
 
 using namespace std;
 
-using BYTE = unsigned char;
+using BYTE = boost::uint8_t;
 using int8 = boost::int8_t;
 using int16 = boost::int16_t;
 using int32 = boost::int32_t;
@@ -27,5 +27,4 @@ using SessionRef = boost::shared_ptr<class Session>;
 using SendBufferRef = boost::shared_ptr<class SendBuffer>;
 using SendBufferChunkRef = boost::shared_ptr<class SendBufferChunk>;
 using SendBufferManagerRef = boost::shared_ptr<class SendBufferManager>;
-
 using ServiceRef = boost::shared_ptr<class Service>;

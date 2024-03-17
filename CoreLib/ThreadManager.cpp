@@ -8,6 +8,7 @@ thread_local SendBufferManager* TLS_SendBufferManager = nullptr;
 
 ThreadManager::ThreadManager()
 {
+    // 메인스레드
     ThreadTLS();
 }
 

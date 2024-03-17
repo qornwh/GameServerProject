@@ -39,7 +39,7 @@ SendBufferRef SendBufferChunk::Open(uint32 size)
     _use = true;
     _pos = size;
 
-    SendBufferRef sendBuffer = boost::make_shared<SendBuffer>(shared_from_this(), size, &_chunk[0]);
+    SendBufferRef sendBuffer = boost::make_shared<SendBuffer>(shared_from_this(), size, _chunk.data());
     return sendBuffer;
 }
 
