@@ -140,20 +140,14 @@ void GameRoom::StartGameRoom()
 
 void GameRoom::Tick()
 {
-    // 일단 스트랜드는 싱글처리해도 되기때문에 딜레이를 넣어둔다.
     // _gameStrand는 Tick 처리용도이다.
+    // 일단 스트랜드는 싱글처리해도 되기때문에 딜레이를 넣어둔다.
     // 먼저 딜레이후 일정 시간마다 _gameStrand에 Tick 함수를 계속 집어넣어서 시작한다.
     _timer.expires_at(_timer.expiry() + _timerDelay);
     _tickCounter.Add();
-    // while (_isTask)
-    // {
-    //     _timer.expires_at(_timer.expiry() + _timerDelay);
-    //     _tickCounter.Add();
-    // }
-
     _timer.async_wait(boost::asio::bind_executor(_gameStrand, [this](boost::system::error_code error)
     {
-        // 룸의 일정 시간마다 작업 (일단 10프레임 해봄)
+        // 룸의 일정 시간마다 작업 (100ms)
         Task();
 
         GameRoomQuestInfo& rqInfo = _gameRoomQuest->GetInfo();
