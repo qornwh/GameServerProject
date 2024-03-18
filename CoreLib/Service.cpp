@@ -64,12 +64,14 @@ SessionRef Service::CreateSession()
 
 void Service::AddSessionRef(SessionRef session)
 {
+    WriteLockGuard wl(lock, "writeLock");
     _sessions.insert(session);
     _sessionCount++;
 }
 
 void Service::BroadCast(SendBufferRef sendBuffer)
 {
+    ReadLockGuard rl(lock, "BroadCast");
     for (auto session : _sessions)
     {
         if (session->IsConnected())
@@ -88,8 +90,11 @@ void Service::run() const
 
 void Service::ReleaseSession(SessionRef session)
 {
-    _sessions.erase(session);
-    _sessionCount--;
-    
+    {
+        WriteLockGuard wl(lock, "writeLock");
+        _sessions.erase(session);
+        _sessionCount--;
+    }
+
     ReleaseSessionMesssage(session);
 }
