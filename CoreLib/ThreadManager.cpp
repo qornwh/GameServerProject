@@ -8,8 +8,6 @@ thread_local SendBufferManager* TLS_SendBufferManager = nullptr;
 
 ThreadManager::ThreadManager()
 {
-    // 메인스레드
-    ThreadTLS();
 }
 
 ThreadManager::~ThreadManager()
@@ -31,7 +29,6 @@ void ThreadManager::ThreadTLS()
 {
     static Atomic<uint32> SThreadId = 1;
     TLS_ThreadId = SThreadId.fetch_add(1);
-
     TLS_SendBufferManager = new SendBufferManager();
 }
 
