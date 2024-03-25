@@ -9,8 +9,38 @@
 #include "SendBuffer.h"
 #include "ThreadManager.h"
 
+#ifdef _WIN32
+#include <Windows.h>
+#include <DbgHelp.h>
+#pragma comment(lib, "Dbghelp.lib")
+long WINAPI ExceptionCallBack(EXCEPTION_POINTERS* exception_pointers)
+{
+    MINIDUMP_EXCEPTION_INFORMATION info = { 0 };
+    info.ThreadId = ::GetCurrentThreadId(); // Threae ID 설정
+    info.ExceptionPointers = exception_pointers; // Exception 정보 설정
+    info.ClientPointers = FALSE;
+
+    // 덤프 파일 생성
+    std::wstring strtemp(L"GameServer.dmp");
+    HANDLE hFile = CreateFile(strtemp.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpNormal, &info, NULL, NULL);
+
+    return 0L;
+}
+#endif
+
+void test()
+{
+    char* ptr = nullptr;
+    ptr[5] = 'a';
+}
+
 int main()
 {
+#ifdef _WIN32
+    SetUnhandledExceptionFilter(ExceptionCallBack);
+#endif
+
     auto count = std::thread::hardware_concurrency() * 2;
     std::cout << "core : " << count << std::endl;
     boost::asio::io_context io_context;
