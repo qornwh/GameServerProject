@@ -8,15 +8,15 @@
 ---
 
 [![Video Label](http://img.youtube.com/vi/UeYY-_UfRoY/0.jpg)](https://youtu.be/UeYY-_UfRoY?si=uCtZRGLmAZObMDmo)
-[![Video Label](http://img.youtube.com/vi/bkWg1QWX7Vs/0.jpg)](https://youtu.be/bkWg1QWX7Vs?si=uCtZRGLmAZObMDmo)
+[![Video Label](http://img.youtube.com/vi/bkWg1QWX7Vs/0.jpg)](https://youtu.be/bkWg1QWX7Vs)
 
 ## 테스트 시연 영상
 
 ---
 
-<iframe width="800" height="515" src="https://www.youtube.com/embed/WXoosvnCQw4" frameborder="0" allowfullscreen></iframe>
-<iframe width="800" height="515" src="https://www.youtube.com/embed/k3-c4AiTmxs" frameborder="0" allowfullscreen></iframe>
-<iframe width="800" height="515" src="https://www.youtube.com/embed/6-NsowB52Xw" frameborder="0" allowfullscreen></iframe>
+[![Video Label](http://img.youtube.com/vi/WXoosvnCQw4/0.jpg)](https://youtu.be/WXoosvnCQw4)
+[![Video Label](http://img.youtube.com/vi/k3-c4AiTmxs/0.jpg)](https://youtu.be/k3-c4AiTmxs)
+[![Video Label](http://img.youtube.com/vi/6-NsowB52Xw/0.jpg)](https://youtu.be/6-NsowB52Xw)
 
 ## Source Code
 
