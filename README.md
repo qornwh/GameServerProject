@@ -7,8 +7,8 @@
 
 ---
 
-<iframe width="600" height="400" src="https://www.youtube.com/embed/UeYY-_UfRoY" title="rpg 궁수" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-<iframe width="600" height="400" src="https://www.youtube.com/embed/bkWg1QWX7Vs" title="rpg 전사" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Video Label](http://img.youtube.com/vi/UeYY-_UfRoY/0.jpg)](https://youtu.be/UeYY-_UfRoY?si=uCtZRGLmAZObMDmo)
+[![Video Label](http://img.youtube.com/vi/bkWg1QWX7Vs/0.jpg)](https://youtu.be/bkWg1QWX7Vs?si=uCtZRGLmAZObMDmo)
 
 ## 테스트 시연 영상
 
