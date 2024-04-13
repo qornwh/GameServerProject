@@ -8,9 +8,7 @@
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
 #include "GameSession.h"
-#include "GameMapInfo.h"
 #include "GameObjectInfo.h"
-#include "GameBossInfo.h"
 #include "GameUtils.h"
 
 // 일단 이구간 템플릿 연구 필요 아직 템플릿 숙지 덜됨, 컴파일시 어떻게 돌아가는지??
@@ -89,12 +87,11 @@ public:
     {
         _type = GRoomManger->RoomType::space; // 일단 디폴트
         CreateMapInfo(id);
-        StartGameRoom();
+        // StartGameRoom();
     }
 
     ~GameRoom() override
     {
-        cout << "~GameRoom !!!" << endl;
     }
 
     void EnterSession(GameSessionRef session) override;
@@ -119,7 +116,7 @@ public:
     void Tick() override;
     void Task();
 
-    void CreateMapInfo(int32 type);
+    GameMapInfoRef CreateMapInfo(int32 type);
 
     void InitMonsters();
 
@@ -141,7 +138,7 @@ public:
         return nullptr;
     }
 
-    GameMapInfoRef GetGameMap() { return _gameMapInfo; };
+    GameMapInfoRef GetGameMap() { return _gameMapInfo; }
     GameRoomQuestRef GetQuest() { return _gameRoomQuest; }
 
     protocol::SUnitStates& GetUnitPacket()

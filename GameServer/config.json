@@ -110,5 +110,35 @@
         ]
       }
     ]
-  }
+  },
+  "maps": [
+    {
+      "x" : 25,
+      "y" : 25,
+      "centerX": 0,
+      "centerY": 0,
+      "monsterMap":
+      {
+        "x" : 22,
+        "y" : 15,
+        "centerX": 0,
+        "centerY": 0
+      },
+      "type" : 1
+    },
+    {
+      "x" : 15,
+      "y" : 15,
+      "centerX": 0,
+      "centerY": 0,
+      "monsterMap":
+      {
+        "x" : 10,
+        "y" : 10,
+        "centerX": 0,
+        "centerY": 0
+      },
+      "type" : 1
+    }
+  ]
 }

@@ -3,8 +3,10 @@
 #include <boost/json.hpp>
 
 #include "GameGlobal.h"
+#include "GameMapInfo.h"
 #include "GameSkill.h"
 #include "GameUtils.h"
+#include "IRoom.h"
 
 class GameInit
 {
@@ -16,27 +18,23 @@ public:
         boost::json::value json;
 
         ifstream openFile(configFilePath.data());
-        if (openFile.is_open())
-        {
-            string line = "";
-            while (getline(openFile, line))
-                jsonStr.append(line);
-            openFile.close();
-            json = GameUtils::JsonParser::GetStrParser(jsonStr);
-        }
-        else
-        {
-            cout << "not exist config.json.." << endl;
-        }
 
-        boost::json::value objJson = GameUtils::JsonParser::Parser("units", json);
-        boost::json::value playerJson = GameUtils::JsonParser::Parser("players", objJson);
-        boost::json::value monsterJson = GameUtils::JsonParser::Parser("monsters", objJson);
+        CrashFunc(openFile.is_open());
+
+        string line = "";
+        while (getline(openFile, line))
+            jsonStr.append(line);
+        openFile.close();
+        json = GameUtils::JsonParser::GetStrParser(jsonStr);
+
+        boost::json::value unitJson = GameUtils::JsonParser::Parser("units", json);
+        boost::json::value playerJson = GameUtils::JsonParser::Parser("players", unitJson);
+        boost::json::value monsterJson = GameUtils::JsonParser::Parser("monsters", unitJson);
+        boost::json::value mapJson = GameUtils::JsonParser::Parser("maps", json);
 
         SetSkill(playerJson, false);
         SetSkill(monsterJson, true);
-
-        cout << "skill setting !!!" << endl;
+        SetMap(mapJson);
     }
 
     void SetSkill(boost::json::value& unitJson, bool isMonster)
@@ -81,6 +79,45 @@ public:
                     else
                         GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, heal);
                 }
+            }
+        }
+    }
+
+    void SetMap(boost::json::value& mapJson)
+    {
+        for (int i = 0; i < mapJson.get_array().size(); i++)
+        {
+            auto& map = mapJson.get_array()[i];
+            int32 type = GameUtils::JsonParser::Parser("type", map).get_int64();
+    
+            int32 x = GameUtils::JsonParser::Parser("x", map).get_int64();
+            int32 y = GameUtils::JsonParser::Parser("y", map).get_int64();
+            int32 centerX = GameUtils::JsonParser::Parser("centerX", map).get_int64();
+            int32 centerY = GameUtils::JsonParser::Parser("centerY", map).get_int64();
+    
+            GameRoomRef room = GRoomManger->getRoom(i);
+            if (room == nullptr)
+            {
+                printf("eRRRRRR!!!!0");
+            }
+            room->GetGameMap()->GetMapInfo().GetRect().X = x;
+            room->GetGameMap()->GetMapInfo().GetRect().Y = y;
+            room->GetGameMap()->GetMapInfo().GetRect().CenterX = centerX;
+            room->GetGameMap()->GetMapInfo().GetRect().CenterY = centerY;
+    
+            if (type > 0)
+            {
+                boost::json::value monsterMapJson = GameUtils::JsonParser::Parser("monsterMap", map);
+    
+                x = GameUtils::JsonParser::Parser("x", monsterMapJson).get_int64();
+                y = GameUtils::JsonParser::Parser("y", monsterMapJson).get_int64();
+                centerX = GameUtils::JsonParser::Parser("centerX", monsterMapJson).get_int64();
+                centerY = GameUtils::JsonParser::Parser("centerY", monsterMapJson).get_int64();
+    
+                room->GetGameMap()->GetMonsterMapInfo()->GetRect().X = x;
+                room->GetGameMap()->GetMonsterMapInfo()->GetRect().Y = y;
+                room->GetGameMap()->GetMonsterMapInfo()->GetRect().CenterX = centerX;
+                room->GetGameMap()->GetMonsterMapInfo()->GetRect().CenterY = centerY;
             }
         }
     }

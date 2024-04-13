@@ -18,7 +18,7 @@ namespace GameUtils
         static boost::json::value Parser(string key, const boost::json::value& json)
         {
             // 그냥 바로 크래시 낸다 !!!
-            assert(!json.at(key).is_null());
+            CrashFunc(!json.at(key).is_null());
 
             return json.at(key);
         }

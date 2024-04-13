@@ -23,7 +23,6 @@ Skill::Skill(int32 type, bool target, int32 heal) : _type(static_cast<SkillType>
 Skill::Skill() : _type(static_cast<SkillType>(0)), _target(false), _width(-1), _height(-1), _radius(-1), _heal(-1),
                  _damage(-1)
 {
-    cout << "Skill !!!!" << endl;
 }
 
 UnitSkill::UnitSkill(int32 type) : _type(type)
@@ -32,7 +31,6 @@ UnitSkill::UnitSkill(int32 type) : _type(type)
 
 UnitSkill::UnitSkill() : _type(-1)
 {
-    cout << "UnitSkill !!!!" << endl;
 }
 
 void UnitSkill::AddSkill(int32 skillCode, int32 type, bool target, int32 width, int32 height, int32 damage)

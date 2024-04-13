@@ -1,5 +1,7 @@
 ﻿#include "IRoom.h"
 
+#include "GameBossInfo.h"
+#include "GameMapInfo.h"
 #include "GamePacketHandler.h"
 #include "GameRoomQuest.h"
 #include "GameService.pb.h"
@@ -16,7 +18,7 @@ void GameRoom::EnterSession(GameSessionRef session)
         unit->set_code(session->GetPlayer()->GetCode());
         unit->set_type(session->GetPlayer()->GetType());
         unit->set_hp(session->GetPlayer()->GetHp());
-
+ 
         protocol::Position* position = new protocol::Position;
         position->set_x(session->GetPlayer()->GetPosition().Y);
         position->set_y(0);
@@ -238,29 +240,32 @@ void GameRoom::Task()
     // 보스가 공격, 특수 공격 진행시에는 데미지가 들어가지 않는다. ( 사실상 무조건 패턴 발동 )
 }
 
-void GameRoom::CreateMapInfo(int32 type)
+GameMapInfoRef GameRoom::CreateMapInfo(int32 type)
 {
     // 일단 하드코딩으로 생성해둔다.
     if (type == 0)
     {
         // 일반 몹 맵
-        _gameMapInfo = boost::make_shared<GameMapInfo>(25, 25, 0, 0);
-        _gameMapInfo->CreateMonsterMapInfo(15, 22, 0, 0, MapType::MONSTER);
+        _gameMapInfo = boost::make_shared<GameMapInfo>(0, 0, 0, 0);
+        _gameMapInfo->CreateMonsterMapInfo(0, 0, 0, 0, MapType::MONSTER);
         _gameRoomQuest = boost::make_shared<GameRoomQuest>(5);
         _monsterCount = 10;
     }
     else if (type == 1)
     {
         // 보스 몹 맵
-        _gameMapInfo = boost::make_shared<GameMapInfo>(15, 15, 0, 0);
-        _gameMapInfo->CreateMonsterMapInfo(10, 10, 0, 0, MapType::BOS);
+        _gameMapInfo = boost::make_shared<GameMapInfo>(0, 0, 0, 0);
+        _gameMapInfo->CreateMonsterMapInfo(0, 0, 0, 0, MapType::BOS);
         _gameRoomQuest = boost::make_shared<GameRoomQuest>(1);
         _bosMonsterCount = 1;
     }
+
+    return _gameMapInfo;
 }
 
 void GameRoom::InitMonsters()
 {
+    StartGameRoom();
     MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
     Rect& rect = _gameMapInfo->GetMonsterMapInfo()->GetRect();
     boost::random::uniform_int_distribution<> genX(rect.StartX(), rect.EndX());

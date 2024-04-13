@@ -1,6 +1,7 @@
 ﻿#include "GameObjectInfo.h"
 
 #include "GameGlobal.h"
+#include "GameMapInfo.h"
 #include "GameRoomQuest.h"
 #include "GameSession.h"
 #include "GameSkill.h"
