@@ -1,5 +1,28 @@
 ﻿# boost을 이용한 온라인 게임 서버 구현
 
+## 포트폴리오 문서 주소
+- [**포트폴리오**](https://qornwh.github.io/bjsBlog.github.io/posts/OnlineGameportfolio-0/)
+
+## 플레이 시연 영상
+
+---
+
+[![Video Label](http://img.youtube.com/vi/UeYY-_UfRoY/0.jpg)](https://youtu.be/UeYY-_UfRoY?si=uCtZRGLmAZObMDmo)
+[![Video Label](http://img.youtube.com/vi/bkWg1QWX7Vs/0.jpg)](https://youtu.be/bkWg1QWX7Vs)
+
+## 테스트 시연 영상
+
+---
+
+[![Video Label](http://img.youtube.com/vi/WXoosvnCQw4/0.jpg)](https://youtu.be/WXoosvnCQw4)
+[![Video Label](http://img.youtube.com/vi/k3-c4AiTmxs/0.jpg)](https://youtu.be/k3-c4AiTmxs)
+[![Video Label](http://img.youtube.com/vi/6-NsowB52Xw/0.jpg)](https://youtu.be/6-NsowB52Xw)
+
+## Source Code
+
+- [**Server**](https://github.com/qornwh/GameServerProject)
+- [**Client**](https://github.com/Theta08/RpgProject)
+
 ## 사용법
 
 1. vcpkg 로 google protobuf 설치 필수
