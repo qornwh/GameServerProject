@@ -7,9 +7,7 @@ class GameSession : public Session
 public:
     GameSession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep);
 
-    ~GameSession()
-    {
-    }
+    ~GameSession();
 
     void LoginHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void MoveHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
@@ -29,6 +27,5 @@ public:
 private:
     boost::shared_ptr<class GamePlayerInfo> _player;
     int32 _roomId = -1;
-
     uint16 _sessionId = -1;
 };

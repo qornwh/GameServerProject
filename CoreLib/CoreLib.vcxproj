@@ -167,6 +167,9 @@
   <ItemGroup>
     <ClInclude Include="CoreGlobal.h" />
     <ClInclude Include="CorePch.h" />
+    <ClInclude Include="DBConn.h" />
+    <ClInclude Include="DBConnectPool.h" />
+    <ClInclude Include="DBOrm.h" />
     <ClInclude Include="PacketHeader.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RecvBuffer.h" />
@@ -180,6 +183,9 @@
   <ItemGroup>
     <ClCompile Include="CoreGlobal.cpp" />
     <ClCompile Include="CorePch.cpp" />
+    <ClCompile Include="DBConn.cpp" />
+    <ClCompile Include="DBConnectPool.cpp" />
+    <ClCompile Include="DBOrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

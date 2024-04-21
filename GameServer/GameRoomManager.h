@@ -12,7 +12,7 @@ public:
 
     GameRoomManager();
     ~GameRoomManager();
-    void CreateRoom(boost::asio::io_context& io_context, int32 id);
+    GameRoomRef CreateRoom(boost::asio::io_context& io_context, int32 id);
     void EreaseRoom(int32 id);
     GameRoomRef getRoom(int32 id);
     void ClearRoom();

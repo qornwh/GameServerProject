@@ -1,19 +1,152 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="GameBossInfo.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectInfo.cpp">
+      <Filter>Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GameUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSkill.cpp">
+      <Filter>Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMapInfo.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInit.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="GameRoomManager.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="GameRoomQuest.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSerivce.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="GameService.pb.cc">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="IRoom.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSession.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGlobal.cpp">
+      <Filter>Service\global</Filter>
+    </ClCompile>
     <ClCompile Include="GameServer.cpp" />
-    <ClCompile Include="IRoom.cpp" />
-    <ClCompile Include="GameSerivce.cpp" />
-    <ClCompile Include="GameSession.cpp" />
-    <ClCompile Include="GameService.pb.cc" />
+    <ClCompile Include="GameItem.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDB.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDB.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="IRoom.h" />
-    <ClInclude Include="PacketUtils.h" />
-    <ClInclude Include="GameSerivce.h" />
-    <ClInclude Include="GameSession.h" />
-    <ClInclude Include="GameService.pb.h" />
+    <ClInclude Include="GameBossInfo.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectInfo.h">
+      <Filter>Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSkill.h">
+      <Filter>Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMapInfo.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInit.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRoomManager.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="GameRoomQuest.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSerivce.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="GameService.pb.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="IRoom.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSession.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGlobal.h">
+      <Filter>Service\global</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePacketHandler.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameItem.h">
+      <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDB.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDB.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Unit">
+      <UniqueIdentifier>{383bc279-a4fb-406f-af74-6d76d30a84a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{d4ae30c0-78d8-4dbe-936b-85a1a2c130dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{4a9ed231-b6e7-4932-ab8c-41317e8a2068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service\global">
+      <UniqueIdentifier>{93d758c5-e45b-478e-809b-83850ea53662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{876103ae-0bde-4c17-88d4-9ed9c5ad98f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{134ed715-33db-4d48-b73e-dc744dccfaac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{af7c36c3-8c77-42da-8d5a-1016b88c35a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DB">
+      <UniqueIdentifier>{ee19a25e-17dc-46d3-92e0-d4df5e75df78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skill">
+      <UniqueIdentifier>{6b1da8a7-21d1-4dc2-be96-fd0374bd2db5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
+    <None Include="GameService.proto" />
   </ItemGroup>
 </Project>

@@ -82,3 +82,8 @@ MapInfoRef GameMapInfo::GetMonsterMapInfo()
 {
     return _monsterMapInfo;
 }
+
+void GameMapInfo::SetMapCode(int32 mapCode)
+{
+    _mapCode = mapCode;
+}

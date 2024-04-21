@@ -177,22 +177,27 @@
     <ClInclude Include="GameBossInfo.h" />
     <ClInclude Include="GameGlobal.h" />
     <ClInclude Include="GameInit.h" />
+    <ClInclude Include="GameItem.h" />
     <ClInclude Include="GameMapInfo.h" />
     <ClInclude Include="GameObjectInfo.h" />
     <ClInclude Include="GameRoomManager.h" />
     <ClInclude Include="GameRoomQuest.h" />
     <ClInclude Include="GameSkill.h" />
     <ClInclude Include="GameUtils.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="IRoom.h" />
     <ClInclude Include="GamePacketHandler.h" />
+    <ClInclude Include="ItemDB.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameSerivce.h" />
     <ClInclude Include="GameSession.h" />
+    <ClInclude Include="PlayerDB.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameBossInfo.cpp" />
     <ClCompile Include="GameGlobal.cpp" />
     <ClCompile Include="GameInit.cpp" />
+    <ClCompile Include="GameItem.cpp" />
     <ClCompile Include="GameMapInfo.cpp" />
     <ClCompile Include="GameObjectInfo.cpp" />
     <ClCompile Include="GameRoomManager.cpp" />
@@ -200,16 +205,23 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameSkill.cpp" />
     <ClCompile Include="GameUtils.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="IRoom.cpp" />
+    <ClCompile Include="ItemDB.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="GameSerivce.cpp" />
     <ClCompile Include="GameSession.cpp" />
+    <ClCompile Include="PlayerDB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.json" />
     <Content Include="GameService.proto" />
     <ClInclude Include="GameService.pb.h" />
     <ClCompile Include="GameService.pb.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.json" />
+    <None Include="GameService.proto" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

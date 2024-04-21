@@ -55,7 +55,7 @@ private:
     unordered_map<int32, Skill> _skillMap;
 };
 
-class GameSkill
+class GameSkill : public boost::enable_shared_from_this<GameSkill>
 {
 public:
     GameSkill();

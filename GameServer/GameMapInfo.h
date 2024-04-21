@@ -72,8 +72,12 @@ public:
 
     MapInfo& GetMapInfo();
     MapInfoRef GetMonsterMapInfo();
-    
+
+    void SetMapCode(int32 mapCode);
+    int32 GetMapCode() { return _mapCode; }
+
 private:
     MapInfo _mapInfo;
     MapInfoRef _monsterMapInfo;
+    int32 _mapCode = 0;
 };

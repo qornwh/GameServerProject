@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #ifdef _DEBUG
 #pragma comment(lib, "CoreLib\\Debug\\CoreLib.lib")
 #pragma comment(lib, "EngineLib\\Debug\\GameEngine.lib")

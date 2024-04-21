@@ -86,7 +86,7 @@ public:
         _gameStrand(boost::asio::make_strand(io_context))
     {
         _type = GRoomManger->RoomType::space; // 일단 디폴트
-        CreateMapInfo(id);
+        // CreateMapInfo(id);
         // StartGameRoom();
     }
 

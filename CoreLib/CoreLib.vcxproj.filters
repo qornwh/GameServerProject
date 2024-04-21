@@ -1,32 +1,102 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="ReadBuffer.h" />
-    <ClInclude Include="ReadWriteLock.h" />
-    <ClInclude Include="Service.h" />
-    <ClInclude Include="Session.h" />
-    <ClInclude Include="ThreadManager.h" />
-    <ClInclude Include="Types.h" />
-    <ClInclude Include="WriteBuffer.h" />
-    <ClInclude Include="CorePch.h" />
-    <ClInclude Include="CoreGlobal.h" />
+    <ClInclude Include="DBConn.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DBConnectPool.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreGlobal.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CorePch.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketHeader.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadWriteLock.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="RecvBuffer.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="SendBuffer.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadManager.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="DBOrm.h">
+      <Filter>DB</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp" />
-    <ClCompile Include="..\..\..\myProject\projectBS\coreLib\mainTest.cpp" />
-    <ClCompile Include="ReadBuffer.cpp" />
-    <ClCompile Include="ReadWriteLock.cpp" />
-    <ClCompile Include="Service.cpp" />
-    <ClCompile Include="Session.cpp" />
-    <ClCompile Include="ThreadManager.cpp" />
-    <ClCompile Include="WriteBuffer.cpp" />
-    <ClCompile Include="CorePch.cpp" />
-    <ClCompile Include="CoreGlobal.cpp" />
+    <ClCompile Include="DBConn.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="DBConnectPool.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreGlobal.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="CorePch.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadWriteLock.cpp">
+      <Filter>Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="RecvBuffer.cpp">
+      <Filter>Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="SendBuffer.cpp">
+      <Filter>Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadManager.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Service.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="DBOrm.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="NewFilter1">
+    <Filter Include="DB">
+      <UniqueIdentifier>{24cd2635-3d0b-47f9-acfd-1a03b6c6596e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
       <UniqueIdentifier>{2669a5de-bbed-49f6-8c9c-c54d61dac6a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Packet">
+      <UniqueIdentifier>{37683fab-5170-4624-a607-be61b7cc4880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{8d20ede6-d6bf-4a93-a357-6edf4d0c9ea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{9b9f7769-ae7d-44fa-bf6b-776679ee6be5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

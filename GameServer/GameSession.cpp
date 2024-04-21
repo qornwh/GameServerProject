@@ -17,6 +17,10 @@ GameSession::GameSession(boost::asio::io_context& io_context, const boost::asio:
     _sessionId = GameSessionId;
 }
 
+GameSession::~GameSession()
+{
+}
+
 int32 GameSession::OnRecv(BYTE* buffer, int32 len)
 {
     boost::asio::mutable_buffer _buffer = boost::asio::buffer(buffer, len);
@@ -121,6 +125,7 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
 void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
 {
     protocol::Login readPkt;
+
     if (GamePacketHandler::ParsePacketHandler(readPkt, buffer, header->size - offset, offset))
     {
         CreatePlayerInfo(readPkt.type(), 1000);

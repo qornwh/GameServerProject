@@ -2,6 +2,8 @@
 #include "Service.h"
 #include "Session.h"
 
+class Service;
+
 class GameService : public Service
 {
 public:
