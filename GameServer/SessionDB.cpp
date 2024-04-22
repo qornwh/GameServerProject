@@ -8,7 +8,7 @@ SessionDB::~SessionDB()
 {
 }
 
-bool SessionDB::LoginDB(const WCHAR* id)
+bool SessionDB::LoginDB(const WCHAR* id, int& accountCode)
 {
 	const wchar_t* query = L"SELECT accountCode, id, pwd FROM Account WHERE id = ?";
 	DBConnRef conn = GDBPool->Pop();
@@ -24,6 +24,7 @@ bool SessionDB::LoginDB(const WCHAR* id)
 	bool result = conn->Fetch();
 	conn->FreeStmt();
 	_dbOrm.ReSetIdx();
+	accountCode = _accountCode;
 
 	return result;
 }
@@ -51,13 +52,20 @@ bool SessionDB::CreateAccount(const WCHAR* id, const WCHAR* pwd)
 	return result;
 }
 
-bool SessionDB::PlayerDB()
+bool SessionDB::PlayerDB(int32 accountCode)
 {
 	const wchar_t* query = L"SELECT playerCode, name, jobCode, mapCode FROM Player WHERE accountCode = ?";
 	DBConnRef conn = GDBPool->Pop();
 	_dbOrm.SetDBConn(conn);
 	conn->Prepare(query);
-	_dbOrm.BindParamInt(&_accountCode);
+	if (_accountCode > 0)
+	{
+		_dbOrm.BindParamInt(&_accountCode);
+	}
+	else
+	{
+		_dbOrm.BindParamInt(&accountCode);
+	}
 	conn->Execute();
 
 	_dbOrm.BindColInt(sizeof(_playerCode), &_playerCode);
@@ -72,11 +80,10 @@ bool SessionDB::PlayerDB()
 	return result;
 }
 
-void SessionDB::GetPlayerDBInfo(int32& playerCode, WCHAR* name, int32& jobCode, int32& mapCode, int32& accountCode)
+void SessionDB::GetPlayerDBInfo(int32& playerCode, WCHAR* name, int32& jobCode, int32& mapCode)
 {
 	playerCode = _playerCode;
 	jobCode = _jobCode;
 	mapCode = _mapCode;
-	accountCode = _accountCode;
 	wcscpy_s(name, 10, _name);
 }

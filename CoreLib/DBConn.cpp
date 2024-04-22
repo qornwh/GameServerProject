@@ -67,7 +67,10 @@ bool DBConn::Fetch()
     SQLRETURN ret = SQLFetch(_hstmt);
     if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
         return true;
-    ErrorDisplay(ret);
+    if (ret == SQL_ERROR)
+    {
+        ErrorDisplay(ret);
+    }
     return false;
 }
 

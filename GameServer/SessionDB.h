@@ -7,14 +7,14 @@ public:
 	SessionDB();
 	~SessionDB();
 
-	bool LoginDB(const WCHAR* id);
+	bool LoginDB(const WCHAR* id, int& accountCode);
 	bool LoginCheck(const WCHAR* pwd);
 
 	bool CreateAccount(const WCHAR* id, const WCHAR* pwd);
 
-	bool PlayerDB();
+	bool PlayerDB(int32 accountCode);
 
-	void GetPlayerDBInfo(int32& playerCode, WCHAR* name, int32& jobCode, int32& mapCode, int32& accountCode);
+	void GetPlayerDBInfo(int32& playerCode, WCHAR* name, int32& jobCode, int32& mapCode);
 
 private:
 	DBOrm _dbOrm;

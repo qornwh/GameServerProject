@@ -116,7 +116,7 @@
   },
   "maps": [
     {
-      "mapCode" : 1,
+      "mapCode" : 0,
       "x" : 25,
       "y" : 25,
       "centerX": 0,
@@ -128,7 +128,7 @@
         "centerX": 0,
         "centerY": 0
       },
-      "type" : 1
+      "type" : 0
     }
   ],
   "item": [

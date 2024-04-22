@@ -10,6 +10,7 @@ public:
     ~GameSession();
 
     void LoginHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
+    void LoadHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void MoveHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void ChatHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void AttackHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
@@ -28,4 +29,5 @@ private:
     boost::shared_ptr<class GamePlayerInfo> _player;
     int32 _roomId = -1;
     uint16 _sessionId = -1;
+    int32 _accountCode = -1;
 };

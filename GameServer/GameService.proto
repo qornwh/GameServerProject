@@ -28,9 +28,6 @@ message Login {
     int32 type = 2;
     string id = 3;
     string pwd = 4;
-    // 아래는 더미클라만 사용
-    Position position = 100;
-    bool is_dummy = 101;
 }
 
 message CreateAccount {
@@ -80,6 +77,9 @@ message SLoad {
 
 message CLoad {
     int32 code = 1;
+    // 아래는 더미클라만 사용
+    Position position = 100;
+    bool is_dummy = 101;
 }
 
 message SInsertplayer {

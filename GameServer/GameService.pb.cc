@@ -26,9 +26,7 @@ PROTOBUF_CONSTEXPR Login::Login(
     /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.pwd_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.position_)*/nullptr
   , /*decltype(_impl_.type_)*/0
-  , /*decltype(_impl_.is_dummy_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct LoginDefaultTypeInternal {
   PROTOBUF_CONSTEXPR LoginDefaultTypeInternal()
@@ -158,7 +156,9 @@ struct SLoadDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SLoadDefaultTypeInternal _SLoad_default_instance_;
 PROTOBUF_CONSTEXPR CLoad::CLoad(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.code_)*/0
+    /*decltype(_impl_.position_)*/nullptr
+  , /*decltype(_impl_.code_)*/0
+  , /*decltype(_impl_.is_dummy_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct CLoadDefaultTypeInternal {
   PROTOBUF_CONSTEXPR CLoadDefaultTypeInternal()
@@ -429,8 +429,6 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.type_),
   PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.id_),
   PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.pwd_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.position_),
-  PROTOBUF_FIELD_OFFSET(::protocol::Login, _impl_.is_dummy_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::CreateAccount, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -507,6 +505,8 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::CLoad, _impl_.code_),
+  PROTOBUF_FIELD_OFFSET(::protocol::CLoad, _impl_.position_),
+  PROTOBUF_FIELD_OFFSET(::protocol::CLoad, _impl_.is_dummy_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::SInsertplayer, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -652,15 +652,15 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::protocol::Login)},
-  { 12, -1, -1, sizeof(::protocol::CreateAccount)},
-  { 19, -1, -1, sizeof(::protocol::LoginAccess)},
-  { 27, -1, -1, sizeof(::protocol::Charater)},
-  { 36, -1, -1, sizeof(::protocol::Position)},
-  { 46, -1, -1, sizeof(::protocol::Unit)},
-  { 57, -1, -1, sizeof(::protocol::Player)},
-  { 64, -1, -1, sizeof(::protocol::Monster)},
-  { 72, -1, -1, sizeof(::protocol::SLoad)},
-  { 81, -1, -1, sizeof(::protocol::CLoad)},
+  { 10, -1, -1, sizeof(::protocol::CreateAccount)},
+  { 17, -1, -1, sizeof(::protocol::LoginAccess)},
+  { 25, -1, -1, sizeof(::protocol::Charater)},
+  { 34, -1, -1, sizeof(::protocol::Position)},
+  { 44, -1, -1, sizeof(::protocol::Unit)},
+  { 55, -1, -1, sizeof(::protocol::Player)},
+  { 62, -1, -1, sizeof(::protocol::Monster)},
+  { 70, -1, -1, sizeof(::protocol::SLoad)},
+  { 79, -1, -1, sizeof(::protocol::CLoad)},
   { 88, -1, -1, sizeof(::protocol::SInsertplayer)},
   { 95, -1, -1, sizeof(::protocol::SMove)},
   { 104, -1, -1, sizeof(::protocol::SChat)},
@@ -711,23 +711,23 @@ static const ::_pb::Message* const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\021GameService.proto\022\010protocol\"t\n\005Login\022\014"
+  "\n\021GameService.proto\022\010protocol\"<\n\005Login\022\014"
   "\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\n\n\002id\030\003 \001(\t\022\013"
-  "\n\003pwd\030\004 \001(\t\022$\n\010position\030d \001(\0132\022.protocol"
-  ".Position\022\020\n\010is_dummy\030e \001(\010\" \n\rCreateAcc"
-  "ount\022\017\n\007success\030\001 \001(\010\"D\n\013LoginAccess\022\017\n\007"
-  "success\030\001 \001(\010\022$\n\010charater\030\002 \003(\0132\022.protoc"
-  "ol.Charater\"4\n\010Charater\022\014\n\004type\030\001 \001(\005\022\014\n"
-  "\004code\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\"8\n\010Position\022\t\n"
-  "\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\022\013\n\003yaw\030\004 "
-  "\001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\022\014\n"
-  "\004code\030\003 \001(\005\022$\n\010position\030\004 \001(\0132\022.protocol"
-  ".Position\022\014\n\004name\030\005 \001(\t\"&\n\006Player\022\034\n\004uni"
-  "t\030\001 \001(\0132\016.protocol.Unit\"6\n\007Monster\022\034\n\004un"
-  "it\030\001 \001(\0132\016.protocol.Unit\022\r\n\005state\030\002 \001(\r\""
-  "^\n\005SLoad\022 \n\006player\030\001 \003(\0132\020.protocol.Play"
-  "er\022\"\n\007monster\030\002 \003(\0132\021.protocol.Monster\022\017"
-  "\n\007room_id\030\003 \001(\005\"\025\n\005CLoad\022\014\n\004code\030\001 \001(\005\"1"
+  "\n\003pwd\030\004 \001(\t\" \n\rCreateAccount\022\017\n\007success\030"
+  "\001 \001(\010\"D\n\013LoginAccess\022\017\n\007success\030\001 \001(\010\022$\n"
+  "\010charater\030\002 \003(\0132\022.protocol.Charater\"4\n\010C"
+  "harater\022\014\n\004type\030\001 \001(\005\022\014\n\004code\030\002 \001(\005\022\014\n\004n"
+  "ame\030\003 \001(\t\"8\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 "
+  "\001(\002\022\t\n\001z\030\003 \001(\002\022\013\n\003yaw\030\004 \001(\002\"b\n\004Unit\022\014\n\004t"
+  "ype\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\005\022$\n\010p"
+  "osition\030\004 \001(\0132\022.protocol.Position\022\014\n\004nam"
+  "e\030\005 \001(\t\"&\n\006Player\022\034\n\004unit\030\001 \001(\0132\016.protoc"
+  "ol.Unit\"6\n\007Monster\022\034\n\004unit\030\001 \001(\0132\016.proto"
+  "col.Unit\022\r\n\005state\030\002 \001(\r\"^\n\005SLoad\022 \n\006play"
+  "er\030\001 \003(\0132\020.protocol.Player\022\"\n\007monster\030\002 "
+  "\003(\0132\021.protocol.Monster\022\017\n\007room_id\030\003 \001(\005\""
+  "M\n\005CLoad\022\014\n\004code\030\001 \001(\005\022$\n\010position\030d \001(\013"
+  "2\022.protocol.Position\022\020\n\010is_dummy\030e \001(\010\"1"
   "\n\rSInsertplayer\022 \n\006player\030\001 \001(\0132\020.protoc"
   "ol.Player\"O\n\005SMove\022\014\n\004code\030\001 \001(\005\022$\n\010posi"
   "tion\030\002 \001(\0132\022.protocol.Position\022\022\n\nis_mon"
@@ -816,13 +816,8 @@ bool MessageCode_IsValid(int value) {
 
 class Login::_Internal {
  public:
-  static const ::protocol::Position& position(const Login* msg);
 };
 
-const ::protocol::Position&
-Login::_Internal::position(const Login* msg) {
-  return *msg->_impl_.position_;
-}
 Login::Login(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -836,9 +831,7 @@ Login::Login(const Login& from)
       decltype(_impl_.name_){}
     , decltype(_impl_.id_){}
     , decltype(_impl_.pwd_){}
-    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.type_){}
-    , decltype(_impl_.is_dummy_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -866,12 +859,7 @@ Login::Login(const Login& from)
     _this->_impl_.pwd_.Set(from._internal_pwd(), 
       _this->GetArenaForAllocation());
   }
-  if (from._internal_has_position()) {
-    _this->_impl_.position_ = new ::protocol::Position(*from._impl_.position_);
-  }
-  ::memcpy(&_impl_.type_, &from._impl_.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.is_dummy_) -
-    reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.is_dummy_));
+  _this->_impl_.type_ = from._impl_.type_;
   // @@protoc_insertion_point(copy_constructor:protocol.Login)
 }
 
@@ -883,9 +871,7 @@ inline void Login::SharedCtor(
       decltype(_impl_.name_){}
     , decltype(_impl_.id_){}
     , decltype(_impl_.pwd_){}
-    , decltype(_impl_.position_){nullptr}
     , decltype(_impl_.type_){0}
-    , decltype(_impl_.is_dummy_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
@@ -916,7 +902,6 @@ inline void Login::SharedDtor() {
   _impl_.name_.Destroy();
   _impl_.id_.Destroy();
   _impl_.pwd_.Destroy();
-  if (this != internal_default_instance()) delete _impl_.position_;
 }
 
 void Login::SetCachedSize(int size) const {
@@ -932,13 +917,7 @@ void Login::Clear() {
   _impl_.name_.ClearToEmpty();
   _impl_.id_.ClearToEmpty();
   _impl_.pwd_.ClearToEmpty();
-  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
-    delete _impl_.position_;
-  }
-  _impl_.position_ = nullptr;
-  ::memset(&_impl_.type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.is_dummy_) -
-      reinterpret_cast<char*>(&_impl_.type_)) + sizeof(_impl_.is_dummy_));
+  _impl_.type_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -983,22 +962,6 @@ const char* Login::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "protocol.Login.pwd"));
-        } else
-          goto handle_unusual;
-        continue;
-      // .protocol.Position position = 100;
-      case 100:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_position(), ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // bool is_dummy = 101;
-      case 101:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
-          _impl_.is_dummy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -1067,19 +1030,6 @@ uint8_t* Login::_InternalSerialize(
         4, this->_internal_pwd(), target);
   }
 
-  // .protocol.Position position = 100;
-  if (this->_internal_has_position()) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(100, _Internal::position(this),
-        _Internal::position(this).GetCachedSize(), target, stream);
-  }
-
-  // bool is_dummy = 101;
-  if (this->_internal_is_dummy() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(101, this->_internal_is_dummy(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1117,21 +1067,9 @@ size_t Login::ByteSizeLong() const {
         this->_internal_pwd());
   }
 
-  // .protocol.Position position = 100;
-  if (this->_internal_has_position()) {
-    total_size += 2 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.position_);
-  }
-
   // int32 type = 2;
   if (this->_internal_type() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_type());
-  }
-
-  // bool is_dummy = 101;
-  if (this->_internal_is_dummy() != 0) {
-    total_size += 2 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -1161,15 +1099,8 @@ void Login::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF
   if (!from._internal_pwd().empty()) {
     _this->_internal_set_pwd(from._internal_pwd());
   }
-  if (from._internal_has_position()) {
-    _this->_internal_mutable_position()->::protocol::Position::MergeFrom(
-        from._internal_position());
-  }
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
-  }
-  if (from._internal_is_dummy() != 0) {
-    _this->_internal_set_is_dummy(from._internal_is_dummy());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1202,12 +1133,7 @@ void Login::InternalSwap(Login* other) {
       &_impl_.pwd_, lhs_arena,
       &other->_impl_.pwd_, rhs_arena
   );
-  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(Login, _impl_.is_dummy_)
-      + sizeof(Login::_impl_.is_dummy_)
-      - PROTOBUF_FIELD_OFFSET(Login, _impl_.position_)>(
-          reinterpret_cast<char*>(&_impl_.position_),
-          reinterpret_cast<char*>(&other->_impl_.position_));
+  swap(_impl_.type_, other->_impl_.type_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Login::GetMetadata() const {
@@ -3171,8 +3097,13 @@ void SLoad::InternalSwap(SLoad* other) {
 
 class CLoad::_Internal {
  public:
+  static const ::protocol::Position& position(const CLoad* msg);
 };
 
+const ::protocol::Position&
+CLoad::_Internal::position(const CLoad* msg) {
+  return *msg->_impl_.position_;
+}
 CLoad::CLoad(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
@@ -3183,11 +3114,18 @@ CLoad::CLoad(const CLoad& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   CLoad* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.code_){}
+      decltype(_impl_.position_){nullptr}
+    , decltype(_impl_.code_){}
+    , decltype(_impl_.is_dummy_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  _this->_impl_.code_ = from._impl_.code_;
+  if (from._internal_has_position()) {
+    _this->_impl_.position_ = new ::protocol::Position(*from._impl_.position_);
+  }
+  ::memcpy(&_impl_.code_, &from._impl_.code_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.is_dummy_) -
+    reinterpret_cast<char*>(&_impl_.code_)) + sizeof(_impl_.is_dummy_));
   // @@protoc_insertion_point(copy_constructor:protocol.CLoad)
 }
 
@@ -3196,7 +3134,9 @@ inline void CLoad::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.code_){0}
+      decltype(_impl_.position_){nullptr}
+    , decltype(_impl_.code_){0}
+    , decltype(_impl_.is_dummy_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -3212,6 +3152,7 @@ CLoad::~CLoad() {
 
 inline void CLoad::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.position_;
 }
 
 void CLoad::SetCachedSize(int size) const {
@@ -3224,7 +3165,13 @@ void CLoad::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  _impl_.code_ = 0;
+  if (GetArenaForAllocation() == nullptr && _impl_.position_ != nullptr) {
+    delete _impl_.position_;
+  }
+  _impl_.position_ = nullptr;
+  ::memset(&_impl_.code_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.is_dummy_) -
+      reinterpret_cast<char*>(&_impl_.code_)) + sizeof(_impl_.is_dummy_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3238,6 +3185,22 @@ const char* CLoad::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           _impl_.code_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .protocol.Position position = 100;
+      case 100:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          ptr = ctx->ParseMessage(_internal_mutable_position(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool is_dummy = 101;
+      case 101:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.is_dummy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3277,6 +3240,19 @@ uint8_t* CLoad::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_code(), target);
   }
 
+  // .protocol.Position position = 100;
+  if (this->_internal_has_position()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(100, _Internal::position(this),
+        _Internal::position(this).GetCachedSize(), target, stream);
+  }
+
+  // bool is_dummy = 101;
+  if (this->_internal_is_dummy() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(101, this->_internal_is_dummy(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3293,9 +3269,21 @@ size_t CLoad::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // .protocol.Position position = 100;
+  if (this->_internal_has_position()) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.position_);
+  }
+
   // int32 code = 1;
   if (this->_internal_code() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_code());
+  }
+
+  // bool is_dummy = 101;
+  if (this->_internal_is_dummy() != 0) {
+    total_size += 2 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3316,8 +3304,15 @@ void CLoad::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_has_position()) {
+    _this->_internal_mutable_position()->::protocol::Position::MergeFrom(
+        from._internal_position());
+  }
   if (from._internal_code() != 0) {
     _this->_internal_set_code(from._internal_code());
+  }
+  if (from._internal_is_dummy() != 0) {
+    _this->_internal_set_is_dummy(from._internal_is_dummy());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -3336,7 +3331,12 @@ bool CLoad::IsInitialized() const {
 void CLoad::InternalSwap(CLoad* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.code_, other->_impl_.code_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(CLoad, _impl_.is_dummy_)
+      + sizeof(CLoad::_impl_.is_dummy_)
+      - PROTOBUF_FIELD_OFFSET(CLoad, _impl_.position_)>(
+          reinterpret_cast<char*>(&_impl_.position_),
+          reinterpret_cast<char*>(&other->_impl_.position_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata CLoad::GetMetadata() const {

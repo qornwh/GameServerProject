@@ -62,14 +62,17 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
 	case protocol::MessageCode::LOGIN:
 	{
 		LoginHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+	}
+	break;
+	case protocol::MessageCode::C_LOAD:
+	{
+		LoadHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
 
 		if (GRoomManger->getRoom(0) != nullptr)
 		{
 			GRoomManger->getRoom(0)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
 		}
 	}
-	break;
-	case protocol::MessageCode::S_LOAD:
 		break;
 	case protocol::MessageCode::S_INSERTPLAYER:
 		break;
@@ -126,13 +129,12 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
 void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
 {
 	protocol::Login readPkt;
-
 	if (GamePacketHandler::ParsePacketHandler(readPkt, buffer, header->size - offset, offset))
 	{
 		SessionDB sdb;
 		WCHAR* wId = GameUtils::Utils::CharToWchar(readPkt.id().c_str());
 		WCHAR* wPwd = GameUtils::Utils::CharToWchar(readPkt.pwd().c_str());
-		bool isAccount = sdb.LoginDB(wId);
+		bool isAccount = sdb.LoginDB(wId, _accountCode);
 		if (isAccount)
 		{
 			bool loginCheck = sdb.LoginCheck(wPwd);
@@ -141,14 +143,13 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
 			if (loginCheck)
 			{
 				// 로그인 성공
-				if (sdb.PlayerDB())
+				if (sdb.PlayerDB(_accountCode))
 				{
 					int32 playerCode = 0;
 					int32 jobCode = 0;
 					int32 mapCode = 0;
-					int32 accountCode = 0;
 					WCHAR name[10] = {0 ,};
-					sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode, accountCode);
+					sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode);
 					protocol::Charater* charater = logPkt.add_charater();
 					charater->set_code(playerCode);
 					charater->set_type(jobCode);
@@ -172,41 +173,58 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
 		}
 		delete wId;
 		delete wPwd;
+	}
+}
 
-		//CreatePlayerInfo(readPkt.type(), 1000);
-		//GetPlayer()->SetName(readPkt.name());
+void GameSession::LoadHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+{
+	protocol::CLoad readPkt;
 
-		//// 나를 확인용 메시지 전달.
-		//if (GetService() != nullptr)
-		//{
-		//	protocol::SPlayerData sendPkt;
-		//	protocol::Player* player = new protocol::Player;
-		//	protocol::Unit* unit = new protocol::Unit;
-		//	unit->set_name(_player->GetName());
-		//	unit->set_code(_player->GetCode());
-		//	unit->set_type(_player->GetType());
-		//	unit->set_hp(_player->GetHp());
-		//	player->set_allocated_unit(unit);
-		//	sendPkt.set_allocated_player(player);
+	if (GamePacketHandler::ParsePacketHandler(readPkt, buffer, header->size - offset, offset))
+	{
+		SessionDB sdb;
+		bool result = sdb.PlayerDB(_accountCode);
+		if (result)
+		{
+			int32 playerCode = 0;
+			int32 jobCode = 0;
+			int32 mapCode = 0;
+			WCHAR name[10] = { 0 , };
+			sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode);
+			string nameStr(GameUtils::Utils::WcharToChar(name));
 
-		//	// 초기 위치 설정
-		//	if (!readPkt.is_dummy())
-		//	{
-		//		GetPlayer()->SetPosition(-15, 0);
-		//		GetPlayer()->SetRotate(0);
-		//	}
-		//	else
-		//	{
-		//		// 더미 클라이언트만 !!!
-		//		auto& position = readPkt.position();
-		//		GetPlayer()->SetPosition(position.z(), position.x());
-		//		GetPlayer()->SetRotate(position.yaw());
-		//	}
+			CreatePlayerInfo(jobCode, 1000);
+			GetPlayer()->SetName(nameStr);
 
-		//	SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
-		//		sendPkt, protocol::MessageCode::S_PLAYERDATA);
-		//	AsyncWrite(sendBuffer);
-		//}
+			// 나를 확인용 메시지 전달.
+			if (GetService() != nullptr)
+			{
+				protocol::SPlayerData sendPkt;
+				protocol::Player* player = new protocol::Player;
+				protocol::Unit* unit = new protocol::Unit;
+				unit->set_name(_player->GetName());
+				unit->set_code(_player->GetCode());
+				unit->set_type(_player->GetType());
+				unit->set_hp(_player->GetHp());
+				player->set_allocated_unit(unit);
+				sendPkt.set_allocated_player(player);
+
+				// 초기 위치 설정
+				GetPlayer()->SetPosition(-15, 0);
+				GetPlayer()->SetRotate(0);
+
+				SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
+					sendPkt, protocol::MessageCode::S_PLAYERDATA);
+				AsyncWrite(sendBuffer);
+			}
+		}
+		else
+		{
+			// 더미 클라이언트만 !!!
+			auto& position = readPkt.position();
+			GetPlayer()->SetPosition(position.z(), position.x());
+			GetPlayer()->SetRotate(position.yaw());
+		}
 	}
 }
 
