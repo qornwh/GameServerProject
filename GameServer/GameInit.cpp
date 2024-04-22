@@ -107,7 +107,7 @@ void GameInit::SetMap(boost::json::value& mapJson, boost::asio::io_context& io_c
 		room->GetGameMap()->GetMapInfo().GetRect().CenterX = centerX;
 		room->GetGameMap()->GetMapInfo().GetRect().CenterY = centerY;
 
-		if (type > 0)
+		if (type >= 0)
 		{
 			boost::json::value monsterMapJson = GameUtils::JsonParser::Parser("monsterMap", map);
 
