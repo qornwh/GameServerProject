@@ -191,7 +191,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameSerivce.h" />
     <ClInclude Include="GameSession.h" />
-    <ClInclude Include="PlayerDB.h" />
+    <ClInclude Include="SessionDB.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameBossInfo.cpp" />
@@ -211,7 +211,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="GameSerivce.cpp" />
     <ClCompile Include="GameSession.cpp" />
-    <ClCompile Include="PlayerDB.cpp" />
+    <ClCompile Include="SessionDB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.json" />

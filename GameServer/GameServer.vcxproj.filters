@@ -53,7 +53,7 @@
     <ClCompile Include="ItemDB.cpp">
       <Filter>DB</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerDB.cpp">
+    <ClCompile Include="SessionDB.cpp">
       <Filter>DB</Filter>
     </ClCompile>
   </ItemGroup>
@@ -112,7 +112,7 @@
     <ClInclude Include="ItemDB.h">
       <Filter>DB</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerDB.h">
+    <ClInclude Include="SessionDB.h">
       <Filter>DB</Filter>
     </ClInclude>
   </ItemGroup>

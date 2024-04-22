@@ -18,14 +18,34 @@ enum MessageCode {
     S_ROOMQUEST = 12; // 룸 클리어 정보
     C_MOVEPOTAL = 13; // 포탈 이동
     S_ENDGAME = 14; // 게임 종료
+    LOGINACCESS = 15; // 로그인 성공 여부
+    CREATEACCOUNT = 16; // 계정 생성
+    C_LOAD = 17; // 클라이언트 인게임 요청
 }
 
 message Login {
     string name = 1;
     int32 type = 2;
+    string id = 3;
+    string pwd = 4;
     // 아래는 더미클라만 사용
-    Position position = 4;
+    Position position = 100;
     bool is_dummy = 101;
+}
+
+message CreateAccount {
+    bool success = 1; // 계정 생성 여부
+}
+
+message LoginAccess {
+    bool success = 1; // 로그인 성공 여부
+    repeated Charater charater = 2;
+}
+
+message Charater {
+    int32 type = 1;
+    int32 code = 2;
+    string name = 3;
 }
 
 message Position {
@@ -56,6 +76,10 @@ message SLoad {
     repeated Player player = 1;
     repeated Monster monster = 2;
     int32 room_id = 3;
+}
+
+message CLoad {
+    int32 code = 1;
 }
 
 message SInsertplayer {
