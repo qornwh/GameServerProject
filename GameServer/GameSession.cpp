@@ -64,6 +64,11 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
 		LoginHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
 	}
 	break;
+	case protocol::MessageCode::CREATECHARACTER:
+	{
+		CreateCharacterHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+	}
+		break;
 	case protocol::MessageCode::C_LOAD:
 	{
 		LoadHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
@@ -73,8 +78,6 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
 			GRoomManger->getRoom(0)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
 		}
 	}
-		break;
-	case protocol::MessageCode::S_INSERTPLAYER:
 		break;
 	case protocol::MessageCode::S_MOVE:
 	{
@@ -176,6 +179,40 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
 	}
 }
 
+void GameSession::CreateCharacterHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+{
+	protocol::CreateCharacter pkt;
+	if (GamePacketHandler::ParsePacketHandler(pkt, buffer, header->size - offset, offset))
+	{
+		SessionDB sdb;
+		WCHAR* wName = GameUtils::Utils::CharToWchar(pkt.charater().name().c_str());
+		int32 type = pkt.charater().type();
+		CrashFunc(_accountCode >= 0);
+		bool result = sdb.CreateCharacter(wName, type, _accountCode);
+		
+		if (result)
+		{
+			if (sdb.PlayerDB(_accountCode))
+			{
+				int32 playerCode = 0;
+				int32 jobCode = 0;
+				int32 mapCode = 0;
+				WCHAR name[10] = { 0 , };
+				sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode);
+				protocol::Charater* character = new protocol::Charater();
+				char* nameByte = GameUtils::Utils::WcharToChar(name);
+				character->set_name(nameByte);
+				character->set_type(jobCode);
+				character->set_code(playerCode);
+				pkt.set_allocated_charater(character);
+			}
+		}
+		SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
+			pkt, protocol::MessageCode::CREATECHARACTER);
+		AsyncWrite(sendBuffer);
+	}
+}
+
 void GameSession::LoadHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
 {
 	protocol::CLoad readPkt;
@@ -200,8 +237,8 @@ void GameSession::LoadHandler(const boost::asio::mutable_buffer& buffer, PacketH
 			if (GetService() != nullptr)
 			{
 				protocol::SPlayerData sendPkt;
-				protocol::Player* player = new protocol::Player;
-				protocol::Unit* unit = new protocol::Unit;
+				protocol::Player* player = new protocol::Player();
+				protocol::Unit* unit = new protocol::Unit();
 				unit->set_name(_player->GetName());
 				unit->set_code(_player->GetCode());
 				unit->set_type(_player->GetType());
@@ -274,7 +311,7 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
 				attackPkt->set_code(GetPlayer()->GetCode());
 				attackPkt->set_is_monster(false);
 				attackPkt->set_skill_code(SkillCode);
-				protocol::Position* playerPosition = new protocol::Position;
+				protocol::Position* playerPosition = new protocol::Position();
 				playerPosition->set_x(position.x());
 				playerPosition->set_y(position.y());
 				playerPosition->set_z(position.z());

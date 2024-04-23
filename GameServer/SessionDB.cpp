@@ -40,7 +40,8 @@ bool SessionDB::CreateAccount(const WCHAR* id, const WCHAR* pwd)
 {
 	const wchar_t* query = L"INSERT INTO Account (id, pwd) VALUES (?, ?)";
 	DBConnRef conn = GDBPool->Pop();
-	
+
+	conn->ConnectAttr();
 	_dbOrm.SetDBConn(conn);
 	conn->Prepare(query);
 	_dbOrm.BindParamWchar(sizeof(id), (SQLPOINTER)id);
@@ -48,6 +49,26 @@ bool SessionDB::CreateAccount(const WCHAR* id, const WCHAR* pwd)
 	bool result = conn->Execute();
 	conn->FreeStmt();
 	_dbOrm.ReSetIdx();
+	conn->EndTran();
+
+	return result;
+}
+
+bool SessionDB::CreateCharacter(const WCHAR* name, int32 jobCode, int32 accountCode)
+{
+	const wchar_t* query = L"INSERT INTO Player (name, jobCode, mapCode, accountCode) VALUES (?, ?, 1, ?)";
+	DBConnRef conn = GDBPool->Pop();
+	conn->ConnectAttr();
+
+	_dbOrm.SetDBConn(conn);
+	conn->Prepare(query);
+	_dbOrm.BindParamWchar(sizeof(name), (SQLPOINTER)name);
+	_dbOrm.BindParamInt(&jobCode);
+	_dbOrm.BindParamInt(&accountCode);
+	bool result = conn->Execute();
+	conn->FreeStmt();
+	_dbOrm.ReSetIdx();
+	conn->EndTran();
 
 	return result;
 }
@@ -56,6 +77,8 @@ bool SessionDB::PlayerDB(int32 accountCode)
 {
 	const wchar_t* query = L"SELECT playerCode, name, jobCode, mapCode FROM Player WHERE accountCode = ?";
 	DBConnRef conn = GDBPool->Pop();
+	conn->ConnectAttr();
+
 	_dbOrm.SetDBConn(conn);
 	conn->Prepare(query);
 	if (_accountCode > 0)
@@ -76,6 +99,7 @@ bool SessionDB::PlayerDB(int32 accountCode)
 	bool result = conn->Fetch();
 	conn->FreeStmt();
 	_dbOrm.ReSetIdx();
+	conn->EndTran();
 
 	return result;
 }

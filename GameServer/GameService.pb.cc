@@ -50,6 +50,19 @@ struct CreateAccountDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CreateAccountDefaultTypeInternal _CreateAccount_default_instance_;
+PROTOBUF_CONSTEXPR CreateCharacter::CreateCharacter(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.charater_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CreateCharacterDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CreateCharacterDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CreateCharacterDefaultTypeInternal() {}
+  union {
+    CreateCharacter _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CreateCharacterDefaultTypeInternal _CreateCharacter_default_instance_;
 PROTOBUF_CONSTEXPR LoginAccess::LoginAccess(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.charater_)*/{}
@@ -414,7 +427,7 @@ struct SEndGameDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SEndGameDefaultTypeInternal _SEndGame_default_instance_;
 }  // namespace protocol
-static ::_pb::Metadata file_level_metadata_GameService_2eproto[27];
+static ::_pb::Metadata file_level_metadata_GameService_2eproto[28];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_GameService_2eproto[1];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_GameService_2eproto = nullptr;
 
@@ -436,6 +449,13 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::protocol::CreateAccount, _impl_.success_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::protocol::CreateCharacter, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::protocol::CreateCharacter, _impl_.charater_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::protocol::LoginAccess, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -653,36 +673,38 @@ const uint32_t TableStruct_GameService_2eproto::offsets[] PROTOBUF_SECTION_VARIA
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::protocol::Login)},
   { 10, -1, -1, sizeof(::protocol::CreateAccount)},
-  { 17, -1, -1, sizeof(::protocol::LoginAccess)},
-  { 25, -1, -1, sizeof(::protocol::Charater)},
-  { 34, -1, -1, sizeof(::protocol::Position)},
-  { 44, -1, -1, sizeof(::protocol::Unit)},
-  { 55, -1, -1, sizeof(::protocol::Player)},
-  { 62, -1, -1, sizeof(::protocol::Monster)},
-  { 70, -1, -1, sizeof(::protocol::SLoad)},
-  { 79, -1, -1, sizeof(::protocol::CLoad)},
-  { 88, -1, -1, sizeof(::protocol::SInsertplayer)},
-  { 95, -1, -1, sizeof(::protocol::SMove)},
-  { 104, -1, -1, sizeof(::protocol::SChat)},
-  { 113, -1, -1, sizeof(::protocol::SPlayerData)},
-  { 120, -1, -1, sizeof(::protocol::SClosePlayer)},
-  { 127, -1, -1, sizeof(::protocol::UnitState)},
-  { 138, -1, -1, sizeof(::protocol::SUnitStates)},
-  { 145, -1, -1, sizeof(::protocol::Attack)},
-  { 155, -1, -1, sizeof(::protocol::Buff)},
-  { 166, -1, -1, sizeof(::protocol::CPlayerAttack)},
-  { 176, -1, -1, sizeof(::protocol::SUnitAttack)},
-  { 183, -1, -1, sizeof(::protocol::SUnitBuff)},
-  { 190, -1, -1, sizeof(::protocol::Demage)},
-  { 199, -1, -1, sizeof(::protocol::SUnitDemage)},
-  { 206, -1, -1, sizeof(::protocol::SRoomQuest)},
-  { 215, -1, -1, sizeof(::protocol::CMovePotal)},
-  { 223, -1, -1, sizeof(::protocol::SEndGame)},
+  { 17, -1, -1, sizeof(::protocol::CreateCharacter)},
+  { 24, -1, -1, sizeof(::protocol::LoginAccess)},
+  { 32, -1, -1, sizeof(::protocol::Charater)},
+  { 41, -1, -1, sizeof(::protocol::Position)},
+  { 51, -1, -1, sizeof(::protocol::Unit)},
+  { 62, -1, -1, sizeof(::protocol::Player)},
+  { 69, -1, -1, sizeof(::protocol::Monster)},
+  { 77, -1, -1, sizeof(::protocol::SLoad)},
+  { 86, -1, -1, sizeof(::protocol::CLoad)},
+  { 95, -1, -1, sizeof(::protocol::SInsertplayer)},
+  { 102, -1, -1, sizeof(::protocol::SMove)},
+  { 111, -1, -1, sizeof(::protocol::SChat)},
+  { 120, -1, -1, sizeof(::protocol::SPlayerData)},
+  { 127, -1, -1, sizeof(::protocol::SClosePlayer)},
+  { 134, -1, -1, sizeof(::protocol::UnitState)},
+  { 145, -1, -1, sizeof(::protocol::SUnitStates)},
+  { 152, -1, -1, sizeof(::protocol::Attack)},
+  { 162, -1, -1, sizeof(::protocol::Buff)},
+  { 173, -1, -1, sizeof(::protocol::CPlayerAttack)},
+  { 183, -1, -1, sizeof(::protocol::SUnitAttack)},
+  { 190, -1, -1, sizeof(::protocol::SUnitBuff)},
+  { 197, -1, -1, sizeof(::protocol::Demage)},
+  { 206, -1, -1, sizeof(::protocol::SUnitDemage)},
+  { 213, -1, -1, sizeof(::protocol::SRoomQuest)},
+  { 222, -1, -1, sizeof(::protocol::CMovePotal)},
+  { 230, -1, -1, sizeof(::protocol::SEndGame)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
   &::protocol::_Login_default_instance_._instance,
   &::protocol::_CreateAccount_default_instance_._instance,
+  &::protocol::_CreateCharacter_default_instance_._instance,
   &::protocol::_LoginAccess_default_instance_._instance,
   &::protocol::_Charater_default_instance_._instance,
   &::protocol::_Position_default_instance_._instance,
@@ -714,62 +736,64 @@ const char descriptor_table_protodef_GameService_2eproto[] PROTOBUF_SECTION_VARI
   "\n\021GameService.proto\022\010protocol\"<\n\005Login\022\014"
   "\n\004name\030\001 \001(\t\022\014\n\004type\030\002 \001(\005\022\n\n\002id\030\003 \001(\t\022\013"
   "\n\003pwd\030\004 \001(\t\" \n\rCreateAccount\022\017\n\007success\030"
-  "\001 \001(\010\"D\n\013LoginAccess\022\017\n\007success\030\001 \001(\010\022$\n"
-  "\010charater\030\002 \003(\0132\022.protocol.Charater\"4\n\010C"
-  "harater\022\014\n\004type\030\001 \001(\005\022\014\n\004code\030\002 \001(\005\022\014\n\004n"
-  "ame\030\003 \001(\t\"8\n\010Position\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 "
-  "\001(\002\022\t\n\001z\030\003 \001(\002\022\013\n\003yaw\030\004 \001(\002\"b\n\004Unit\022\014\n\004t"
-  "ype\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\022\014\n\004code\030\003 \001(\005\022$\n\010p"
-  "osition\030\004 \001(\0132\022.protocol.Position\022\014\n\004nam"
-  "e\030\005 \001(\t\"&\n\006Player\022\034\n\004unit\030\001 \001(\0132\016.protoc"
-  "ol.Unit\"6\n\007Monster\022\034\n\004unit\030\001 \001(\0132\016.proto"
-  "col.Unit\022\r\n\005state\030\002 \001(\r\"^\n\005SLoad\022 \n\006play"
-  "er\030\001 \003(\0132\020.protocol.Player\022\"\n\007monster\030\002 "
-  "\003(\0132\021.protocol.Monster\022\017\n\007room_id\030\003 \001(\005\""
-  "M\n\005CLoad\022\014\n\004code\030\001 \001(\005\022$\n\010position\030d \001(\013"
-  "2\022.protocol.Position\022\020\n\010is_dummy\030e \001(\010\"1"
-  "\n\rSInsertplayer\022 \n\006player\030\001 \001(\0132\020.protoc"
-  "ol.Player\"O\n\005SMove\022\014\n\004code\030\001 \001(\005\022$\n\010posi"
-  "tion\030\002 \001(\0132\022.protocol.Position\022\022\n\nis_mon"
-  "ster\030\003 \001(\010\"1\n\005SChat\022\014\n\004type\030\001 \001(\r\022\014\n\004cod"
-  "e\030\002 \001(\005\022\014\n\004text\030\005 \001(\t\"/\n\013SPlayerData\022 \n\006"
-  "player\030\001 \001(\0132\020.protocol.Player\"\034\n\014SClose"
-  "Player\022\014\n\004code\030\001 \001(\005\"\203\001\n\tUnitState\022\"\n\007mo"
-  "nster\030\001 \001(\0132\021.protocol.Monster\022 \n\006player"
-  "\030\002 \001(\0132\020.protocol.Player\022\016\n\006demage\030\004 \001(\005"
-  "\022\014\n\004heal\030\005 \001(\005\022\022\n\nis_monster\030\n \001(\010\"6\n\013SU"
-  "nitStates\022\'\n\nunit_state\030\001 \003(\0132\023.protocol"
-  ".UnitState\"d\n\006Attack\022\014\n\004code\030\001 \001(\005\022\022\n\nsk"
-  "ill_code\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\022$\n\010po"
-  "sition\030\004 \001(\0132\022.protocol.Position\"V\n\004Buff"
-  "\022\014\n\004code\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\022\n\nis"
-  "_monster\030\003 \001(\010\022\014\n\004heal\030\004 \001(\005\022\n\n\002hp\030\005 \001(\005"
-  "\"l\n\rCPlayerAttack\022\014\n\004code\030\001 \001(\005\022\022\n\nskill"
-  "_code\030\002 \001(\005\022\023\n\013target_code\030\003 \001(\005\022$\n\010posi"
-  "tion\030\004 \001(\0132\022.protocol.Position\"/\n\013SUnitA"
-  "ttack\022 \n\006attack\030\001 \003(\0132\020.protocol.Attack\""
-  ")\n\tSUnitBuff\022\034\n\004buff\030\001 \003(\0132\016.protocol.Bu"
-  "ff\":\n\006Demage\022\014\n\004code\030\001 \001(\005\022\016\n\006demage\030\002 \001"
-  "(\005\022\022\n\nis_monster\030\003 \001(\010\"/\n\013SUnitDemage\022 \n"
-  "\006demage\030\001 \001(\0132\020.protocol.Demage\"D\n\nSRoom"
-  "Quest\022\020\n\010is_clear\030\001 \001(\010\022\022\n\nkill_count\030\002 "
-  "\001(\005\022\020\n\010sum_kill\030\003 \001(\005\"7\n\nCMovePotal\022\023\n\013p"
-  "re_room_id\030\001 \001(\005\022\024\n\014next_room_id\030\002 \001(\005\"\034"
-  "\n\010SEndGame\022\020\n\010end_game\030\001 \001(\010*\260\002\n\013Message"
-  "Code\022\t\n\005LOGIN\020\000\022\n\n\006S_LOAD\020\001\022\022\n\016S_INSERTP"
-  "LAYER\020\002\022\n\n\006S_MOVE\020\003\022\n\n\006S_CHAT\020\004\022\020\n\014S_PLA"
-  "YERDATA\020\005\022\021\n\rS_CLOSEPLAYER\020\006\022\020\n\014S_UNITST"
-  "ATES\020\007\022\022\n\016C_PLAYERATTACK\020\010\022\020\n\014S_UNITATTA"
-  "CK\020\t\022\020\n\014S_UNITDEMAGE\020\n\022\016\n\nS_UNITBUFF\020\013\022\017"
-  "\n\013S_ROOMQUEST\020\014\022\017\n\013C_MOVEPOTAL\020\r\022\r\n\tS_EN"
-  "DGAME\020\016\022\017\n\013LOGINACCESS\020\017\022\021\n\rCREATEACCOUN"
-  "T\020\020\022\n\n\006C_LOAD\020\021b\006proto3"
+  "\001 \001(\010\"7\n\017CreateCharacter\022$\n\010charater\030\001 \001"
+  "(\0132\022.protocol.Charater\"D\n\013LoginAccess\022\017\n"
+  "\007success\030\001 \001(\010\022$\n\010charater\030\002 \003(\0132\022.proto"
+  "col.Charater\"4\n\010Charater\022\014\n\004type\030\001 \001(\005\022\014"
+  "\n\004code\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\"8\n\010Position\022\t"
+  "\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\022\t\n\001z\030\003 \001(\002\022\013\n\003yaw\030\004"
+  " \001(\002\"b\n\004Unit\022\014\n\004type\030\001 \001(\r\022\n\n\002hp\030\002 \001(\r\022\014"
+  "\n\004code\030\003 \001(\005\022$\n\010position\030\004 \001(\0132\022.protoco"
+  "l.Position\022\014\n\004name\030\005 \001(\t\"&\n\006Player\022\034\n\004un"
+  "it\030\001 \001(\0132\016.protocol.Unit\"6\n\007Monster\022\034\n\004u"
+  "nit\030\001 \001(\0132\016.protocol.Unit\022\r\n\005state\030\002 \001(\r"
+  "\"^\n\005SLoad\022 \n\006player\030\001 \003(\0132\020.protocol.Pla"
+  "yer\022\"\n\007monster\030\002 \003(\0132\021.protocol.Monster\022"
+  "\017\n\007room_id\030\003 \001(\005\"M\n\005CLoad\022\014\n\004code\030\001 \001(\005\022"
+  "$\n\010position\030d \001(\0132\022.protocol.Position\022\020\n"
+  "\010is_dummy\030e \001(\010\"1\n\rSInsertplayer\022 \n\006play"
+  "er\030\001 \001(\0132\020.protocol.Player\"O\n\005SMove\022\014\n\004c"
+  "ode\030\001 \001(\005\022$\n\010position\030\002 \001(\0132\022.protocol.P"
+  "osition\022\022\n\nis_monster\030\003 \001(\010\"1\n\005SChat\022\014\n\004"
+  "type\030\001 \001(\r\022\014\n\004code\030\002 \001(\005\022\014\n\004text\030\005 \001(\t\"/"
+  "\n\013SPlayerData\022 \n\006player\030\001 \001(\0132\020.protocol"
+  ".Player\"\034\n\014SClosePlayer\022\014\n\004code\030\001 \001(\005\"\203\001"
+  "\n\tUnitState\022\"\n\007monster\030\001 \001(\0132\021.protocol."
+  "Monster\022 \n\006player\030\002 \001(\0132\020.protocol.Playe"
+  "r\022\016\n\006demage\030\004 \001(\005\022\014\n\004heal\030\005 \001(\005\022\022\n\nis_mo"
+  "nster\030\n \001(\010\"6\n\013SUnitStates\022\'\n\nunit_state"
+  "\030\001 \003(\0132\023.protocol.UnitState\"d\n\006Attack\022\014\n"
+  "\004code\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\022\n\nis_mo"
+  "nster\030\003 \001(\010\022$\n\010position\030\004 \001(\0132\022.protocol"
+  ".Position\"V\n\004Buff\022\014\n\004code\030\001 \001(\005\022\022\n\nskill"
+  "_code\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\022\014\n\004heal\030"
+  "\004 \001(\005\022\n\n\002hp\030\005 \001(\005\"l\n\rCPlayerAttack\022\014\n\004co"
+  "de\030\001 \001(\005\022\022\n\nskill_code\030\002 \001(\005\022\023\n\013target_c"
+  "ode\030\003 \001(\005\022$\n\010position\030\004 \001(\0132\022.protocol.P"
+  "osition\"/\n\013SUnitAttack\022 \n\006attack\030\001 \003(\0132\020"
+  ".protocol.Attack\")\n\tSUnitBuff\022\034\n\004buff\030\001 "
+  "\003(\0132\016.protocol.Buff\":\n\006Demage\022\014\n\004code\030\001 "
+  "\001(\005\022\016\n\006demage\030\002 \001(\005\022\022\n\nis_monster\030\003 \001(\010\""
+  "/\n\013SUnitDemage\022 \n\006demage\030\001 \001(\0132\020.protoco"
+  "l.Demage\"D\n\nSRoomQuest\022\020\n\010is_clear\030\001 \001(\010"
+  "\022\022\n\nkill_count\030\002 \001(\005\022\020\n\010sum_kill\030\003 \001(\005\"7"
+  "\n\nCMovePotal\022\023\n\013pre_room_id\030\001 \001(\005\022\024\n\014nex"
+  "t_room_id\030\002 \001(\005\"\034\n\010SEndGame\022\020\n\010end_game\030"
+  "\001 \001(\010*\305\002\n\013MessageCode\022\t\n\005LOGIN\020\000\022\n\n\006S_LO"
+  "AD\020\001\022\022\n\016S_INSERTPLAYER\020\002\022\n\n\006S_MOVE\020\003\022\n\n\006"
+  "S_CHAT\020\004\022\020\n\014S_PLAYERDATA\020\005\022\021\n\rS_CLOSEPLA"
+  "YER\020\006\022\020\n\014S_UNITSTATES\020\007\022\022\n\016C_PLAYERATTAC"
+  "K\020\010\022\020\n\014S_UNITATTACK\020\t\022\020\n\014S_UNITDEMAGE\020\n\022"
+  "\016\n\nS_UNITBUFF\020\013\022\017\n\013S_ROOMQUEST\020\014\022\017\n\013C_MO"
+  "VEPOTAL\020\r\022\r\n\tS_ENDGAME\020\016\022\017\n\013LOGINACCESS\020"
+  "\017\022\021\n\rCREATEACCOUNT\020\020\022\n\n\006C_LOAD\020\021\022\023\n\017CREA"
+  "TECHARACTER\020\022b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_GameService_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_GameService_2eproto = {
-    false, false, 2103, descriptor_table_protodef_GameService_2eproto,
+    false, false, 2181, descriptor_table_protodef_GameService_2eproto,
     "GameService.proto",
-    &descriptor_table_GameService_2eproto_once, nullptr, 0, 27,
+    &descriptor_table_GameService_2eproto_once, nullptr, 0, 28,
     schemas, file_default_instances, TableStruct_GameService_2eproto::offsets,
     file_level_metadata_GameService_2eproto, file_level_enum_descriptors_GameService_2eproto,
     file_level_service_descriptors_GameService_2eproto,
@@ -805,6 +829,7 @@ bool MessageCode_IsValid(int value) {
     case 15:
     case 16:
     case 17:
+    case 18:
       return true;
     default:
       return false;
@@ -1322,6 +1347,199 @@ void CreateAccount::InternalSwap(CreateAccount* other) {
 
 // ===================================================================
 
+class CreateCharacter::_Internal {
+ public:
+  static const ::protocol::Charater& charater(const CreateCharacter* msg);
+};
+
+const ::protocol::Charater&
+CreateCharacter::_Internal::charater(const CreateCharacter* msg) {
+  return *msg->_impl_.charater_;
+}
+CreateCharacter::CreateCharacter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:protocol.CreateCharacter)
+}
+CreateCharacter::CreateCharacter(const CreateCharacter& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CreateCharacter* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.charater_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_charater()) {
+    _this->_impl_.charater_ = new ::protocol::Charater(*from._impl_.charater_);
+  }
+  // @@protoc_insertion_point(copy_constructor:protocol.CreateCharacter)
+}
+
+inline void CreateCharacter::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.charater_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+CreateCharacter::~CreateCharacter() {
+  // @@protoc_insertion_point(destructor:protocol.CreateCharacter)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CreateCharacter::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.charater_;
+}
+
+void CreateCharacter::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CreateCharacter::Clear() {
+// @@protoc_insertion_point(message_clear_start:protocol.CreateCharacter)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.charater_ != nullptr) {
+    delete _impl_.charater_;
+  }
+  _impl_.charater_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CreateCharacter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .protocol.Charater charater = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_charater(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CreateCharacter::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.CreateCharacter)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .protocol.Charater charater = 1;
+  if (this->_internal_has_charater()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::charater(this),
+        _Internal::charater(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.CreateCharacter)
+  return target;
+}
+
+size_t CreateCharacter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:protocol.CreateCharacter)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .protocol.Charater charater = 1;
+  if (this->_internal_has_charater()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.charater_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CreateCharacter::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CreateCharacter::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CreateCharacter::GetClassData() const { return &_class_data_; }
+
+
+void CreateCharacter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CreateCharacter*>(&to_msg);
+  auto& from = static_cast<const CreateCharacter&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:protocol.CreateCharacter)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_charater()) {
+    _this->_internal_mutable_charater()->::protocol::Charater::MergeFrom(
+        from._internal_charater());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CreateCharacter::CopyFrom(const CreateCharacter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:protocol.CreateCharacter)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CreateCharacter::IsInitialized() const {
+  return true;
+}
+
+void CreateCharacter::InternalSwap(CreateCharacter* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.charater_, other->_impl_.charater_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CreateCharacter::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
+      file_level_metadata_GameService_2eproto[2]);
+}
+
+// ===================================================================
+
 class LoginAccess::_Internal {
  public:
 };
@@ -1529,7 +1747,7 @@ void LoginAccess::InternalSwap(LoginAccess* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata LoginAccess::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[2]);
+      file_level_metadata_GameService_2eproto[3]);
 }
 
 // ===================================================================
@@ -1792,7 +2010,7 @@ void Charater::InternalSwap(Charater* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Charater::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[3]);
+      file_level_metadata_GameService_2eproto[4]);
 }
 
 // ===================================================================
@@ -2099,7 +2317,7 @@ void Position::InternalSwap(Position* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Position::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[4]);
+      file_level_metadata_GameService_2eproto[5]);
 }
 
 // ===================================================================
@@ -2427,7 +2645,7 @@ void Unit::InternalSwap(Unit* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Unit::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[5]);
+      file_level_metadata_GameService_2eproto[6]);
 }
 
 // ===================================================================
@@ -2620,7 +2838,7 @@ void Player::InternalSwap(Player* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Player::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[6]);
+      file_level_metadata_GameService_2eproto[7]);
 }
 
 // ===================================================================
@@ -2844,7 +3062,7 @@ void Monster::InternalSwap(Monster* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Monster::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[7]);
+      file_level_metadata_GameService_2eproto[8]);
 }
 
 // ===================================================================
@@ -3090,7 +3308,7 @@ void SLoad::InternalSwap(SLoad* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SLoad::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[8]);
+      file_level_metadata_GameService_2eproto[9]);
 }
 
 // ===================================================================
@@ -3342,7 +3560,7 @@ void CLoad::InternalSwap(CLoad* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CLoad::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[9]);
+      file_level_metadata_GameService_2eproto[10]);
 }
 
 // ===================================================================
@@ -3535,7 +3753,7 @@ void SInsertplayer::InternalSwap(SInsertplayer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SInsertplayer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[10]);
+      file_level_metadata_GameService_2eproto[11]);
 }
 
 // ===================================================================
@@ -3787,7 +4005,7 @@ void SMove::InternalSwap(SMove* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SMove::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[11]);
+      file_level_metadata_GameService_2eproto[12]);
 }
 
 // ===================================================================
@@ -4050,7 +4268,7 @@ void SChat::InternalSwap(SChat* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SChat::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[12]);
+      file_level_metadata_GameService_2eproto[13]);
 }
 
 // ===================================================================
@@ -4243,7 +4461,7 @@ void SPlayerData::InternalSwap(SPlayerData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SPlayerData::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[13]);
+      file_level_metadata_GameService_2eproto[14]);
 }
 
 // ===================================================================
@@ -4421,7 +4639,7 @@ void SClosePlayer::InternalSwap(SClosePlayer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SClosePlayer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[14]);
+      file_level_metadata_GameService_2eproto[15]);
 }
 
 // ===================================================================
@@ -4738,7 +4956,7 @@ void UnitState::InternalSwap(UnitState* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UnitState::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[15]);
+      file_level_metadata_GameService_2eproto[16]);
 }
 
 // ===================================================================
@@ -4923,7 +5141,7 @@ void SUnitStates::InternalSwap(SUnitStates* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SUnitStates::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[16]);
+      file_level_metadata_GameService_2eproto[17]);
 }
 
 // ===================================================================
@@ -5199,7 +5417,7 @@ void Attack::InternalSwap(Attack* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Attack::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[17]);
+      file_level_metadata_GameService_2eproto[18]);
 }
 
 // ===================================================================
@@ -5482,7 +5700,7 @@ void Buff::InternalSwap(Buff* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Buff::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[18]);
+      file_level_metadata_GameService_2eproto[19]);
 }
 
 // ===================================================================
@@ -5758,7 +5976,7 @@ void CPlayerAttack::InternalSwap(CPlayerAttack* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CPlayerAttack::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[19]);
+      file_level_metadata_GameService_2eproto[20]);
 }
 
 // ===================================================================
@@ -5943,7 +6161,7 @@ void SUnitAttack::InternalSwap(SUnitAttack* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SUnitAttack::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[20]);
+      file_level_metadata_GameService_2eproto[21]);
 }
 
 // ===================================================================
@@ -6128,7 +6346,7 @@ void SUnitBuff::InternalSwap(SUnitBuff* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SUnitBuff::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[21]);
+      file_level_metadata_GameService_2eproto[22]);
 }
 
 // ===================================================================
@@ -6363,7 +6581,7 @@ void Demage::InternalSwap(Demage* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata Demage::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[22]);
+      file_level_metadata_GameService_2eproto[23]);
 }
 
 // ===================================================================
@@ -6556,7 +6774,7 @@ void SUnitDemage::InternalSwap(SUnitDemage* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SUnitDemage::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[23]);
+      file_level_metadata_GameService_2eproto[24]);
 }
 
 // ===================================================================
@@ -6791,7 +7009,7 @@ void SRoomQuest::InternalSwap(SRoomQuest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SRoomQuest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[24]);
+      file_level_metadata_GameService_2eproto[25]);
 }
 
 // ===================================================================
@@ -7002,7 +7220,7 @@ void CMovePotal::InternalSwap(CMovePotal* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CMovePotal::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[25]);
+      file_level_metadata_GameService_2eproto[26]);
 }
 
 // ===================================================================
@@ -7180,7 +7398,7 @@ void SEndGame::InternalSwap(SEndGame* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SEndGame::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_GameService_2eproto_getter, &descriptor_table_GameService_2eproto_once,
-      file_level_metadata_GameService_2eproto[26]);
+      file_level_metadata_GameService_2eproto[27]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -7193,6 +7411,10 @@ Arena::CreateMaybeMessage< ::protocol::Login >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::protocol::CreateAccount*
 Arena::CreateMaybeMessage< ::protocol::CreateAccount >(Arena* arena) {
   return Arena::CreateMessageInternal< ::protocol::CreateAccount >(arena);
+}
+template<> PROTOBUF_NOINLINE ::protocol::CreateCharacter*
+Arena::CreateMaybeMessage< ::protocol::CreateCharacter >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::protocol::CreateCharacter >(arena);
 }
 template<> PROTOBUF_NOINLINE ::protocol::LoginAccess*
 Arena::CreateMaybeMessage< ::protocol::LoginAccess >(Arena* arena) {

@@ -21,6 +21,7 @@ enum MessageCode {
     LOGINACCESS = 15; // 로그인 성공 여부
     CREATEACCOUNT = 16; // 계정 생성
     C_LOAD = 17; // 클라이언트 인게임 요청
+    CREATECHARACTER = 18; // 캐릭터 생성 요청
 }
 
 message Login {
@@ -32,6 +33,10 @@ message Login {
 
 message CreateAccount {
     bool success = 1; // 계정 생성 여부
+}
+
+message CreateCharacter {
+    Charater charater = 1; // 캐릭터 생성
 }
 
 message LoginAccess {

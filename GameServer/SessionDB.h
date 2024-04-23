@@ -11,6 +11,7 @@ public:
 	bool LoginCheck(const WCHAR* pwd);
 
 	bool CreateAccount(const WCHAR* id, const WCHAR* pwd);
+	bool CreateCharacter(const WCHAR* name, int32 jobCode, int32 accountCode);
 
 	bool PlayerDB(int32 accountCode);
 

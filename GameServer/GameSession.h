@@ -10,6 +10,7 @@ public:
     ~GameSession();
 
     void LoginHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
+    void CreateCharacterHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void LoadHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void MoveHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);
     void ChatHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset);

@@ -82,7 +82,7 @@ void DBConn::ErrorDisplay(SQLRETURN ret)
 
 bool DBConn::BindCol(SQLUSMALLINT colIdx, SQLSMALLINT cType, SQLULEN len, SQLPOINTER value, SQLLEN* index)
 {
-    SQLRETURN ret = ::SQLBindCol(_hstmt, colIdx, cType, value, len, index);
+    SQLRETURN ret = SQLBindCol(_hstmt, colIdx, cType, value, len, index);
     if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
         return true;
     ErrorDisplay(ret);
@@ -91,7 +91,7 @@ bool DBConn::BindCol(SQLUSMALLINT colIdx, SQLSMALLINT cType, SQLULEN len, SQLPOI
 
 bool DBConn::BindParameter(SQLUSMALLINT colIdx, SQLSMALLINT paramType, SQLSMALLINT cType, SQLSMALLINT sqlType, SQLULEN cbColDef, SQLSMALLINT ibScale, SQLPOINTER rgbValue, SQLLEN cbValueMax, SQLLEN* index)
 {
-    SQLRETURN ret = ::SQLBindParameter(_hstmt, colIdx, paramType, cType, sqlType, cbColDef, ibScale, rgbValue, cbValueMax, index);
+    SQLRETURN ret = SQLBindParameter(_hstmt, colIdx, paramType, cType, sqlType, cbColDef, ibScale, rgbValue, cbValueMax, index);
     if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
         return true;
     ErrorDisplay(ret);
@@ -101,4 +101,22 @@ bool DBConn::BindParameter(SQLUSMALLINT colIdx, SQLSMALLINT paramType, SQLSMALLI
 void DBConn::FreeStmt()
 {
     SQLFreeStmt(_hstmt, SQL_UNBIND);
+}
+
+bool DBConn::ConnectAttr()
+{
+    SQLRETURN ret = SQLSetConnectAttr(_hdbc, SQL_ATTR_AUTOCOMMIT, (SQLPOINTER)SQL_AUTOCOMMIT_OFF, SQL_NTS);
+    if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
+        return true;
+    ErrorDisplay(ret);
+    return false;
+}
+
+bool DBConn::EndTran()
+{
+    SQLRETURN ret = SQLEndTran(SQL_HANDLE_DBC, _hdbc, SQL_COMMIT);
+    if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
+        return true;
+    ErrorDisplay(ret);
+    return false;
 }

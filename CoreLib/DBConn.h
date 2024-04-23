@@ -18,6 +18,9 @@ public:
 	bool BindParameter(SQLUSMALLINT colIdx, SQLSMALLINT paramType, SQLSMALLINT cType, SQLSMALLINT sqlType, SQLULEN cbColDef, SQLSMALLINT ibScale, SQLPOINTER rgbValue, SQLLEN cbValueMax, SQLLEN* index);
 	void FreeStmt();
 
+	bool ConnectAttr();
+	bool EndTran();
+
 private:
 	SQLHDBC _hdbc = SQL_NULL_HANDLE;
 	SQLHSTMT _hstmt = SQL_NULL_HANDLE;
