@@ -45,6 +45,7 @@ int main()
 
     // sql 인증
     //const wchar_t* connStr = L"Driver={SQL Server};Server=127.0.0.1;Database=BSGameServerDB;Uid=qornwh;Pwd=123456;";
+    //const wchar_t* connStr = L"Driver={MySQL ODBC 8.3 Unicode Driver};Server=127.0.0.1;Port=3307;Database=bsgameserverdb;Uid=root;Pwd=root;";
     // windows 인증
     const wchar_t* connStr = L"Driver={SQL Server};Server=DESKTOP-TFSEO7R\\SQLEXPRESS;Database=BSGameServerDB;Trusted_Connection=Yes;";
     GDBPool->Init(connStr);

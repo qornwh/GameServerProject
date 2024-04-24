@@ -16,7 +16,8 @@ public:
 	void ErrorDisplay(SQLRETURN ret);
 	bool BindCol(SQLUSMALLINT colIdx, SQLSMALLINT cType, SQLULEN len, SQLPOINTER value, SQLLEN* index);
 	bool BindParameter(SQLUSMALLINT colIdx, SQLSMALLINT paramType, SQLSMALLINT cType, SQLSMALLINT sqlType, SQLULEN cbColDef, SQLSMALLINT ibScale, SQLPOINTER rgbValue, SQLLEN cbValueMax, SQLLEN* index);
-	void FreeStmt();
+	bool FreeStmt();
+	bool CloseCursor();
 
 	bool ConnectAttr();
 	bool EndTran();

@@ -98,9 +98,22 @@ bool DBConn::BindParameter(SQLUSMALLINT colIdx, SQLSMALLINT paramType, SQLSMALLI
     return false;
 }
 
-void DBConn::FreeStmt()
+bool DBConn::FreeStmt()
 {
-    SQLFreeStmt(_hstmt, SQL_UNBIND);
+    SQLRETURN ret = SQLFreeStmt(_hstmt, SQL_UNBIND);
+    if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
+        return true;
+    ErrorDisplay(ret);
+    return false;
+}
+
+bool DBConn::CloseCursor()
+{
+    SQLRETURN ret = SQLCloseCursor(_hstmt);
+    if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
+        return true;
+    ErrorDisplay(ret);
+    return false;
 }
 
 bool DBConn::ConnectAttr()
