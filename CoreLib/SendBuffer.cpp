@@ -1,8 +1,6 @@
 ﻿#include "pch.h"
 #include "SendBuffer.h"
 
-#include <boost/make_shared.hpp>
-
 #include "ThreadManager.h"
 
 SendBuffer::SendBuffer(SendBufferChunkRef sendBufferChunk, uint32 allocSize, BYTE* buffer):

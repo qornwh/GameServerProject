@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "pch.h"
-#include <boost/array.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 #include "ReadWriteLock.h"
 

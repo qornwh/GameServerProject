@@ -1,12 +1,16 @@
 ﻿#pragma once
 #include <iostream>
+#include <atomic>
 #include <boost/asio.hpp>
 #include <boost/smart_ptr/enable_shared_from_this.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
-#include <atomic>
+#include <boost/array.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/write.hpp>
 
 using namespace std;
 

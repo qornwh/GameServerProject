@@ -10,7 +10,6 @@
 
 #include "CorePch.h"
 
-// 일단 나중에 정리 !!!
 using GameSessionRef = boost::shared_ptr<class GameSession>;
 using GameServiceRef = boost::shared_ptr<class GameService>;
 
