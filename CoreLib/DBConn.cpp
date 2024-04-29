@@ -12,14 +12,12 @@ DBConn::~DBConn()
     {
         ::SQLFreeHandle(SQL_HANDLE_DBC, _hdbc);
         _hdbc = SQL_NULL_HANDLE;
-        cout << "~DBConn _hdbc" << endl;
     }
 
     if (_hstmt != SQL_NULL_HANDLE)
     {
         ::SQLFreeHandle(SQL_HANDLE_DBC, _hstmt);
         _hstmt = SQL_NULL_HANDLE;
-        cout << "~DBConn _hstmt" << endl;
     }
 }
 

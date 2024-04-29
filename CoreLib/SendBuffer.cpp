@@ -14,12 +14,12 @@ SendBuffer::SendBuffer(SendBufferChunkRef sendBufferChunk, uint32 allocSize, BYT
 
 SendBuffer::~SendBuffer()
 {
-    // std::cout << "~SendBuffer !!" << std::endl;
 }
 
 void SendBuffer::Close(uint32 writeSize)
 {
     // crash if _wirtesize + writeSize > _allocSize
+    CrashFunc(_writeSize + writeSize <= _allocSize);
     _writeSize = writeSize;
     _sendBufferChunk->Close(writeSize);
 }

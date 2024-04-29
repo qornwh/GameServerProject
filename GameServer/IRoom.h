@@ -11,8 +11,6 @@
 #include "GameObjectInfo.h"
 #include "GameUtils.h"
 
-// 일단 이구간 템플릿 연구 필요 아직 템플릿 숙지 덜됨, 컴파일시 어떻게 돌아가는지??
-
 template <typename T, typename = std::enable_if_t<std::is_base_of_v<SessionRef, T>>>
 class IRoom : public boost::enable_shared_from_this<IRoom<T, SessionRef>>
 {

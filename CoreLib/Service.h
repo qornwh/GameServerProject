@@ -24,8 +24,8 @@ private:
 class Service : public boost::enable_shared_from_this<Service>
 {
 public:
-    Service(boost::asio::io_context& io_context, uint16 port, int32 _maxSessionCount = 200);
-    Service(boost::asio::io_context& io_context, std::string host, uint16 port, int32 _maxSessionCount = 200);
+    Service(boost::asio::io_context& ioContext, uint16 port, int32 _maxSessionCount = 200);
+    Service(boost::asio::io_context& ioContext, std::string host, uint16 port, int32 _maxSessionCount = 200);
     ~Service();
 
     int32 GetCurrentSessionCount() const { return _sessionCount; }

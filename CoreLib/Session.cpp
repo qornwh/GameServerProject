@@ -12,7 +12,6 @@ Session::Session(boost::asio::io_context& io_context,
 
 Session::~Session()
 {
-    std::cout << "~Session" << std::endl;
 }
 
 bool Session::AsyncConnect()
@@ -58,19 +57,19 @@ void Session::AsyncRead()
     );
 }
 
-void Session::OnRead(const boost::system::error_code err, size_t bytes_transferred)
+void Session::OnRead(const boost::system::error_code err, size_t len)
 {
     // 컨텐츠단 구성 필요
     if (!err)
     {
         // TODO : recv 처리
-        if (bytes_transferred == 0)
+        if (len == 0)
         {
             Disconnect();
         }
         else
         {
-            if (!_recvBuffer.OnWrite(static_cast<int32>(bytes_transferred)))
+            if (!_recvBuffer.OnWrite(static_cast<int32>(len)))
             {
                 Disconnect();
                 return;
@@ -122,14 +121,14 @@ void Session::AsyncWrite()
         });
 }
 
-void Session::AsyncWrite(void* data, std::size_t size_in_bytes)
+void Session::AsyncWrite(void* data, std::size_t len)
 {
     auto ptr = shared_from_this();
     _socket.async_write_some(
-        boost::asio::buffer(data, size_in_bytes),
-        [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
+        boost::asio::buffer(data, len),
+        [ptr](const boost::system::error_code& ec, const size_t& len)
         {
-            ptr->OnWrite(ec, bytes_transferred);
+            ptr->OnWrite(ec, len);
         });
 }
 
@@ -148,17 +147,15 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
     boost::asio::async_write(
         _socket,
         buffers,
-        [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
+        [ptr](const boost::system::error_code& ec, const size_t& len)
         {
-            ptr->OnWrite(ec, bytes_transferred);
+            ptr->OnWrite(ec, len);
             WriteLockGuard wl(ptr->lock, "write");
             ptr->_sendBuffers.clear();
-            // std::cout << "sendbuffer size !!! : " << bytes_transferred << std::endl;
-            // 세션 shared_ptr관리 필요?? disconnected될때 끊길 확률 있다
         });
 }
 
-void Session::OnWrite(const boost::system::error_code err, const size_t bytes_transferred)
+void Session::OnWrite(const boost::system::error_code err, const size_t len)
 {
     if (!err)
     {
@@ -179,7 +176,7 @@ void Session::Connect()
 void Session::Disconnect()
 {
     _recvBuffer.Clean();
-    _sendBuffers.clear(); // queue clear 함수 없어서 이렇게함
+    _sendBuffers.clear();
     _connected.exchange(false);
 
     if (_serviceRef.lock() != nullptr)

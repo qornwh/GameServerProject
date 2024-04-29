@@ -13,12 +13,12 @@ public:
     bool AsyncConnect();
     void AsyncRead();
     void AsyncWrite();
-    void AsyncWrite(void* data, std::size_t size_in_bytes);
+    void AsyncWrite(void* data, std::size_t len);
     void AsyncWrite(SendBufferRef sendBuffer);
     virtual void OnConnect(const boost::system::error_code& err);
     virtual int32 OnRecv(BYTE* buffer, int32 len);
-    void OnRead(const boost::system::error_code err, const size_t bytes_transferred);
-    void OnWrite(const boost::system::error_code err, const size_t bytes_transferred);
+    void OnRead(const boost::system::error_code err, const size_t len);
+    void OnWrite(const boost::system::error_code err, const size_t len);
     void Connect();
     void Disconnect();
     void AddWriteBuffer(SendBufferRef sendBuffer);

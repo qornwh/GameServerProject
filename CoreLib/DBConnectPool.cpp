@@ -16,7 +16,6 @@ DBPool::~DBPool()
     {
         ::SQLFreeHandle(SQL_HANDLE_ENV, _henv);
         _henv = SQL_NULL_HANDLE;
-        cout << "~DBPoll" << endl;
     }
 }
 

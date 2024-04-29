@@ -37,23 +37,22 @@ const uint16 EndPointUtil::GetPort()
     return _ep.port();
 }
 
-Service::Service(boost::asio::io_context& io_context, uint16 port, int32 maxSessionCount) :
+Service::Service(boost::asio::io_context& ioContext, uint16 port, int32 maxSessionCount) :
     _maxSessionCount(maxSessionCount),
     _ep(boost::asio::ip::tcp::v4(), port),
-    _ioContext(io_context)
+    _ioContext(ioContext)
 {
 }
 
-Service::Service(boost::asio::io_context& io_context, std::string host, uint16 port, int32 maxSessionCount) :
+Service::Service(boost::asio::io_context& ioContext, std::string host, uint16 port, int32 maxSessionCount) :
     _maxSessionCount(maxSessionCount),
     _ep(boost::asio::ip::make_address(host), port),
-    _ioContext(io_context)
+    _ioContext(ioContext)
 {
 }
 
 Service::~Service()
 {
-    cout << "~Service" << endl;
 }
 
 SessionRef Service::CreateSession()

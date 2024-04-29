@@ -14,7 +14,6 @@ GameSession::GameSession(boost::asio::io_context& io_context, const boost::asio:
 {
 	static Atomic<uint16> GameSessionId(0);
 	GameSessionId.fetch_add(1);
-	// 멀티스레드 상에서 이거 문제없는지 체크되야됨.. strand에서 하면 상관없긴한데...
 	_sessionId = GameSessionId;
 }
 

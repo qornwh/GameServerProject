@@ -47,7 +47,6 @@ void GameRoom::EnterSession(GameSessionRef session)
                 if (gameSession->GetPlayer() != nullptr)
                 {
                     boost::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
-                    // 설마 안지우지는 않겠지. pkt 소멸되면 메모리도 같이 날리겠지. 그냥 믿겠다!!!
                     protocol::Player* player = sendPkt.add_player();
                     protocol::Unit* unit = new protocol::Unit;
                     unit->set_name(info->GetName());
@@ -59,7 +58,6 @@ void GameRoom::EnterSession(GameSessionRef session)
                     position->set_y(0);
                     position->set_z(info->GetPosition().X);
                     position->set_yaw(info->GetRotate());
-                    // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
                     unit->set_allocated_position(position);
                     player->set_allocated_unit(unit);
                 }
@@ -81,7 +79,6 @@ void GameRoom::EnterSession(GameSessionRef session)
             position->set_y(0);
             position->set_z(info->GetPosition().X);
             position->set_yaw(info->GetRotate());
-            // 메모리 할당이 아니라 스택메모리에 position 있어서 바로 보내야된다.
             unit->set_allocated_position(position);
             monster->set_state(info->GetObjectState());
             monster->set_allocated_unit(unit);
@@ -136,7 +133,6 @@ void GameRoom::BuffSession(GameSessionRef session)
 void GameRoom::StartGameRoom()
 {
     cout << "StartGameRoom !!!" << endl;
-    // 처음 타이머를 시작시킨다.
     Tick();
 }
 
@@ -149,7 +145,6 @@ void GameRoom::Tick()
     _tickCounter.Add();
     _timer.async_wait(boost::asio::bind_executor(_gameStrand, [this](boost::system::error_code error)
     {
-        // 룸의 일정 시간마다 작업 (100ms)
         Task();
 
         GameRoomQuestInfo& rqInfo = _gameRoomQuest->GetInfo();
@@ -182,7 +177,6 @@ void GameRoom::Task()
     const MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
     const MapInfoRef monsterMap = _gameMapInfo->GetMonsterMapInfo();
 
-    // _gameStrand에 넣었기 때문에 동시에 발생되는 문제는 없다 !!!
     while (!attackQueue.empty())
     {
         GamePlayerInfoRef attackInfo = attackQueue.front();
@@ -209,7 +203,6 @@ void GameRoom::Task()
         _unitPkt.clear_unit_state();
     }
     _isTask.exchange(false);
-    // 다시 Tick 등록
     Tick();
 
     // 몬스터 이동.

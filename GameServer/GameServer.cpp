@@ -45,7 +45,6 @@ int main()
 
     // sql 인증
     //const wchar_t* connStr = L"Driver={SQL Server};Server=127.0.0.1;Database=BSGameServerDB;Uid=qornwh;Pwd=123456;";
-    //const wchar_t* connStr = L"Driver={MySQL ODBC 8.3 Unicode Driver};Server=127.0.0.1;Port=3307;Database=bsgameserverdb;Uid=root;Pwd=root;";
     // windows 인증
     const wchar_t* connStr = L"Driver={SQL Server};Server=DESKTOP-TFSEO7R\\SQLEXPRESS;Database=BSGameServerDB;Trusted_Connection=Yes;";
     GDBPool->Init(connStr);
@@ -96,56 +95,3 @@ int main()
 
     return 0;
 }
-
-
-//DBConnRef conn = GDBPool->Pop();
-//const wchar_t* query = L"SELECT accountCode, id, pwd FROM Account WHERE accountCode = ?";
-//bool result = conn->Prepare(query);
-//if (!result)
-//{
-//    return 0;
-//}
-//const wchar_t* id = L"Gm1";
-//const wchar_t* pwd = L"1234";
-//SQLLEN cbId = 0, cbPwd = 0;
-//int accccc = 1;
-//result = conn->BindParameter(1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, &accccc, 0, nullptr);
-////result = conn->BindParameter(2, SQL_PARAM_INPUT, SQL_C_WCHAR, SQL_WVARCHAR, sizeof(pwd), 0, (SQLPOINTER)pwd, 0, nullptr);
-//if (!result)
-//{
-//    return 0;
-//}
-//result = conn->Execute();
-//if (!result)
-//{
-//    return 0;
-//}
-
-//int32 acc = -1;
-//wchar_t id2[20] = {0, };
-//wchar_t pwd2[20] = { 0, };
-//SQLLEN sqlLen[3];
-
-//result = conn->BindCol(1, SQL_C_LONG, sizeof(acc), &acc, &sqlLen[0]);
-//if (!result)
-//{
-//    return 0;
-//}
-//result = conn->BindCol(2, SQL_C_WCHAR, sizeof(id2), &id2, &sqlLen[1]);
-//if (!result)
-//{
-//    return 0;
-//}
-//result = conn->BindCol(3, SQL_C_WCHAR, sizeof(pwd2), &pwd2, &sqlLen[2]);
-//if (!result)
-//{
-//    return 0;
-//}
-//result = conn->Fetch();
-
-//if (result)
-//{
-//    wcout << "acc : " << acc << endl;
-//    wcout << "id2 : " << id2 << endl;
-//    wcout << "pwd2 : " << pwd2 << endl;
-//}

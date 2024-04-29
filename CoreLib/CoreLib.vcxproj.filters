@@ -98,5 +98,8 @@
     <Filter Include="Service">
       <UniqueIdentifier>{9b9f7769-ae7d-44fa-bf6b-776679ee6be5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Log">
+      <UniqueIdentifier>{760cb959-bbce-43da-b237-c7aaac2f3735}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
