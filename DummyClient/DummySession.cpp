@@ -1,8 +1,5 @@
 ﻿#include "DummySession.h"
-
 #include "PacketHandler.h"
-#include <boost/make_shared.hpp>
-
 #include "DummyPlayerInfo.h"
 #include "DummyProto.pb.h"
 #include "GamePacketHandler.h"
@@ -25,11 +22,6 @@ DummySession::~DummySession()
 void DummySession::SetId(int32 id)
 {
     _id = id;
-}
-
-void DummySession::SetUUID(boost::uuids::uuid uuid)
-{
-    _uuid = uuid;
 }
 
 void DummySession::OnWait()
@@ -75,7 +67,6 @@ void DummySession::OnConnect(const boost::system::error_code& error)
     else
     {
         std::cout << "OnConnect !!!" << std::endl;
-        _uuid = generator();
         AsyncRead();
         AsyncLoad();
     }

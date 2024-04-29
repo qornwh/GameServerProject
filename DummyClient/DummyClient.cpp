@@ -1,8 +1,6 @@
-﻿#include <iostream>
-#include <boost/make_shared.hpp>
+﻿#include "pch.h"
 #include "DummyService.h"
 #include "ThreadManager.h"
-#include "pch.h"
 
 using DummyServiceRef = boost::shared_ptr<DummyService>;
 

@@ -37,6 +37,4 @@ namespace BS_Protocol
             return sizeof(FVector);
         }
     };
-
-    
 }

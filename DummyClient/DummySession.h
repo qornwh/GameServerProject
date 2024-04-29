@@ -1,6 +1,4 @@
 ﻿#pragma once
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
 
 #include "Session.h"
 #include "pch.h"
@@ -15,7 +13,6 @@ public:
     ~DummySession();
 
     void SetId(int32 id);
-    void SetUUID(boost::uuids::uuid uuid);
 
     int32 GetId() { return _id; }
 
@@ -29,8 +26,6 @@ public:
 
 private:
     int32 _id;
-    boost::uuids::uuid _uuid;
-    boost::uuids::random_generator generator;
 
     DummyPlayerInfoRef _playerInfo;
 

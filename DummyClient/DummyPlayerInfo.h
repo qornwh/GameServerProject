@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "pch.h"
-#include <boost/smart_ptr/enable_shared_from_this.hpp>
 
 struct Vector
 {
