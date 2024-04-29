@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "CoreGlobal.h"
-
 #include "DBConnectPool.h"
 #include "ThreadManager.h"
 

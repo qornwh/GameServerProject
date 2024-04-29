@@ -64,7 +64,7 @@ public:
     SendBufferChunkRef CreateChunk() const;
 
 private:
-    vector<SendBufferChunkRef> _chunks;
+    Vector<SendBufferChunkRef> _chunks;
     Lock lock;
 };
 

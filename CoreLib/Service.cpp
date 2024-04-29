@@ -6,7 +6,7 @@ EndPointUtil::EndPointUtil(boost::asio::ip::tcp::endpoint ep) : _ep(std::move(ep
 {
 }
 
-EndPointUtil::EndPointUtil(string addr, uint16 port) : _ep(
+EndPointUtil::EndPointUtil(String addr, uint16 port) : _ep(
     boost::asio::ip::tcp::endpoint(boost::asio::ip::make_address(addr), port))
 {
 }

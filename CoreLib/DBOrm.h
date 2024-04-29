@@ -24,5 +24,5 @@ private:
 	DBConnRef _conn;
 	int _colIdx = 1;
 	int _paramIdx = 1;
-	vector<SQLLEN> _sqlLenList;
+	Vector<SQLLEN> _sqlLenList;
 };

@@ -6,7 +6,7 @@
 struct EndPointUtil
 {
     EndPointUtil(boost::asio::ip::tcp::endpoint ep);
-    EndPointUtil(string addr, uint16 port);
+    EndPointUtil(String addr, uint16 port);
     EndPointUtil(EndPointUtil& ep);
 
     void SetAddress(boost::asio::ip::address addr);

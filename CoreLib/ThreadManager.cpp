@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "ThreadManager.h"
-
 #include "SendBuffer.h"
 
 thread_local uint32 TLS_ThreadId = 0;
@@ -15,7 +14,7 @@ ThreadManager::~ThreadManager()
     ThreadJoinAll();
 }
 
-void ThreadManager::CreateThread(function<void()> callback)
+void ThreadManager::CreateThread(Function callback)
 {
     boost::asio::post(_threadPool, [=]()
     {

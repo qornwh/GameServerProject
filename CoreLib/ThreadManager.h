@@ -10,7 +10,7 @@ public:
     ThreadManager();
     ~ThreadManager();
 
-    void CreateThread(function<void()> callback);
+    void CreateThread(Function callback);
     
     void ThreadTLS();
     void ThreadDestory();

@@ -35,7 +35,7 @@ private:
     boost::asio::ip::tcp::socket _socket;
 
     RecvBuffer _recvBuffer;
-    vector<SendBufferRef> _sendBuffers;
+    Vector<SendBufferRef> _sendBuffers;
 
     boost::weak_ptr<Service> _serviceRef;
 

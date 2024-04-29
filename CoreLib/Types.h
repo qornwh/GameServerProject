@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <iostream>
 #include <atomic>
+#include <queue>
+
 #include <boost/asio.hpp>
 #include <boost/smart_ptr/enable_shared_from_this.hpp>
 #include <boost/make_shared.hpp>
@@ -12,7 +14,11 @@
 #include <boost/asio/buffer.hpp>
 #include <boost/asio/write.hpp>
 
-using namespace std;
+using SessionRef = boost::shared_ptr<class Session>;
+using SendBufferRef = boost::shared_ptr<class SendBuffer>;
+using SendBufferChunkRef = boost::shared_ptr<class SendBufferChunk>;
+using SendBufferManagerRef = boost::shared_ptr<class SendBufferManager>;
+using ServiceRef = boost::shared_ptr<class Service>;
 
 using BYTE = boost::uint8_t;
 using int8 = boost::int8_t;
@@ -27,8 +33,12 @@ using uint64 = boost::uint64_t;
 template <typename T>
 using Atomic = std::atomic<T>;
 
-using SessionRef = boost::shared_ptr<class Session>;
-using SendBufferRef = boost::shared_ptr<class SendBuffer>;
-using SendBufferChunkRef = boost::shared_ptr<class SendBufferChunk>;
-using SendBufferManagerRef = boost::shared_ptr<class SendBufferManager>;
-using ServiceRef = boost::shared_ptr<class Service>;
+template <typename T>
+using Vector = std::vector<T>;
+
+template <typename T>
+using Queue = std::queue<T>;
+
+using String = std::string;
+
+using Function = std::function<void()>;
