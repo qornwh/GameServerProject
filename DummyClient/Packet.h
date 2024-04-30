@@ -19,7 +19,7 @@ namespace BS_Protocol
     struct P_LOGIN_PAKCET
     {
         uint16 IdLen;
-        string Id;
+        String Id;
         uint16 Type;
 
         uint32 Size()

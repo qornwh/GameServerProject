@@ -1,6 +1,5 @@
 #pragma once
 
-
 #ifdef _DEBUG
 #pragma comment(lib, "CoreLib\\Debug\\CoreLib.lib")
 #else

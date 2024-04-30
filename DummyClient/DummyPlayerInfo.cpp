@@ -21,12 +21,12 @@ DummyPlayerInfo::~DummyPlayerInfo()
 {
 }
 
-Vector& DummyPlayerInfo::GetPostion()
+Vector3d& DummyPlayerInfo::GetPostion()
 {
     return _position;
 }
 
-void DummyPlayerInfo::SetPostion(Vector vec)
+void DummyPlayerInfo::SetPostion(Vector3d vec)
 {
     _position = vec;
 }

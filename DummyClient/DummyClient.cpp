@@ -2,7 +2,7 @@
 #include "DummyService.h"
 #include "ThreadManager.h"
 
-using DummyServiceRef = boost::shared_ptr<DummyService>;
+using DummyServiceRef = std::shared_ptr<DummyService>;
 
 int main()
 {
@@ -18,7 +18,7 @@ int main()
 
     GThreadManager->CreateThread([&io_context, &address, &port]()
         {
-            DummyServiceRef service = boost::make_shared<DummyService>(io_context, address, port, 100);
+            DummyServiceRef service = std::make_shared<DummyService>(io_context, address, port, 100);
             if (!service->Start())
             {
                 // crash!!

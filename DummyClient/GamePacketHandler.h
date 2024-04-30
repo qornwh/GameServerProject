@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <google/protobuf/message.h>
-
 #include "PacketHeader.h"
 #include "SendBuffer.h"
 #include "ThreadManager.h"
@@ -22,8 +21,7 @@ public:
 
         if (dataSize < header->size)
         {
-            cout << " header code : " << header->id << " header size : " << header->size << " data size : " << dataSize
-                << endl;
+            // cout << " header code : " << header->id << " header size : " << header->size << " data size : " << dataSize << endl;
             return false;
         }
         return true;

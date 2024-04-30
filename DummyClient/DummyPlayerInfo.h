@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "pch.h"
 
-struct Vector
+struct Vector3d
 {
-    Vector(float X, float Y, float Z, float Yaw) : X(X), Y(Y), Z(Z), Yaw(Yaw)
+    Vector3d(float X, float Y, float Z, float Yaw) : X(X), Y(Y), Z(Z), Yaw(Yaw)
     {
     }
     
@@ -12,7 +12,7 @@ struct Vector
     float Z;
     float Yaw;
 
-    Vector& operator=(const Vector& ref)
+    Vector3d& operator=(const Vector3d& ref)
     {
         X = ref.X;
         Y = ref.Y;
@@ -30,14 +30,14 @@ struct MapRange
     int32 EndY;
 };
 
-class DummyPlayerInfo : public boost::enable_shared_from_this<DummyPlayerInfo>
+class DummyPlayerInfo : public std::enable_shared_from_this<DummyPlayerInfo>
 {
 public:
     DummyPlayerInfo();
     ~DummyPlayerInfo();
 
-    Vector& GetPostion();
-    void SetPostion(Vector vec);
+    Vector3d& GetPostion();
+    void SetPostion(Vector3d vec);
     void UpdateRotate();
 
     bool IsUse() const { return _use; }
@@ -48,7 +48,7 @@ public:
     void updatePosition();
 
 protected:
-    Vector _position{0, 0, 0, 0};
+    Vector3d _position{0, 0, 0, 0};
 
 private:
     bool _use = false;

@@ -7,8 +7,8 @@
 DummySession::DummySession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep)
     : Session(io_context, ep)
 {
-    static atomic<int32> id = 0;
-    _playerInfo = boost::make_shared<DummyPlayerInfo>();
+    static Atomic<int32> id = 0;
+    _playerInfo = std::make_shared<DummyPlayerInfo>();
     _id = id.fetch_add(1);
 
     _playerInfo->Start();
@@ -42,7 +42,7 @@ void DummySession::AsyncLoad()
     SendBufferRef sendBuffer = PacketHandler::MakePacket(pkt);
 #elif AMODE == 1
     protocol::Login pkt;
-    string wsId = "dummy";
+    String wsId = "dummy";
     wsId += std::to_string(_id);
     pkt.set_text(wsId);
     pkt.set_type(_id % 2);

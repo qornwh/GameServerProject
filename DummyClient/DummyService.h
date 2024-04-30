@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include "Service.h"
 
-class DummySession;
-using DummySessionRef = boost::shared_ptr<DummySession>;
+using DummySessionRef = std::shared_ptr<class DummySession>;
 
 static boost::asio::chrono::milliseconds gTimerDelay = boost::asio::chrono::milliseconds(3000);
 

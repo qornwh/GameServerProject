@@ -20,13 +20,11 @@ public:
     {
     }
 
-public:
     BYTE* Buffer() { return _buffer; }
     uint16 Size() { return _size; }
     uint16 WriteSize() { return _pos; }
     uint16 FreeSize() { return _size - _pos; }
 
-public:
     template <typename T>
     bool Write(T* src) { return Write(src, sizeof(T)); }
 

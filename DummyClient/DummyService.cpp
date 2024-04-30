@@ -45,7 +45,7 @@ bool DummyService::Start()
 
 SessionRef DummyService::CreateSession()
 {
-    SessionRef session = boost::make_shared<DummySession>(GetIoContext(), GetEndPoint());
+    SessionRef session = std::make_shared<DummySession>(GetIoContext(), GetEndPoint());
     return session;
 }
 
@@ -63,7 +63,7 @@ void DummyService::AsyncSession()
 {
     for (auto session : _sessions)
     {
-        DummySessionRef dummySession = static_pointer_cast<DummySession>(session);
+        DummySessionRef dummySession = std::static_pointer_cast<DummySession>(session);
         DummyPlayerInfoRef info = dummySession->GetInfo();
         if (info != nullptr)
         {
@@ -77,8 +77,6 @@ void DummyService::AsyncSession()
                     info->UpdateRotate();
                 }
             }
-
-            // 좌표 이동 업데이트
             info->updatePosition();
 
             #if AMODE == 0
