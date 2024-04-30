@@ -4,7 +4,7 @@
 #include "DBConn.h"
 #include "ReadWriteLock.h"
 
-using DBConnRef = boost::shared_ptr<DBConn>;
+using DBConnRef = std::shared_ptr<DBConn>;
 class DBPool
 {
 public:

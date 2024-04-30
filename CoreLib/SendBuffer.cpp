@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "SendBuffer.h"
-
 #include "ThreadManager.h"
 
 SendBuffer::SendBuffer(SendBufferChunkRef sendBufferChunk, uint32 allocSize, BYTE* buffer):
@@ -37,7 +36,7 @@ SendBufferRef SendBufferChunk::Open(uint32 size)
     _use = true;
     _pos = size;
 
-    SendBufferRef sendBuffer = boost::make_shared<SendBuffer>(shared_from_this(), size, &_chunk[0]);
+    SendBufferRef sendBuffer = std::make_shared<SendBuffer>(shared_from_this(), size, &_chunk[0]);
     return sendBuffer;
 }
 

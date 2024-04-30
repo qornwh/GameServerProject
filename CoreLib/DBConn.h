@@ -2,7 +2,7 @@
 #include "pch.h"
 #include <sql.h>
 
-class DBConn : public boost::enable_shared_from_this<DBConn>
+class DBConn : public std::enable_shared_from_this<DBConn>
 {
 public:
 	DBConn();

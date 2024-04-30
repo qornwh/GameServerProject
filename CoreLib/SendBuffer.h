@@ -1,7 +1,5 @@
 ﻿#pragma once
-
 #include "pch.h"
-
 #include "ReadWriteLock.h"
 
 class SendBuffer
@@ -24,7 +22,7 @@ private:
     SendBufferChunkRef _sendBufferChunk;
 };
 
-class SendBufferChunk : public boost::enable_shared_from_this<SendBufferChunk>
+class SendBufferChunk : public std::enable_shared_from_this<SendBufferChunk>
 {
     enum
     {

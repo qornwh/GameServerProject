@@ -4,7 +4,7 @@
 #include "RecvBuffer.h"
 #include "Service.h"
 
-class Session : public boost::enable_shared_from_this<Session>
+class Session : public std::enable_shared_from_this<Session>
 {
 public:
     Session(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep);
@@ -28,7 +28,7 @@ public:
 	bool IsConnected() { return _connected; }
 
     boost::asio::ip::tcp::socket& GetSocket() { return _socket; }
-    boost::shared_ptr<Session> getSharePtr() { return shared_from_this(); }
+    SessionRef getSharePtr() { return shared_from_this(); }
 
 private:
     boost::asio::ip::tcp::endpoint _ep;
@@ -36,10 +36,8 @@ private:
 
     RecvBuffer _recvBuffer;
     Vector<SendBufferRef> _sendBuffers;
-
-    boost::weak_ptr<Service> _serviceRef;
+    std::weak_ptr<Service> _serviceRef;
 
     Lock lock;
-
 	Atomic<bool> _connected{ false };
 };

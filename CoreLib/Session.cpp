@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "Session.h"
-
 #include "SendBuffer.h"
 
 Session::Session(boost::asio::io_context& io_context,
@@ -97,7 +96,7 @@ void Session::OnRead(const boost::system::error_code err, size_t len)
 
 void Session::AsyncWrite()
 {
-    std::vector<boost::asio::const_buffer> buffers;
+    Vector<boost::asio::const_buffer> buffers;
     {
         WriteLockGuard wl(lock, "write");
         for (auto buffer : _sendBuffers)
@@ -132,7 +131,7 @@ void Session::AsyncWrite(void* data, std::size_t len)
 
 void Session::AsyncWrite(SendBufferRef sendBuffer)
 {
-    std::vector<boost::asio::const_buffer> buffers;
+    Vector<boost::asio::const_buffer> buffers;
     {
         WriteLockGuard wl(lock, "write");
         _sendBuffers.emplace_back(sendBuffer);

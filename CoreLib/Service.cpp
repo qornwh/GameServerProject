@@ -57,7 +57,7 @@ Service::~Service()
 
 SessionRef Service::CreateSession()
 {
-    SessionRef session = boost::make_shared<Session>(_ioContext, _ep);
+    SessionRef session = std::make_shared<Session>(_ioContext, _ep);
     return session;
 }
 

@@ -21,7 +21,7 @@ private:
     boost::asio::ip::tcp::endpoint _ep;
 };
 
-class Service : public boost::enable_shared_from_this<Service>
+class Service : public std::enable_shared_from_this<Service>
 {
 public:
     Service(boost::asio::io_context& ioContext, uint16 port, int32 _maxSessionCount = 200);
