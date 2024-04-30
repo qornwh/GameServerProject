@@ -1,5 +1,4 @@
 ﻿#include "GameBossInfo.h"
-
 #include "GameGlobal.h"
 #include "GameSkill.h"
 #include "IRoom.h"
@@ -120,7 +119,6 @@ bool GameBossInfo::ReadyAttackSkill1(int hp)
 {
     if (hp <= _maxHp * 0.7f)
     {
-        cout << "ReadyAttackSkill1 !!!" << endl;
         SetObjecteState(ObjectState::SKILL1);
         return true;
     }
@@ -131,14 +129,13 @@ bool GameBossInfo::ReadyAttackSkill2(int hp)
 {
     if (hp <= _maxHp * 0.4f)
     {
-        cout << "ReadyAttackSkill2 !!!" << endl;
         SetObjecteState(ObjectState::SKILL2);
         return true;
     }
     return false;
 }
 
-void GameBossInfo::Attack(GamePlayerInfoRef target, vector<int32>& attackList)
+void GameBossInfo::Attack(GamePlayerInfoRef target, Vector<int32>& attackList)
 {
     Skill& skill = GSkill->GetMonsterSkill()[GetType()].GetSkillMap()[GetObjectState()];
     int32 skillType = skill._type;
@@ -296,7 +293,7 @@ void GameBossInfo::Update()
                 monster->set_allocated_unit(unit);
                 childPkt->set_allocated_monster(monster);
 
-                vector<int32> attackList;
+                Vector<int32> attackList;
                 Attack(nullptr, attackList);
 
                 // 공격 판정된 몬스터 리스트들
@@ -364,7 +361,7 @@ void GameBossArrow::Update()
 
     GameRoomRef room = GetGameRoom();
 
-    vector<int32> players;
+    Vector<int32> players;
     for (auto it : room->GetPlayerMap())
     {
         GamePlayerInfoRef player = it.second;

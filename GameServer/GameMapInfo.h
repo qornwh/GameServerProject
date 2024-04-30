@@ -44,7 +44,7 @@ struct Rect
     }
 };
 
-class MapInfo : public boost::enable_shared_from_this<MapInfo>
+class MapInfo : public std::enable_shared_from_this<MapInfo>
 {
 public:
     MapInfo(MapType type);
@@ -62,7 +62,7 @@ private:
     MapType _type = COMMON;
 };
 
-class GameMapInfo : public boost::enable_shared_from_this<GameMapInfo>
+class GameMapInfo : public std::enable_shared_from_this<GameMapInfo>
 {
 public:
     GameMapInfo(int32 x, int32 y, int32 centerX, int32 centerY);

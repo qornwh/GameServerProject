@@ -2,13 +2,11 @@
 
 MapInfo::MapInfo(MapType type)
 {
-    cout << "MapInfo : " << type << endl;
 }
 
 MapInfo::MapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type) : _mapInfo(x, y, centerX, centerY),
     _type(type)
 {
-    cout << "MapInfo : " << type << endl;
 }
 
 MapInfo::~MapInfo()
@@ -60,17 +58,15 @@ Rect& MapInfo::GetRect()
 GameMapInfo::GameMapInfo(int32 x, int32 y, int32 centerX, int32 centerY) : _mapInfo(
     x, y, centerX, centerY, MapType::COMMON)
 {
-    cout << "GameMapInfo" << endl;
 }
 
 GameMapInfo::~GameMapInfo()
 {
-    cout << "~GameMapInfo" << endl;
 }
 
 void GameMapInfo::CreateMonsterMapInfo(int32 x, int32 y, int32 centerX, int32 centerY, MapType type)
 {
-    _monsterMapInfo = boost::make_shared<MapInfo>(x, y, centerX, centerY, type);
+    _monsterMapInfo = std::make_shared<MapInfo>(x, y, centerX, centerY, type);
 }
 
 MapInfo& GameMapInfo::GetMapInfo()

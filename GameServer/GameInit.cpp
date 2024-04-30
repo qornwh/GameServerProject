@@ -3,18 +3,19 @@
 #include "GameMapInfo.h"
 #include "GameSkill.h"
 #include "IRoom.h"
+#include <fstream>
 
 GameInit::GameInit(boost::asio::io_context& io_context)
 {
-	string configFilePath = "./config.json";
-	string jsonStr = "";
+	String configFilePath = "./config.json";
+	String jsonStr = "";
 	boost::json::value json;
 
-	ifstream openFile(configFilePath.data());
+	std::ifstream openFile(configFilePath.data());
 
 	CrashFunc(openFile.is_open());
 
-	string line = "";
+	String line = "";
 	while (getline(openFile, line))
 		jsonStr.append(line);
 	openFile.close();

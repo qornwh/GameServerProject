@@ -1,10 +1,8 @@
 ﻿#include "GameSerivce.h"
-
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
 #include "GameSession.h"
 #include "IRoom.h"
-
 
 GameService::GameService(boost::asio::io_context& io_context, uint16 port,
                          int32 _maxSessionCount) : Service(io_context, port, _maxSessionCount),
@@ -24,14 +22,14 @@ GameService::~GameService()
 
 SessionRef GameService::CreateSession()
 {
-    GameSessionRef gameSession = boost::make_shared<GameSession>(GetIoContext(), GetEndPoint());
+    GameSessionRef gameSession = std::make_shared<GameSession>(GetIoContext(), GetEndPoint());
     AddSessionRef(gameSession);
     return gameSession;
 }
 
 bool GameService::Start()
 {
-    cout << "Start Service !!!" << endl;
+    std::cout << "Start Service !!!" << std::endl;
     RegistAccept();
     return true;
 }
@@ -57,7 +55,7 @@ void GameService::BroadCast(SendBufferRef sendBuffer)
     {
         if (session->IsConnected())
         {
-            GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+            GameSessionRef gameSession = std::static_pointer_cast<GameSession>(session);
             gameSession->AsyncWrite(sendBuffer);
         }
     }
@@ -66,7 +64,7 @@ void GameService::BroadCast(SendBufferRef sendBuffer)
 void GameService::ReleaseSessionMesssage(SessionRef session)
 {
     // 일단 같은 지역만 strand로 끊는다!!!
-    GameSessionRef gameSession = static_pointer_cast<GameSession>(session);
+    GameSessionRef gameSession = std::static_pointer_cast<GameSession>(session);
 
     if (gameSession->GetRoomId() > -1)
     {

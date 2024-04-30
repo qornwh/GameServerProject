@@ -28,7 +28,7 @@ enum GameObjectType
     OBJECT = 2,
 };
 
-class GameObjectInfo : public boost::enable_shared_from_this<GameObjectInfo>
+class GameObjectInfo : public std::enable_shared_from_this<GameObjectInfo>
 {
 public:
     GameObjectInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp);
@@ -48,7 +48,7 @@ public:
     float GetRotate() { return _collider.GetRotate(); }
     Collider& GetCollider() { return _collider; }
 
-    void SetName(const string& name);
+    void SetName(const String& name);
     void TakeDamage(int32 Damage);
     void TakeHeal(int32 heal);
     void ResetDamage();
@@ -73,7 +73,7 @@ protected:
 
     ObjectState _state = ObjectState::IDLE;
 
-    boost::weak_ptr<GameRoom> _gameRoomRef;
+    std::weak_ptr<GameRoom> _gameRoomRef;
 
     Collider _collider;
 
@@ -154,7 +154,7 @@ public:
 
     void Update() override;
 
-    void Attack(GameObjectInfoRef target, vector<int32>& attackList);
+    void Attack(GameObjectInfoRef target, Vector<int32>& attackList);
     void Healing();
     bool AttackRect(Vector2 position, GameObjectInfoRef target);
     bool AttackCircle(Vector2 position, GameObjectInfoRef target);
@@ -170,7 +170,7 @@ private:
     int32 _targetCode;
     
     // 혹시나 해서 들고 있는다.
-    boost::weak_ptr<GameSession> _gameSession;
+    std::weak_ptr<GameSession> _gameSession;
 
     //
     bool _attacked = false;

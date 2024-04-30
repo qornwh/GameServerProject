@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include <boost/smart_ptr/enable_shared_from_this.hpp>
-
-#include "Types.h"
+#include "pch.h"
 
 class GameRoomQuestInfo
 {
@@ -52,11 +50,10 @@ private:
     int32 _deadMonsterSize = 0;
 };
 
-class GameRoomQuest : public boost::enable_shared_from_this<GameRoomQuest>
+class GameRoomQuest : public std::enable_shared_from_this<GameRoomQuest>
 {
 public:
     GameRoomQuest(int32 killMonsterCount);
-
     GameRoomQuestInfo& GetInfo() { return _info; }
 
 private:

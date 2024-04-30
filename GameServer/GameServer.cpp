@@ -1,8 +1,6 @@
 ﻿#include <boost/make_shared.hpp>
 
 #include "DBConnectPool.h"
-#include "GameGlobal.h"
-#include "GameRoomManager.h"
 #include "pch.h"
 #include "GameSerivce.h"
 #include "IRoom.h"
@@ -13,9 +11,7 @@
 #ifdef _WIN32
 #include <Windows.h>
 #include <DbgHelp.h>
-#include <sqlucode.h>
 #include "ItemDB.h"
-#include "SessionDB.h"
 #pragma comment(lib, "Dbghelp.lib")
 long WINAPI ExceptionCallBack(EXCEPTION_POINTERS* exception_pointers)
 {
@@ -46,7 +42,7 @@ int main()
     // sql 인증
     //const wchar_t* connStr = L"Driver={SQL Server};Server=127.0.0.1;Database=BSGameServerDB;Uid=qornwh;Pwd=123456;";
     // windows 인증
-    const wchar_t* connStr = L"Driver={SQL Server};Server=DESKTOP-TFSEO7R\\SQLEXPRESS;Database=BSGameServerDB;Trusted_Connection=Yes;";
+    const WCHAR* connStr = L"Driver={SQL Server};Server=DESKTOP-TFSEO7R\\SQLEXPRESS;Database=BSGameServerDB;Trusted_Connection=Yes;";
     GDBPool->Init(connStr);
 
     auto count = std::thread::hardware_concurrency() * 2;
@@ -56,7 +52,7 @@ int main()
 
     // 게임 정보 초기화
     GameInit gInit(io_context);
-    GameServiceRef service = boost::make_shared<GameService>(io_context, port);
+    GameServiceRef service = std::make_shared<GameService>(io_context, port);
     {
         ItemDB idb;
         idb.LoadDB();

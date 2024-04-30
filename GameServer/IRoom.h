@@ -3,7 +3,6 @@
 #include <set>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
-
 #include "pch.h"
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
@@ -12,7 +11,7 @@
 #include "GameUtils.h"
 
 template <typename T, typename = std::enable_if_t<std::is_base_of_v<SessionRef, T>>>
-class IRoom : public boost::enable_shared_from_this<IRoom<T, SessionRef>>
+class IRoom : public std::enable_shared_from_this<IRoom<T, SessionRef>>
 {
 public:
     IRoom(boost::asio::io_context& io_context, uint32 id) : _id(id), _strand(boost::asio::make_strand(io_context))
@@ -29,18 +28,16 @@ public:
         // 1개씩 처리됨
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            cout << "Session Add !!!" << endl;
+            std::cout << "Session Add !!!" << std::endl;
             _sessionList.insert(session);
         }));
     }
 
     virtual void OutSession(T session)
     {
-        // 스트랜드 lock 처리 필요 x
-        // 1개씩 처리됨
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            cout << "Session Out !!!" << endl;
+            std::cout << "Session Out !!!" << std::endl;
             _sessionList.erase(session);
         }));
     }
@@ -51,8 +48,20 @@ public:
         {
             for (const auto session : _sessionList)
             {
-                // 여기에 쓴다.
                 session->AsyncWrite(sendBuffer);
+            }
+        }));
+    }
+
+    void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
+    {
+        boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
+        {
+            for (const auto session : _sessionList)
+            {
+                // 여기에 쓴다.
+                if (session->GetPlayer()->GetCode() != code)
+                    session->AsyncWrite(sendBuffer);
             }
         }));
     }
@@ -66,7 +75,7 @@ public:
     }
 
 protected:
-    set<T> _sessionList;
+    Set<T> _sessionList;
     int32 _id;
     uint32 _type;
 
@@ -79,7 +88,7 @@ class GameRoom : public IRoom<GameSessionRef, SessionRef>
 {
 public:
     GameRoom(boost::asio::io_context& io_context, uint32 id) :
-        IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>(io_context, id),
+        IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>(io_context, id),
         _timer(io_context, _timerDelay),
         _gameStrand(boost::asio::make_strand(io_context))
     {
@@ -97,19 +106,6 @@ public:
     void AttackSession(GameSessionRef session);
     void BuffSession(GameSessionRef session);
 
-    void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
-    {
-        boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
-        {
-            for (const auto session : _sessionList)
-            {
-                // 여기에 쓴다.
-                if (session->GetPlayer()->GetCode() != code)
-                    session->AsyncWrite(sendBuffer);
-            }
-        }));
-    }
-
     void StartGameRoom();
     void Tick() override;
     void Task();
@@ -118,7 +114,7 @@ public:
 
     void InitMonsters();
 
-    unordered_map<int32, GameMosterInfoRef> GetMonsterMap() { return _monsterMap; }
+    Map<int32, GameMosterInfoRef> GetMonsterMap() { return _monsterMap; }
 
     GameMosterInfoRef GetMonster(int32 Code)
     {
@@ -127,7 +123,7 @@ public:
         return nullptr;
     }
 
-    unordered_map<int32, GamePlayerInfoRef> GetPlayerMap() { return _playerMap; }
+    Map<int32, GamePlayerInfoRef> GetPlayerMap() { return _playerMap; }
 
     GamePlayerInfoRef GetPlayer(int32 Code)
     {
@@ -152,12 +148,12 @@ private:
 
     int32 _monsterCount = -1;
     int32 _bosMonsterCount = -1;
-    queue<GamePlayerInfoRef> attackQueue;
+    Queue<GamePlayerInfoRef> attackQueue;
 
     GameMapInfoRef _gameMapInfo;
     GameRoomQuestRef _gameRoomQuest;
-    unordered_map<int32, GameMosterInfoRef> _monsterMap;
-    unordered_map<int32, GamePlayerInfoRef> _playerMap;
+    Map<int32, GameMosterInfoRef> _monsterMap;
+    Map<int32, GamePlayerInfoRef> _playerMap;
     Atomic<bool> _isTask{false};
     GameUtils::TickCounter _tickCounter{10};
 

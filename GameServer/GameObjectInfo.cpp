@@ -1,5 +1,4 @@
 ﻿#include "GameObjectInfo.h"
-
 #include "GameGlobal.h"
 #include "GameMapInfo.h"
 #include "GameRoomQuest.h"
@@ -33,7 +32,7 @@ void GameObjectInfo::SetRotate(float yaw)
     _collider.SetRotate(yaw);
 }
 
-void GameObjectInfo::SetName(const string& name)
+void GameObjectInfo::SetName(const String& name)
 {
     _name = name;
 }
@@ -339,7 +338,7 @@ void GameMosterInfo::MoveTarget(GamePlayerInfoRef target)
 bool GameMosterInfo::CheckAttackTarget(GamePlayerInfoRef target)
 {
     // 임시로 하드코딩 해둠 나중에 함수화 해야됨 !!!
-    unordered_map<int32, Skill>& skillMap = GSkill->GetMonsterSkill()[GetType()].GetSkillMap();
+    Map<int32, Skill>& skillMap = GSkill->GetMonsterSkill()[GetType()].GetSkillMap();
 
     int32 skillType = skillMap[ObjectState::ATTACK]._type;
     bool isTargeting = skillMap[ObjectState::ATTACK]._target;
@@ -460,7 +459,7 @@ GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 typ
 
 GamePlayerInfo::~GamePlayerInfo()
 {
-    cout << "close player info" << endl;
+    std::cout << "close player info" << std::endl;
 }
 
 void GamePlayerInfo::Update()
@@ -476,7 +475,7 @@ void GamePlayerInfo::Update()
     if (_attacked)
     {
         int32 targetCode = GetTarget();
-        vector<int32> attackList;
+        Vector<int32> attackList;
 
         if (targetCode < 0)
         {
@@ -500,7 +499,7 @@ void GamePlayerInfo::Update()
             GameMosterInfoRef info = room->GetMonster(monsterCode);
             if (info != nullptr && info->GetObjectState() != ObjectState::DIE)
             {
-                cout << "Attack Success : " << info->GetCode() << endl;
+                std::cout << "Attack Success : " << info->GetCode() << std::endl;
                 info->IdlePosition();
                 if (info->GetHp() > 0)
                 {
@@ -518,7 +517,7 @@ void GamePlayerInfo::Update()
     }
 }
 
-void GamePlayerInfo::Attack(GameObjectInfoRef target, vector<int32>& attackList)
+void GamePlayerInfo::Attack(GameObjectInfoRef target, Vector<int32>& attackList)
 {
     if (GetGameSession() == nullptr)
         return;

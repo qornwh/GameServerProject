@@ -7,7 +7,6 @@ GameRoomManager::GameRoomManager()
 
 GameRoomManager::~GameRoomManager()
 {
-    cout << "~GameRoomManger" << endl;
 }
 
 GameRoomRef GameRoomManager::CreateRoom(boost::asio::io_context& io_context, int32 id)
@@ -15,7 +14,7 @@ GameRoomRef GameRoomManager::CreateRoom(boost::asio::io_context& io_context, int
     // room생성
     if (_roomMap.find(id) == _roomMap.end())
     {
-        GameRoomRef room = boost::make_shared<GameRoom>(io_context, id);
+        GameRoomRef room = std::make_shared<GameRoom>(io_context, id);
         _roomMap[id] = room;
     }
     return _roomMap[id];
@@ -31,8 +30,7 @@ GameRoomRef GameRoomManager::getRoom(int32 id)
 {
     if (_roomMap.find(id) != _roomMap.end())
         return _roomMap[id];
-    else
-        return nullptr;
+    return nullptr;
 }
 
 void GameRoomManager::ClearRoom()

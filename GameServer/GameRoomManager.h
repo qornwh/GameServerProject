@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "pch.h"
 
-class GameRoomManager : public enable_shared_from_this<GameRoomManager>
+class GameRoomManager : public std::enable_shared_from_this<GameRoomManager>
 {
 public:
     
@@ -19,7 +19,7 @@ public:
 
 private:
     Atomic<int32> _id{0};
-    unordered_map<int32, GameRoomRef> _roomMap;
+    Map<int32, GameRoomRef> _roomMap;
 };
 
-extern shared_ptr<GameRoomManager> GBSRoomManger;
+extern std::shared_ptr<GameRoomManager> GBSRoomManger;

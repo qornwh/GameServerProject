@@ -1,5 +1,4 @@
 ﻿#include "GameSession.h"
-
 #include "GameGlobal.h"
 #include "GameService.pb.h"
 #include "PacketHeader.h"
@@ -43,11 +42,11 @@ int32 GameSession::OnRecv(BYTE* buffer, int32 len)
 
 void GameSession::CreatePlayerInfo(int32 type, int32 hp)
 {
-	_player = boost::make_shared<GamePlayerInfo>(reinterpret_pointer_cast<GameSession>(shared_from_this()), _sessionId,
+	_player = std::make_shared<GamePlayerInfo>(std::reinterpret_pointer_cast<GameSession>(shared_from_this()), _sessionId,
 		type, hp);
 }
 
-boost::shared_ptr<GamePlayerInfo> GameSession::GetPlayer()
+std::shared_ptr<GamePlayerInfo> GameSession::GetPlayer()
 {
 	return _player;
 }
@@ -74,7 +73,7 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
 
 		if (GRoomManger->getRoom(0) != nullptr)
 		{
-			GRoomManger->getRoom(0)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
+			GRoomManger->getRoom(0)->EnterSession(std::static_pointer_cast<GameSession>(shared_from_this()));
 		}
 	}
 		break;
@@ -227,7 +226,7 @@ void GameSession::LoadHandler(const boost::asio::mutable_buffer& buffer, PacketH
 			int32 mapCode = 0;
 			WCHAR name[10] = { 0 , };
 			sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode);
-			string nameStr(GameUtils::Utils::WcharToChar(name));
+			String nameStr(GameUtils::Utils::WcharToChar(name));
 
 			CreatePlayerInfo(jobCode, 1000);
 			GetPlayer()->SetName(nameStr);
@@ -298,12 +297,12 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
 			if (ObjectState::SKILL2 == SkillCode)
 			{
 				// 힐, 버프 등.
-				GRoomManger->getRoom(GetRoomId())->BuffSession(static_pointer_cast<GameSession>(shared_from_this()));
+				GRoomManger->getRoom(GetRoomId())->BuffSession(std::static_pointer_cast<GameSession>(shared_from_this()));
 			}
 			else
 			{
 				// 공격
-				GRoomManger->getRoom(GetRoomId())->AttackSession(static_pointer_cast<GameSession>(shared_from_this()));
+				GRoomManger->getRoom(GetRoomId())->AttackSession(std::static_pointer_cast<GameSession>(shared_from_this()));
 
 				protocol::SUnitAttack sendPkt;
 				protocol::Attack* attackPkt = sendPkt.add_attack();
@@ -336,7 +335,7 @@ void GameSession::ChangeRoomHandler(const boost::asio::mutable_buffer& buffer, P
 
 		if (GRoomManger->getRoom(GetRoomId()) != nullptr)
 		{
-			GRoomManger->getRoom(GetRoomId())->OutSession(static_pointer_cast<GameSession>(shared_from_this()));
+			GRoomManger->getRoom(GetRoomId())->OutSession(std::static_pointer_cast<GameSession>(shared_from_this()));
 		}
 
 		if (currentRoomId == 1)
@@ -348,7 +347,7 @@ void GameSession::ChangeRoomHandler(const boost::asio::mutable_buffer& buffer, P
 			// 초기 위치 설정
 			GetPlayer()->SetPosition(-20, 0);
 			GetPlayer()->SetRotate(0);
-			GRoomManger->getRoom(nextRoomId)->EnterSession(static_pointer_cast<GameSession>(shared_from_this()));
+			GRoomManger->getRoom(nextRoomId)->EnterSession(std::static_pointer_cast<GameSession>(shared_from_this()));
 		}
 	}
 }

@@ -23,8 +23,7 @@ public:
 
         if (dataSize < header->size)
         {
-            cout << " header code : " << header->id << " header size : " << header->size << " data size : " << dataSize
-                << endl;
+            std::cout << " header code : " << header->id << " header size : " << header->size << " data size : " << dataSize << std::endl;
             return false;
         }
         return true;
@@ -41,8 +40,7 @@ public:
             offset += static_cast<int32>(pkt.ByteSizeLong());
             return true;
         }
-        else
-            return false;
+        return false;
     }
 
     static SendBufferRef MakePacketHandler(google::protobuf::Message& pkt, uint16 pktId)

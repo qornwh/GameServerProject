@@ -1,5 +1,4 @@
 ﻿#include "IRoom.h"
-
 #include "GameBossInfo.h"
 #include "GameMapInfo.h"
 #include "GamePacketHandler.h"
@@ -39,14 +38,14 @@ void GameRoom::EnterSession(GameSessionRef session)
         {
             if (it != nullptr)
             {
-                GameSessionRef gameSession = static_pointer_cast<GameSession>(it);
+                GameSessionRef gameSession = std::static_pointer_cast<GameSession>(it);
 
                 if (gameSession->GetSessionId() == session->GetSessionId())
                     continue;
 
                 if (gameSession->GetPlayer() != nullptr)
                 {
-                    boost::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
+                    std::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
                     protocol::Player* player = sendPkt.add_player();
                     protocol::Unit* unit = new protocol::Unit;
                     unit->set_name(info->GetName());
@@ -87,7 +86,7 @@ void GameRoom::EnterSession(GameSessionRef session)
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
         session->AsyncWrite(sendBuffer);
     }
-    IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::EnterSession(session);
+    IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>::EnterSession(session);
 }
 
 void GameRoom::OutSession(GameSessionRef session)
@@ -101,7 +100,7 @@ void GameRoom::OutSession(GameSessionRef session)
 
     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_CLOSEPLAYER);
     BroadCastAnother(sendBuffer, session->GetPlayer()->GetCode());
-    IRoom<boost::shared_ptr<GameSession>, boost::shared_ptr<Session>>::OutSession(session);
+    IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>::OutSession(session);
 }
 
 void GameRoom::AttackSession(GameSessionRef session)
@@ -132,7 +131,7 @@ void GameRoom::BuffSession(GameSessionRef session)
 
 void GameRoom::StartGameRoom()
 {
-    cout << "StartGameRoom !!!" << endl;
+    std::cout << "StartGameRoom !!!" << std::endl;
     Tick();
 }
 
@@ -239,17 +238,17 @@ GameMapInfoRef GameRoom::CreateMapInfo(int32 type)
     if (type == 0)
     {
         // 일반 몹 맵
-        _gameMapInfo = boost::make_shared<GameMapInfo>(0, 0, 0, 0);
+        _gameMapInfo = std::make_shared<GameMapInfo>(0, 0, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(0, 0, 0, 0, MapType::MONSTER);
-        _gameRoomQuest = boost::make_shared<GameRoomQuest>(5);
+        _gameRoomQuest = std::make_shared<GameRoomQuest>(5);
         _monsterCount = 10;
     }
     else if (type == 1)
     {
         // 보스 몹 맵
-        _gameMapInfo = boost::make_shared<GameMapInfo>(0, 0, 0, 0);
+        _gameMapInfo = std::make_shared<GameMapInfo>(0, 0, 0, 0);
         _gameMapInfo->CreateMonsterMapInfo(0, 0, 0, 0, MapType::BOS);
-        _gameRoomQuest = boost::make_shared<GameRoomQuest>(1);
+        _gameRoomQuest = std::make_shared<GameRoomQuest>(1);
         _bosMonsterCount = 1;
     }
 
@@ -270,8 +269,8 @@ void GameRoom::InitMonsters()
         {
             int32 startX = genX(rng);
             int32 startZ = genY(rng);
-            GameMosterInfoRef info = boost::make_shared<GameMosterInfo>(
-                static_pointer_cast<GameRoom>(shared_from_this()), i, i % 2, 100, startX, startZ);
+            GameMosterInfoRef info = std::make_shared<GameMosterInfo>(
+                std::static_pointer_cast<GameRoom>(shared_from_this()), i, i % 2, 100, startX, startZ);
             info->SetStartPosition(startX, startZ);
             info->SetObjecteState(ObjectState::MOVE);
 
@@ -282,7 +281,7 @@ void GameRoom::InitMonsters()
     {
         for (int32 i = 0; i < _bosMonsterCount; i++)
         {
-            GameBossInfoRef info = boost::make_shared<GameBossInfo>(static_pointer_cast<GameRoom>(shared_from_this()),
+            GameBossInfoRef info = std::make_shared<GameBossInfo>(std::static_pointer_cast<GameRoom>(shared_from_this()),
                                                                     i, 2, 300, 0, 0);
             info->SetStartPosition(0, 0);
             info->SetObjecteState(ObjectState::MOVE);

@@ -26,7 +26,7 @@ public:
     // 특수 스킬들
     bool ReadyAttackSkill1(int hp);
     bool ReadyAttackSkill2(int hp);
-    void Attack(GamePlayerInfoRef target, vector<int32>& attackList);
+    void Attack(GamePlayerInfoRef target, Vector<int32>& attackList);
 
     bool AttackRect(Vector2 position, GameObjectInfoRef target);
     bool AttackCircle(Vector2 position, GameObjectInfoRef target);
@@ -45,7 +45,7 @@ private:
     // 이전 위치
     Vector2 _prePosition{0, 0};
     boost::random::uniform_int_distribution<> genYaw;
-    vector<function<bool(int)>> _SkillQueue;
+    Vector<std::function<bool(int)>> _SkillQueue;
 };
 
 class GameBossArrow : public GameObjectInfo
@@ -57,7 +57,7 @@ public:
     void Update() override;
 
 private:
-    unordered_map<int32, int32> _players; // 플레이어코드, 상태(0: 안맞음, 1: 처음 충돌시작, 2: 충돌중)
+    Map<int32, int32> _players; // 플레이어코드, 상태(0: 안맞음, 1: 처음 충돌시작, 2: 충돌중)
 
     int32 skillDamage = 20; // 일단 고정 시킨다.
     

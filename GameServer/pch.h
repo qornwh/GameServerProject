@@ -10,16 +10,13 @@
 
 #include "CorePch.h"
 
-using GameSessionRef = boost::shared_ptr<class GameSession>;
-using GameServiceRef = boost::shared_ptr<class GameService>;
-
-using GameMapInfoRef = boost::shared_ptr<class GameMapInfo>;
-using MapInfoRef = boost::shared_ptr<class MapInfo>;
-
-using GameRoomRef = boost::shared_ptr<class GameRoom>;
-using GameObjectInfoRef = boost::shared_ptr<class GameObjectInfo>;
-using GameMosterInfoRef = boost::shared_ptr<class GameMosterInfo>;
-using GameBossInfoRef = boost::shared_ptr<class GameBossInfo>;
-using GamePlayerInfoRef = boost::shared_ptr<class GamePlayerInfo>;
-
-using GameRoomQuestRef = boost::shared_ptr<class GameRoomQuest>;
+using GameSessionRef = std::shared_ptr<class GameSession>;
+using GameServiceRef = std::shared_ptr<class GameService>;
+using GameMapInfoRef = std::shared_ptr<class GameMapInfo>;
+using MapInfoRef = std::shared_ptr<class MapInfo>;
+using GameRoomRef = std::shared_ptr<class GameRoom>;
+using GameObjectInfoRef = std::shared_ptr<class GameObjectInfo>;
+using GameMosterInfoRef = std::shared_ptr<class GameMosterInfo>;
+using GameBossInfoRef = std::shared_ptr<class GameBossInfo>;
+using GamePlayerInfoRef = std::shared_ptr<class GamePlayerInfo>;
+using GameRoomQuestRef = std::shared_ptr<class GameRoomQuest>;

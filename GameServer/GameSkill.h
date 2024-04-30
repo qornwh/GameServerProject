@@ -28,18 +28,6 @@ public:
 class UnitSkill
 {
 public:
-    // enum PlayerSkillType
-    // {
-    //     SWORD = 0,
-    //     ARCHER = 1
-    // };
-    //
-    // enum MonserSkillType
-    // {
-    //     KNIGHT = 0,
-    //     UD_SPEARMAN = 1
-    // };
-
     UnitSkill(int32 type);
     UnitSkill();
 
@@ -48,14 +36,14 @@ public:
     void AddSkill(int32 skillCode, int32 type, bool target, int32 heal);
     void ClearSkill();
 
-    unordered_map<int32, Skill>& GetSkillMap() { return _skillMap; }
+    Map<int32, Skill>& GetSkillMap() { return _skillMap; }
 
 private:
     int32 _type;
-    unordered_map<int32, Skill> _skillMap;
+    Map<int32, Skill> _skillMap;
 };
 
-class GameSkill : public boost::enable_shared_from_this<GameSkill>
+class GameSkill : public std::enable_shared_from_this<GameSkill>
 {
 public:
     GameSkill();
@@ -64,10 +52,10 @@ public:
     void AddMonsterSkill(int32 type);
     void ClearSkill();
 
-    unordered_map<int32, UnitSkill>& GetPlayerSkill() { return _playerSkill; }
-    unordered_map<int32, UnitSkill>& GetMonsterSkill() { return _monsterSkill; }
+    Map<int32, UnitSkill>& GetPlayerSkill() { return _playerSkill; }
+    Map<int32, UnitSkill>& GetMonsterSkill() { return _monsterSkill; }
 
 private:
-    unordered_map<int32, UnitSkill> _playerSkill;
-    unordered_map<int32, UnitSkill> _monsterSkill;
+    Map<int32, UnitSkill> _playerSkill;
+    Map<int32, UnitSkill> _monsterSkill;
 };

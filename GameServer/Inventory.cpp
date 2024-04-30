@@ -1,5 +1,4 @@
 ﻿#include "Inventory.h"
-
 #include "DBConnectPool.h"
 
 Inventory::Inventory()
@@ -14,8 +13,6 @@ void Inventory::Init()
 {
     DBConnRef ref = GDBPool->Pop();
     CrashFunc(ref == nullptr);
-
-    
 }
 
 void Inventory::GetItemInfo()
@@ -27,7 +24,7 @@ bool Inventory::CheckGold(int32 gold)
     return false;
 }
 
-bool Inventory::CheckItem(int32 code, int count)
+bool Inventory::CheckItem(int32 code, int32 count)
 {
     return false;
 }
@@ -36,7 +33,7 @@ void Inventory::UseGold(int32 gold)
 {
 }
 
-void Inventory::UseItem(int32 code, int count)
+void Inventory::UseItem(int32 code, int32 count)
 {
 }
 
