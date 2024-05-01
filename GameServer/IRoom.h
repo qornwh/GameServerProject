@@ -139,14 +139,15 @@ protected:
 
 class GameRoom : public IRoom<GameSessionRef, SessionRef>
 {
-public:
 #ifdef IOCPMODE
+public:
     GameRoom(uint32 id) :
         IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>(id)
     {
         _type = GRoomManger->RoomType::space;
     }
 #else
+public:
     GameRoom(boost::asio::io_context& io_context, uint32 id) :
         IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>(io_context, id),
         _timer(io_context, boost::asio::chrono::milliseconds(100)),
@@ -154,8 +155,13 @@ public:
     {
         _type = GRoomManger->RoomType::space;
     }
+private:
+    boost::asio::steady_timer _timer;
+    boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
+    boost::asio::chrono::milliseconds _timerDelay{100};
 #endif
 
+public:
     ~GameRoom() override
     {
     }
@@ -211,10 +217,4 @@ private:
     GameUtils::TickCounter _tickCounter{10};
     protocol::SUnitStates _unitPkt;
     std::mt19937_64 rng;
-#ifdef IOCPMODE
-#else
-    boost::asio::steady_timer _timer;
-    boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
-    boost::asio::chrono::milliseconds _timerDelay{100};
-#endif
 };
