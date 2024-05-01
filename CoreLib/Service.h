@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "pch.h"
-#include <set>
 #include "ReadWriteLock.h"
 
 struct EndPointUtil
@@ -42,7 +41,6 @@ public:
 
     boost::asio::io_context& GetIoContext() const { return _ioContext; }
     boost::asio::ip::tcp::endpoint& GetEndPoint() { return _ep; }
-    boost::system::error_code& GetErrorCode() { return _ec; }
 
     std::set<SessionRef> GetSession() { return _sessions; }
     void ReleaseSession(SessionRef session);
