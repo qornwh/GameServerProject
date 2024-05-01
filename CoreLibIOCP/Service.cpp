@@ -71,7 +71,7 @@ void Service::Start()
         OverlappedSocket* overlappedPtr = new OverlappedSocket();
         overlappedPtr->Init();
         overlappedPtr->SetType(0); // 초기 설정
-        AcceptRegister(overlappedPtr);
+        RegistAccept(overlappedPtr);
     }
 }
 
@@ -144,7 +144,7 @@ void Service::run()
     }
 }
 
-void Service::AcceptRegister(OverlappedSocket* overlappedPtr)
+void Service::RegistAccept(OverlappedSocket* overlappedPtr)
 {
     SessionRef session = std::make_shared<Session>(_ep);
     session->Init();
@@ -169,7 +169,7 @@ void Service::Accept(OverlappedSocket* overlappedPtr)
 
     if (SocketConfig::SetUpdateAcceptSocket(session->GetSocket(), _serverSocket))
     {
-        AcceptRegister(overlappedPtr);
+        RegistAccept(overlappedPtr);
         return;
     }
 
@@ -177,12 +177,12 @@ void Service::Accept(OverlappedSocket* overlappedPtr)
     int sizeOfSockAddr = sizeof(sockAddress);
     if (SOCKET_ERROR == ::getpeername(session->GetSocket(), OUT reinterpret_cast<SOCKADDR*>(&sockAddress), &sizeOfSockAddr))
     {
-        AcceptRegister(overlappedPtr);
+        RegistAccept(overlappedPtr);
         return;
     }
 
     session->OnConnect();
-    AcceptRegister(overlappedPtr);
+    RegistAccept(overlappedPtr);
 }
 
 void Service::ReleaseSession(SessionRef session)

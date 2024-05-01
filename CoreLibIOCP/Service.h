@@ -29,7 +29,7 @@ public:
     }
 
     void run();
-    void AcceptRegister(class OverlappedSocket* overlappedPtr);
+    virtual void RegistAccept(class OverlappedSocket* overlappedPtr);
     void Accept(class OverlappedSocket* overlappedPtr);
 
     virtual SessionRef CreateSession();
