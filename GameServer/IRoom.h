@@ -1,9 +1,5 @@
 ﻿#pragma once
-#include <queue>
 #include <random>
-#include <set>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
 #include "pch.h"
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
@@ -170,16 +166,11 @@ public:
     void OutSession(GameSessionRef session) override;
     void AttackSession(GameSessionRef session);
     void BuffSession(GameSessionRef session);
-
     void StartGameRoom();
     void Tick() override;
     void Task();
-
     GameMapInfoRef CreateMapInfo(int32 type);
-
     void InitMonsters();
-
-    Map<int32, GameMosterInfoRef> GetMonsterMap() { return _monsterMap; }
 
     GameMosterInfoRef GetMonster(int32 Code)
     {
@@ -187,9 +178,7 @@ public:
             return _monsterMap[Code];
         return nullptr;
     }
-
-    Map<int32, GamePlayerInfoRef> GetPlayerMap() { return _playerMap; }
-
+    
     GamePlayerInfoRef GetPlayer(int32 Code)
     {
         if (_playerMap.find(Code) != _playerMap.end())
@@ -197,13 +186,11 @@ public:
         return nullptr;
     }
 
+    Map<int32, GameMosterInfoRef> GetMonsterMap() { return _monsterMap; }
+    Map<int32, GamePlayerInfoRef> GetPlayerMap() { return _playerMap; }
     GameMapInfoRef GetGameMap() { return _gameMapInfo; }
     GameRoomQuestRef GetQuest() { return _gameRoomQuest; }
-
-    protocol::SUnitStates& GetUnitPacket()
-    {
-        return _unitPkt;
-    }
+    protocol::SUnitStates& GetUnitPacket() { return _unitPkt; }
 
 private:
     int32 _monsterCount = -1;

@@ -260,8 +260,8 @@ void GameRoom::InitMonsters()
     StartGameRoom();
     MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
     Rect& rect = _gameMapInfo->GetMonsterMapInfo()->GetRect();
-    boost::random::uniform_int_distribution<> genX(rect.StartX(), rect.EndX());
-    boost::random::uniform_int_distribution<> genY(rect.StartY(), rect.EndY());
+    std::uniform_int_distribution<> genX(rect.StartX(), rect.EndX());
+    std::uniform_int_distribution<> genY(rect.StartY(), rect.EndY());
 
     if (mapType == MapType::MONSTER)
     {
