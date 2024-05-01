@@ -10,7 +10,7 @@ GameItem::~GameItem()
     _itemMap.clear();
 }
 
-void GameItem::AddItem(int32 code, int32 type, WCHAR* name, int32 maxSize)
+void GameItem::AddItem(int32 code, int32 type, wchar_t* name, int32 maxSize)
 {
     if (_itemMap.find(code) != _itemMap.end())
     {

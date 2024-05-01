@@ -10,8 +10,7 @@
 class GamePacketHandler
 {
 public:
-    static bool CheckPacketHeader(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset,
-                                  int32 len)
+    static bool CheckPacketHeader(PacketHeader* header, int32 offset, int32 len)
     {
         if (header == nullptr)
             return false;
@@ -29,11 +28,9 @@ public:
         return true;
     }
 
-    static bool ParsePacketHandler(google::protobuf::Message& pkt, const boost::asio::mutable_buffer& buffer,
-                                   const int32 dataSize,
-                                   int32& offset)
+    static bool ParsePacketHandler(google::protobuf::Message& pkt, BYTE* buffer, const int32 dataSize, int32& offset)
     {
-        const BYTE* payloadPtr = static_cast<BYTE*>(buffer.data()) + offset;
+        const BYTE* payloadPtr = &buffer[offset];
         const bool parseResult = pkt.ParseFromArray(payloadPtr, dataSize);
         if (parseResult)
         {
@@ -46,9 +43,7 @@ public:
     static SendBufferRef MakePacketHandler(google::protobuf::Message& pkt, uint16 pktId)
     {
         uint16 pktSize = pkt.ByteSizeLong();
-
         SendBufferRef sendBuffer = MakeHeaderPacketHandler(pktId, pktSize);
-
         if (pktSize > 0)
             pkt.SerializeToArray(&sendBuffer->Buffer()[sizeof(PacketHeader)], pktSize);
 
@@ -59,12 +54,10 @@ public:
     static SendBufferRef MakeHeaderPacketHandler(uint16 pktId, uint16 pktSize)
     {
         const uint16 packetSize = pktSize + sizeof(PacketHeader);
-
         SendBufferRef sendBuffer = TLS_SendBufferManager->Open(packetSize);
         PacketHeader* header = reinterpret_cast<PacketHeader*>(sendBuffer->Buffer());
         header->id = pktId;
         header->size = packetSize;
-
         sendBuffer->Close(packetSize);
 
         return sendBuffer;

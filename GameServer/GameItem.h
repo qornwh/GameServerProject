@@ -6,7 +6,7 @@ class GameItem : public std::enable_shared_from_this<GameItem>
 public:
     GameItem();
     ~GameItem();
-    void AddItem(int32 code, int32 type, WCHAR* name, int32 maxSize);
+    void AddItem(int32 code, int32 type, wchar_t* name, int32 maxSize);
     Item& GetItem(int32 code);
     void ClearItem();
 

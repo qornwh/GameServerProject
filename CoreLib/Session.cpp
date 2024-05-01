@@ -2,8 +2,8 @@
 #include "Session.h"
 #include "SendBuffer.h"
 
-Session::Session(boost::asio::io_context& io_context,
-                 const boost::asio::ip::tcp::endpoint& ep) : _ep(ep), _socket(io_context), _recvBuffer(4096)
+Session::Session(boost::asio::io_context& ioContext,
+                 const boost::asio::ip::tcp::endpoint& ep) : _ep(ep), _socket(ioContext), _recvBuffer(4096)
 {
 }
 
@@ -45,11 +45,10 @@ void Session::AsyncRead()
     BYTE* _buffer = _recvBuffer.ReadPos();
     auto ptr = shared_from_this();
     _socket.async_read_some(
-        // 이거 데이터 한계가 있다. => 아니다 size_t 자료형 크기다 ㅅㅂ 와 이거 1시간 날림
         boost::asio::buffer(_buffer, _recvBufferSize),
-        [ptr](const boost::system::error_code ec, const size_t bytes_transferred)
+        [ptr](const boost::system::error_code ec, const size_t bytesTransferred)
         {
-            ptr->OnRead(ec, bytes_transferred);
+            ptr->OnRead(ec, bytesTransferred);
         }
     );
 }
@@ -59,7 +58,6 @@ void Session::OnRead(const boost::system::error_code err, size_t len)
     // 컨텐츠단 구성 필요
     if (!err)
     {
-        // TODO : recv 처리
         if (len == 0)
         {
             Disconnect();
@@ -88,7 +86,6 @@ void Session::OnRead(const boost::system::error_code err, size_t len)
     }
     else
     {
-        // TODO : error 처리
         std::cout << "OnRead error code: " << err.value() << ", msg: " << err.message() << std::endl;
         Disconnect();
     }
@@ -108,13 +105,11 @@ void Session::AsyncWrite()
     boost::asio::async_write(
         _socket,
         buffers,
-        [ptr](const boost::system::error_code& ec, const size_t& bytes_transferred)
+        [ptr](const boost::system::error_code& ec, const size_t& bytesTransferred)
         {
-            ptr->OnWrite(ec, bytes_transferred);
+            ptr->OnWrite(ec, bytesTransferred);
             WriteLockGuard wl(ptr->lock, "write");
             ptr->_sendBuffers.clear();
-            // std::cout << "sendbuffer size !!! : " << bytes_transferred << std::endl;
-            // 세션 shared_ptr관리 필요?? disconnected될때 끊길 확률 있다
         });
 }
 
@@ -123,9 +118,9 @@ void Session::AsyncWrite(void* data, std::size_t len)
     auto ptr = shared_from_this();
     _socket.async_write_some(
         boost::asio::buffer(data, len),
-        [ptr](const boost::system::error_code& ec, const size_t& len)
+        [ptr](const boost::system::error_code& ec, const size_t& bytesTransferred)
         {
-            ptr->OnWrite(ec, len);
+            ptr->OnWrite(ec, bytesTransferred);
         });
 }
 
@@ -144,9 +139,9 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
     boost::asio::async_write(
         _socket,
         buffers,
-        [ptr](const boost::system::error_code& ec, const size_t& len)
+        [ptr](const boost::system::error_code& ec, const size_t& bytesTransferred)
         {
-            ptr->OnWrite(ec, len);
+            ptr->OnWrite(ec, bytesTransferred);
             WriteLockGuard wl(ptr->lock, "write");
             ptr->_sendBuffers.clear();
         });

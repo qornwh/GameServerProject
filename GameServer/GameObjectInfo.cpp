@@ -499,7 +499,6 @@ void GamePlayerInfo::Update()
             GameMosterInfoRef info = room->GetMonster(monsterCode);
             if (info != nullptr && info->GetObjectState() != ObjectState::DIE)
             {
-                std::cout << "Attack Success : " << info->GetCode() << std::endl;
                 info->IdlePosition();
                 if (info->GetHp() > 0)
                 {

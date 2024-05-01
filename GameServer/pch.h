@@ -1,6 +1,10 @@
 ﻿#pragma once
 
+// iocp 사용모드, boost::asio 사용모드 분기처리용 
+// #define IOCPMODE 0
+
 #ifdef _DEBUG
+// #pragma comment(lib, "CoreLibIOCP\\Debug\\CoreLibIOCP.lib")
 #pragma comment(lib, "CoreLib\\Debug\\CoreLib.lib")
 #pragma comment(lib, "EngineLib\\Debug\\GameEngine.lib")
 #else

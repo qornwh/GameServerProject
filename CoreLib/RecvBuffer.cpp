@@ -18,6 +18,7 @@ void RecvBuffer::Clean()
     if (dataSize == 0)
     {
         // 읽기+쓰기 커서가 동일한 위치라면, 둘 다 리셋.
+        ZeroMemory(&_buffer[0], _readPos);
         _readPos = _writePos = 0;
     }
     else

@@ -16,27 +16,17 @@ GameSession::GameSession(boost::asio::io_context& io_context, const boost::asio:
 	_sessionId = GameSessionId;
 }
 
-GameSession::~GameSession()
-{
-}
-
 int32 GameSession::OnRecv(BYTE* buffer, int32 len)
 {
-	boost::asio::mutable_buffer _buffer = boost::asio::buffer(buffer, len);
 	int32 offset = 0;
-
 	while (true)
 	{
 		PacketHeader* header = reinterpret_cast<PacketHeader*>(&buffer[offset]);
-		if (!GamePacketHandler::CheckPacketHeader(_buffer, header, offset, len))
+		if (!GamePacketHandler::CheckPacketHeader(header, offset, len))
 			break;
-
-		// 패킷 메시지
-		HandlePacket(_buffer, offset, header);
-
+		HandlePacket(buffer, offset, header);
 		offset += header->size;
 	}
-
 	return offset;
 }
 
@@ -51,7 +41,7 @@ std::shared_ptr<GamePlayerInfo> GameSession::GetPlayer()
 	return _player;
 }
 
-void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 offset, PacketHeader* header)
+void GameSession::HandlePacket(BYTE* buffer, int32 offset, PacketHeader* header)
 {
 	uint16 id = header->id;
 
@@ -61,7 +51,7 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
 	{
 		LoginHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
 	}
-	break;
+		break;
 	case protocol::MessageCode::CREATECHARACTER:
 	{
 		CreateCharacterHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
@@ -81,28 +71,28 @@ void GameSession::HandlePacket(const boost::asio::mutable_buffer& buffer, int32 
 	{
 		MoveHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
 	}
-	break;
+		break;
 	case protocol::MessageCode::S_CHAT:
 	{
 		ChatHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
 	}
-	break;
+		break;
 	case protocol::MessageCode::S_PLAYERDATA:
 		break;
 	case protocol::MessageCode::C_PLAYERATTACK:
 	{
 		AttackHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
 	}
-	break;
+		break;
 	case protocol::MessageCode::C_MOVEPOTAL:
 	{
 		ChangeRoomHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
 	}
-	break;
+		break;
 	}
 }
 
-void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+void GameSession::MoveHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 {
 	protocol::SMove pkt;
 
@@ -127,7 +117,7 @@ void GameSession::MoveHandler(const boost::asio::mutable_buffer& buffer, PacketH
 	}
 }
 
-void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+void GameSession::LoginHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 {
 	protocol::Login readPkt;
 	if (GamePacketHandler::ParsePacketHandler(readPkt, buffer, header->size - offset, offset))
@@ -177,7 +167,7 @@ void GameSession::LoginHandler(const boost::asio::mutable_buffer& buffer, Packet
 	}
 }
 
-void GameSession::CreateCharacterHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+void GameSession::CreateCharacterHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 {
 	protocol::CreateCharacter pkt;
 	if (GamePacketHandler::ParsePacketHandler(pkt, buffer, header->size - offset, offset))
@@ -211,7 +201,7 @@ void GameSession::CreateCharacterHandler(const boost::asio::mutable_buffer& buff
 	}
 }
 
-void GameSession::LoadHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+void GameSession::LoadHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 {
 	protocol::CLoad readPkt;
 
@@ -263,7 +253,7 @@ void GameSession::LoadHandler(const boost::asio::mutable_buffer& buffer, PacketH
 	}
 }
 
-void GameSession::ChatHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+void GameSession::ChatHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 {
 	protocol::SChat pkt;
 	if (GamePacketHandler::ParsePacketHandler(pkt, buffer, header->size - offset, offset))
@@ -278,7 +268,7 @@ void GameSession::ChatHandler(const boost::asio::mutable_buffer& buffer, PacketH
 	}
 }
 
-void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+void GameSession::AttackHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 {
 	protocol::CPlayerAttack pkt;
 	if (GRoomManger->getRoom(GetRoomId()) != nullptr)
@@ -324,7 +314,7 @@ void GameSession::AttackHandler(const boost::asio::mutable_buffer& buffer, Packe
 	}
 }
 
-void GameSession::ChangeRoomHandler(const boost::asio::mutable_buffer& buffer, PacketHeader* header, int32 offset)
+void GameSession::ChangeRoomHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 {
 	protocol::CMovePotal readPkt;
 

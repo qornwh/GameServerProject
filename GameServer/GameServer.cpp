@@ -42,7 +42,7 @@ int main()
     // sql 인증
     //const wchar_t* connStr = L"Driver={SQL Server};Server=127.0.0.1;Database=BSGameServerDB;Uid=qornwh;Pwd=123456;";
     // windows 인증
-    const WCHAR* connStr = L"Driver={SQL Server};Server=DESKTOP-TFSEO7R\\SQLEXPRESS;Database=BSGameServerDB;Trusted_Connection=Yes;";
+    const wchar_t* connStr = L"Driver={SQL Server};Server=DESKTOP-TFSEO7R\\SQLEXPRESS;Database=BSGameServerDB;Trusted_Connection=Yes;";
     GDBPool->Init(connStr);
 
     auto count = std::thread::hardware_concurrency() * 2;
@@ -69,13 +69,13 @@ int main()
             service->run();
         }
     );
-
+    
     GThreadManager->CreateThread([&service]()
         {
             service->run();
         }
     );
-
+    
     GThreadManager->CreateThread([&service]()
         {
             service->run();

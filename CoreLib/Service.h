@@ -29,27 +29,21 @@ public:
 
     int32 GetCurrentSessionCount() const { return _sessionCount; }
     int32 GetMaxSessionCount() const { return _maxSessionCount; }
-
-    virtual SessionRef CreateSession();
+    std::set<SessionRef> GetSession() { return _sessions; }
+    void run();
     void AddSessionRef(SessionRef session);
-
+    void ReleaseSession(SessionRef session);
     virtual void BroadCast(SendBufferRef sendBuffer);
     virtual void RegistAccept();
     virtual void ReleaseSessionMesssage(SessionRef session) {};
-
-    void run() const;
-
+    virtual SessionRef CreateSession();
     boost::asio::io_context& GetIoContext() const { return _ioContext; }
     boost::asio::ip::tcp::endpoint& GetEndPoint() { return _ep; }
-
-    std::set<SessionRef> GetSession() { return _sessions; }
-    void ReleaseSession(SessionRef session);
 
 private:
     int32 _sessionCount = 0;
     int32 _maxSessionCount = 0;
     boost::asio::ip::tcp::endpoint _ep = {};
-
     boost::asio::io_context& _ioContext;
     boost::system::error_code _ec;
 

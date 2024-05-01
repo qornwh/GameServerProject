@@ -12,10 +12,16 @@ public:
 
     GameRoomManager();
     ~GameRoomManager();
-    GameRoomRef CreateRoom(boost::asio::io_context& io_context, int32 id);
     void EreaseRoom(int32 id);
     GameRoomRef getRoom(int32 id);
     void ClearRoom();
+
+   
+#ifdef IOCPMODE
+    GameRoomRef CreateRoom(int32 id);
+#else
+    GameRoomRef CreateRoom(boost::asio::io_context& io_context, int32 id);
+#endif 
 
 private:
     Atomic<int32> _id{0};

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <queue>
+#include <random>
 #include <set>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int_distribution.hpp>
@@ -13,12 +14,59 @@
 template <typename T, typename = std::enable_if_t<std::is_base_of_v<SessionRef, T>>>
 class IRoom : public std::enable_shared_from_this<IRoom<T, SessionRef>>
 {
+#ifdef IOCPMODE
 public:
-    IRoom(boost::asio::io_context& io_context, uint32 id) : _id(id), _strand(boost::asio::make_strand(io_context))
+    IRoom(uint32 id) : _id(id)
     {
     }
 
-    virtual ~IRoom()
+    virtual void EnterSession(T session)
+    {
+        // boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
+        // {
+        //     std::cout << "Session Add !!!" << std::endl;
+        //     _sessionList.insert(session);
+        // }));
+    }
+
+    virtual void OutSession(T session)
+    {
+        // boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
+        // {
+        //     std::cout << "Session Out !!!" << std::endl;
+        //     _sessionList.erase(session);
+        // }));
+    }
+
+    virtual void BroadCast(SendBufferRef sendBuffer)
+    {
+        // boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer]
+        // {
+        //     for (const auto session : _sessionList)
+        //     {
+        //         session->AsyncWrite(sendBuffer);
+        //     }
+        // }));
+    }
+
+    void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
+    {
+        // boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
+        // {
+        //     for (const auto session : _sessionList)
+        //     {
+        //         // 여기에 쓴다.
+        //         if (session->GetPlayer()->GetCode() != code)
+        //             session->AsyncWrite(sendBuffer);
+        //     }
+        // }));
+    }
+protected:
+    
+#else
+    
+public:
+    IRoom(boost::asio::io_context& io_context, uint32 id) : _id(id), _strand(boost::asio::make_strand(io_context))
     {
     }
 
@@ -53,7 +101,7 @@ public:
         }));
     }
 
-    void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
+    void BroadCastAnother(SendBufferRef sendBuffer, int32 code)
     {
         boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
         {
@@ -65,7 +113,15 @@ public:
             }
         }));
     }
+protected:
+    boost::asio::strand<boost::asio::io_context::executor_type> _strand;
+#endif
 
+public:
+    virtual ~IRoom()
+    {
+    }
+    
     virtual void SetTimer()
     {
     }
@@ -78,24 +134,27 @@ protected:
     Set<T> _sessionList;
     int32 _id;
     uint32 _type;
-
     int32 _frameTime = 50; // 50ms, 20프레임
-
-    boost::asio::strand<boost::asio::io_context::executor_type> _strand;
 };
 
 class GameRoom : public IRoom<GameSessionRef, SessionRef>
 {
 public:
+#ifdef IOCPMODE
+    GameRoom(uint32 id) :
+        IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>(id)
+    {
+        _type = GRoomManger->RoomType::space;
+    }
+#else
     GameRoom(boost::asio::io_context& io_context, uint32 id) :
         IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>(io_context, id),
-        _timer(io_context, _timerDelay),
+        _timer(io_context, boost::asio::chrono::milliseconds(100)),
         _gameStrand(boost::asio::make_strand(io_context))
     {
-        _type = GRoomManger->RoomType::space; // 일단 디폴트
-        // CreateMapInfo(id);
-        // StartGameRoom();
+        _type = GRoomManger->RoomType::space;
     }
+#endif
 
     ~GameRoom() override
     {
@@ -141,21 +200,21 @@ public:
     }
 
 private:
-    boost::asio::steady_timer _timer;
-    boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
-    boost::asio::chrono::milliseconds _timerDelay = boost::asio::chrono::milliseconds(100);
-    boost::random::mt19937_64 rng;
-
     int32 _monsterCount = -1;
     int32 _bosMonsterCount = -1;
     Queue<GamePlayerInfoRef> attackQueue;
-
     GameMapInfoRef _gameMapInfo;
     GameRoomQuestRef _gameRoomQuest;
     Map<int32, GameMosterInfoRef> _monsterMap;
     Map<int32, GamePlayerInfoRef> _playerMap;
     Atomic<bool> _isTask{false};
     GameUtils::TickCounter _tickCounter{10};
-
     protocol::SUnitStates _unitPkt;
+    std::mt19937_64 rng;
+#ifdef IOCPMODE
+#else
+    boost::asio::steady_timer _timer;
+    boost::asio::strand<boost::asio::io_context::executor_type> _gameStrand;
+    boost::asio::chrono::milliseconds _timerDelay{100};
+#endif
 };

@@ -146,27 +146,27 @@ void GameRoom::Tick()
     {
         Task();
 
-        GameRoomQuestInfo& rqInfo = _gameRoomQuest->GetInfo();
-        if (rqInfo.IsKilled())
-        {
-            rqInfo.SetDeadMonster();
-
-            protocol::SRoomQuest pkt;
-            pkt.set_is_clear(rqInfo.IsClear());
-            pkt.set_kill_count(rqInfo.GetKillCount());
-            pkt.set_sum_kill(rqInfo.GetSumCount());
-            SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_ROOMQUEST);
-            BroadCast(sendBuffer);
-
-            MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
-            if (mapType == MapType::BOS)
-            {
-                for (auto session : _sessionList)
-                {
-                    OutSession(session);
-                }
-            }
-        }
+        // GameRoomQuestInfo& rqInfo = _gameRoomQuest->GetInfo();
+        // if (rqInfo.IsKilled())
+        // {
+        //     rqInfo.SetDeadMonster();
+        //
+        //     protocol::SRoomQuest pkt;
+        //     pkt.set_is_clear(rqInfo.IsClear());
+        //     pkt.set_kill_count(rqInfo.GetKillCount());
+        //     pkt.set_sum_kill(rqInfo.GetSumCount());
+        //     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_ROOMQUEST);
+        //     BroadCast(sendBuffer);
+        //     
+        //     MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
+        //     if (mapType == MapType::BOS)
+        //     {
+        //         for (auto session : _sessionList)
+        //         {
+        //             OutSession(session);
+        //         }
+        //     }
+        // }
     }));
 }
 

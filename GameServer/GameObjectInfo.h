@@ -1,13 +1,11 @@
 ﻿#pragma once
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-
+#include <random>
 #include "pch.h"
 #include "GameUtils.h"
 #include "Collider.h"
 #include "GameService.pb.h"
 
-static boost::random::mt19937_64 rng;
+static std::mt19937_64 rng;
 
 enum ObjectState
 {
@@ -134,7 +132,7 @@ private:
     // 이동될 위치
     Vector2 _nextPosition{0, 0};
 
-    boost::random::uniform_int_distribution<> genYaw;
+    std::uniform_int_distribution<> genYaw;
 
 protected:
     GameUtils::TickCounter _YawCounter{4};

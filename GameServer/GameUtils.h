@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include <boost/json.hpp>
 #include "pch.h"
-
-// 일단 잡다한 클래스 함수 여기에 넣어둔다.
+#include <stringapiset.h>
+#include <boost/json.hpp>
 
 namespace GameUtils
 {
@@ -63,20 +62,20 @@ namespace GameUtils
     class Utils
     {
     public:
-        static WCHAR* CharToWchar(const char* cPtr)
+        static wchar_t* CharToWchar(const char* cPtr)
         {
             int isize = strlen(cPtr);
             int nLength = MultiByteToWideChar(CP_ACP, 0, cPtr, isize, NULL, NULL);
 
-            int nLen = sizeof(WCHAR) * (nLength + 1);
-            WCHAR* wPtr = new WCHAR[nLen];
+            int nLen = sizeof(wchar_t) * (nLength + 1);
+            wchar_t* wPtr = new wchar_t[nLen];
             memset(wPtr, 0, nLen);
 
             MultiByteToWideChar(CP_ACP, 0, cPtr, isize, wPtr, nLength);
             return wPtr;
         }
 
-        static char* WcharToChar(const WCHAR* wPtr)
+        static char* WcharToChar(const wchar_t* wPtr)
         {
             int nLength = WideCharToMultiByte(CP_ACP, 0, wPtr, -1, NULL, 0, NULL, NULL);
 

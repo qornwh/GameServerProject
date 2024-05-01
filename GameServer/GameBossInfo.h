@@ -44,7 +44,7 @@ private:
 
     // 이전 위치
     Vector2 _prePosition{0, 0};
-    boost::random::uniform_int_distribution<> genYaw;
+    std::uniform_int_distribution<> genYaw;
     Vector<std::function<bool(int)>> _SkillQueue;
 };
 

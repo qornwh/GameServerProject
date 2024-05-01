@@ -8,7 +8,7 @@ SessionDB::~SessionDB()
 {
 }
 
-bool SessionDB::LoginDB(const WCHAR* id, int& accountCode)
+bool SessionDB::LoginDB(const wchar_t* id, int& accountCode)
 {
 	const wchar_t* query = L"SELECT accountCode, id, pwd FROM Account WHERE id = ?";
 	DBConnRef conn = GDBPool->Pop();
@@ -30,14 +30,14 @@ bool SessionDB::LoginDB(const WCHAR* id, int& accountCode)
 	return result;
 }
 
-bool SessionDB::LoginCheck(const WCHAR* pwd)
+bool SessionDB::LoginCheck(const wchar_t* pwd)
 {
 	if (wcscmp(_pwd, pwd) == 0)
 		return true;
 	return false;
 }
 
-bool SessionDB::CreateAccount(const WCHAR* id, const WCHAR* pwd)
+bool SessionDB::CreateAccount(const wchar_t* id, const wchar_t* pwd)
 {
 	const wchar_t* query = L"INSERT INTO Account (id, pwd) VALUES (?, ?)";
 	DBConnRef conn = GDBPool->Pop();
@@ -55,7 +55,7 @@ bool SessionDB::CreateAccount(const WCHAR* id, const WCHAR* pwd)
 	return result;
 }
 
-bool SessionDB::CreateCharacter(const WCHAR* name, int32 jobCode, int32 accountCode)
+bool SessionDB::CreateCharacter(const wchar_t* name, int32 jobCode, int32 accountCode)
 {
 	const wchar_t* query = L"INSERT INTO Player (name, jobCode, mapCode, accountCode) VALUES (?, ?, 1, ?)";
 	DBConnRef conn = GDBPool->Pop();
@@ -104,7 +104,7 @@ bool SessionDB::PlayerDB(int32 accountCode)
 	return result;
 }
 
-void SessionDB::GetPlayerDBInfo(int32& playerCode, WCHAR* name, int32& jobCode, int32& mapCode)
+void SessionDB::GetPlayerDBInfo(int32& playerCode, wchar_t* name, int32& jobCode, int32& mapCode)
 {
 	playerCode = _playerCode;
 	jobCode = _jobCode;
