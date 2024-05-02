@@ -18,7 +18,7 @@ public:
     ~Service();
 
     void Init();
-    virtual void Start();
+    virtual bool Start();
     void run();
     virtual void RegistAccept(OverlappedSocket* overlappedPtr);
     void Accept(OverlappedSocket* overlappedPtr);
@@ -26,7 +26,7 @@ public:
     void AddSessionRef(SessionRef session);
     void ReleaseSession(SessionRef session);
     virtual void BroadCast(SendBufferRef sendBuffer);
-    virtual void ReleaseSessionMesssage(SessionRef session);
+    virtual void ReleaseSessionMesssage(SessionRef session) {};
 
     HANDLE GetHandler() { return _iocpHd; }
     SOCKET GetServerSocket() { return _serverSocket; }

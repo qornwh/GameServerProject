@@ -63,7 +63,7 @@ void Service::Init()
     ZeroMemory(&_overlapped, sizeof(_overlapped));
 }
 
-void Service::Start()
+bool Service::Start()
 {
     Init();
     for (int i = 0; i < 10; i++)
@@ -73,6 +73,7 @@ void Service::Start()
         overlappedPtr->SetType(0); // 초기 설정
         RegistAccept(overlappedPtr);
     }
+    return true;
 }
 
 SessionRef Service::CreateSession()
