@@ -25,6 +25,7 @@
     <ClCompile Include="DBConnectPool.cpp" />
     <ClCompile Include="DBOrm.cpp" />
     <ClCompile Include="OverlappedSocket.cpp" />
+    <ClCompile Include="OverlappedTask.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -44,6 +45,7 @@
     <ClInclude Include="DBConnectPool.h" />
     <ClInclude Include="DBOrm.h" />
     <ClInclude Include="OverlappedSocket.h" />
+    <ClInclude Include="OverlappedTask.h" />
     <ClInclude Include="PacketHeader.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReadWriteLock.h" />
