@@ -10,13 +10,13 @@ DBConn::~DBConn()
 {
     if (_hdbc != SQL_NULL_HANDLE)
     {
-        ::SQLFreeHandle(SQL_HANDLE_DBC, _hdbc);
+        SQLFreeHandle(SQL_HANDLE_DBC, _hdbc);
         _hdbc = SQL_NULL_HANDLE;
     }
 
     if (_hstmt != SQL_NULL_HANDLE)
     {
-        ::SQLFreeHandle(SQL_HANDLE_DBC, _hstmt);
+        SQLFreeHandle(SQL_HANDLE_DBC, _hstmt);
         _hstmt = SQL_NULL_HANDLE;
     }
 }
@@ -27,7 +27,6 @@ void DBConn::Init(SQLHENV& henv, wchar_t* connStr)
     CrashFunc(ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO);
     ret = SQLDriverConnect(_hdbc, nullptr, reinterpret_cast<SQLWCHAR*>(connStr), SQL_NTS, nullptr, 0, nullptr, SQL_DRIVER_COMPLETE);
     CrashFunc(ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO);
-
     ret = SQLAllocHandle(SQL_HANDLE_STMT, _hdbc, &_hstmt);
     CrashFunc(ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO);
 }
@@ -52,7 +51,6 @@ bool DBConn::Execute()
 
 bool DBConn::Exec(const wchar_t* query)
 {
-    //SQLRETURN ret = SQLExecDirectW(_hstmt, reinterpret_cast<SQLWCHAR*>(query), SQL_NTSL);
     SQLRETURN ret = SQLExecDirect(_hstmt, (SQLWCHAR*)query, SQL_NTSL);
     if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
         return true;

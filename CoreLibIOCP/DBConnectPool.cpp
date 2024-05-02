@@ -14,7 +14,7 @@ DBPool::~DBPool()
     
     if (_henv != SQL_NULL_HANDLE)
     {
-        ::SQLFreeHandle(SQL_HANDLE_ENV, _henv);
+        SQLFreeHandle(SQL_HANDLE_ENV, _henv);
         _henv = SQL_NULL_HANDLE;
     }
 }
@@ -26,8 +26,6 @@ void DBPool::Init(const wchar_t* connStr)
     ret = SQLSetEnvAttr(_henv, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), 0);
     CrashFunc(ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO);
 
-    // _connStr = reinterpret_cast<wchar_t*>(malloc(sizeof(wchar_t) * wcslen(connStr)));
-    // wcscpy_s(_connStr, sizeof(wchar_t) * wcslen(connStr), connStr);
     wcscpy_s(_connStr, connStr);
     WriteLockGuard writeLock(lock, "write");
     for (int i = 0; i < 10; i++)

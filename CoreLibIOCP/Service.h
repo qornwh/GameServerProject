@@ -8,6 +8,8 @@ struct EndPointUtil
     uint16 port;
 };
 
+class OverlappedSocket;
+
 class Service : public std::enable_shared_from_this<Service>
 {
 public:
@@ -16,46 +18,32 @@ public:
     ~Service();
 
     void Init();
-    void Start();
-
-    SOCKET GetServerSocket()
-    {
-        return _serverSocket;
-    }
-
-    HANDLE GetHandler()
-    {
-        return _iocpHd;
-    }
-
+    virtual void Start();
     void run();
-    virtual void RegistAccept(class OverlappedSocket* overlappedPtr);
-    void Accept(class OverlappedSocket* overlappedPtr);
-
+    virtual void RegistAccept(OverlappedSocket* overlappedPtr);
+    void Accept(OverlappedSocket* overlappedPtr);
     virtual SessionRef CreateSession();
     void AddSessionRef(SessionRef session);
     void ReleaseSession(SessionRef session);
-    std::set<SessionRef> GetSession() { return _sessions; }
-
-    EndPointUtil& GetEndPoint() { return _ep; }
-
     virtual void BroadCast(SendBufferRef sendBuffer);
-    virtual void ReleaseSessionMesssage(SessionRef session) {};
+    virtual void ReleaseSessionMesssage(SessionRef session);
 
+    HANDLE GetHandler() { return _iocpHd; }
+    SOCKET GetServerSocket() { return _serverSocket; }
+    std::set<SessionRef> GetSession() { return _sessions; }
+    EndPointUtil& GetEndPoint() { return _ep; }
     int32 GetCurrentSessionCount() const { return _sessionCount; }
     int32 GetMaxSessionCount() const { return _maxSessionCount; }
-
-private:
-    void SocketAcceptRegister(class OverlappedSocket* overlappedPtr);
+    void SocketAcceptRegister(OverlappedSocket* overlappedPtr);
+    void ErrorCode(int32 errorCode);
 
 private:
     int32 _sessionCount = 0;
     int32 _maxSessionCount = 0;
-    EndPointUtil _ep;
-
     HANDLE _iocpHd;
     SOCKET _serverSocket = INVALID_SOCKET;
     OVERLAPPED _overlapped;
+    EndPointUtil _ep;
 
 protected:
     std::set<SessionRef> _sessions;

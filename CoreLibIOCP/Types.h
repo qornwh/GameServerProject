@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <iostream>
+#include <memory>
 #include <atomic>
 #include <queue>
 #include <set>

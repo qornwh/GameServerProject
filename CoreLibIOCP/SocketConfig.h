@@ -1,21 +1,20 @@
 #pragma once
-#include "pch.h"
 
 class SocketConfig
 {
 public:
     static SOCKET CreateSocket();
     static bool SetIoCompletionPort(SOCKET socket, HANDLE iocpHd);
-    static bool SocketBind(SOCKET ServerSocket);
+    static bool SocketBind(SOCKET ServerSocket, int32 port);
     static bool SocketListen(SOCKET ServerSocket);
 
-    // ¼ÒÄÏ ¿¬°á²÷±â¸é ³²Àº ¹öÆÛ Àü´ŞÇÒÁö ¸»Áö
-    static bool SetLinger(SOCKET socket, unsigned int onoff, unsigned int linger);
-    // ¼ÒÄÏ ²¨Áö°í ¹Ù·Î ¿¬°áµÉ¼ö ÀÖµµ·Ï ¼³Á¤
-    static bool SetReuseAddress(SOCKET socket, int opt);
-    // ListenSocketÀÇ Æ¯¼ºÀ» ClientSocket¿¡ ±×´ë·Î ÀÌ¾î¹ŞÀ½.
+    // ì†Œì¼“ ì—°ê²°ëŠê¸°ë©´ ë‚¨ì€ ë²„í¼ ì „ë‹¬í• ì§€ ë§ì§€
+    static bool SetLinger(SOCKET socket, uint16 onoff, uint16 linger);
+    // ì†Œì¼“ êº¼ì§€ê³  ë°”ë¡œ ì—°ê²°ë ìˆ˜ ìˆë„ë¡ ì„¤ì •
+    static bool SetReuseAddress(SOCKET socket, int32 opt);
+    // ListenSocketì˜ íŠ¹ì„±ì„ ClientSocketì— ê·¸ëŒ€ë¡œ ì´ì–´ë°›ìŒ.
     static bool SetUpdateAcceptSocket(SOCKET socket, SOCKET serverSocket);
-    // 
+    // ì†Œì¼“ ì´ˆê¸°í™”, ë¹„ë™ê¸° í•¨ìˆ˜ ë“±ë¡
     static bool Init();
 
     static LPFN_ACCEPTEX lpfnAcceptEx;

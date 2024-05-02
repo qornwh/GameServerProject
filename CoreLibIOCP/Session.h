@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include "pch.h"
 #include "RecvBuffer.h"
-#include "Service.h"
 #include "OverlappedSocket.h"
+#include "Service.h"
 
 class Session : public std::enable_shared_from_this<Session>
 {
@@ -11,19 +10,17 @@ public:
     ~Session();
 
     void Init();
-
     void Connect();
     void AsyncConnect(OverlappedSocket* overlappedPtr);
     void OnConnect();
-
     void AsyncRead();
     void OnRead(int32 len);
-    virtual int OnRecv(BYTE* buffer, int32 len);
-
+    virtual int32 OnRecv(BYTE* buffer, int32 len);
     void AsyncWrite(SendBufferRef sendBuffer);
     void OnWrite(int32 len);
     void Disconnect();
     void AddWriteBuffer(SendBufferRef sendBuffer);
+    static void ErrorCode(int32 errorCode);
 
     void SetService(ServiceRef service) { _serviceRef = service; }
     ServiceRef GetService() { return _serviceRef.lock(); }
@@ -40,7 +37,7 @@ private:
 
     Lock lock;
 	Atomic<bool> _connected{ false };
-    SOCKADDR_IN server_addr;
+    SOCKADDR_IN _serverAddr;
 
     OverlappedSocket _recvOLS;
     OverlappedSocket _sendOLS;

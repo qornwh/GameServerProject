@@ -1,6 +1,8 @@
 #pragma once
 #include "pch.h"
 
+class Session;
+
 class OverlappedSocket
 {
 public:
@@ -15,7 +17,7 @@ public:
 
     void Init();
 
-    void SetType(int type);
+    void SetType(int32 type);
     int GetType()
     {
         return _type;

@@ -6,7 +6,7 @@ void OverlappedSocket::Init()
     ZeroMemory(&_overlapped, sizeof(_overlapped));
 }
 
-void OverlappedSocket::SetType(int type)
+void OverlappedSocket::SetType(int32 type)
 {
     _type = type;
 }

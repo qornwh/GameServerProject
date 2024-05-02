@@ -21,14 +21,12 @@ bool SocketConfig::SetIoCompletionPort(SOCKET socket, HANDLE iocpHd)
     return true;
 }
 
-bool SocketConfig::SocketBind(SOCKET ServerSocket)
+bool SocketConfig::SocketBind(SOCKET ServerSocket, int32 port)
 {
     SOCKADDR_IN socketAddr;
-    int port = 27015;
-    const char* ip_addr = "127.0.0.1";
     socketAddr.sin_family = AF_INET;
     socketAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    socketAddr.sin_port = htons(port);
+    socketAddr.sin_port = htons(static_cast<u_short>(port));
 
     if (bind(ServerSocket, reinterpret_cast<const SOCKADDR*>(&socketAddr), sizeof(socketAddr)) == SOCKET_ERROR)
     {
@@ -46,7 +44,7 @@ bool SocketConfig::SocketListen(SOCKET ServerSocket)
     return true;
 }
 
-bool SocketConfig::SetLinger(SOCKET socket, unsigned int onoff, unsigned int linger)
+bool SocketConfig::SetLinger(SOCKET socket, uint16 onoff, uint16 linger)
 {
     LINGER option;
     option.l_onoff = onoff;
@@ -54,7 +52,7 @@ bool SocketConfig::SetLinger(SOCKET socket, unsigned int onoff, unsigned int lin
     return setsockopt(socket, SOL_SOCKET, SO_LINGER, reinterpret_cast<char*>(&option), sizeof(option));
 }
 
-bool SocketConfig::SetReuseAddress(SOCKET socket, int opt)
+bool SocketConfig::SetReuseAddress(SOCKET socket, int32 opt)
 {
     return setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<char*>(&opt), sizeof(opt));
 }
@@ -79,14 +77,14 @@ bool SocketConfig::Init()
     GUID guid = WSAID_ACCEPTEX;
     if (WSAIoctl(dummySocket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &lpfnAcceptEx, sizeof(lpfnAcceptEx), &dwBytes, nullptr, nullptr) == SOCKET_ERROR)
     {
-        printf("AcceptEx µÓ∑œ Ω«∆– : %u\n", WSAGetLastError());
+        printf("AcceptEx Îì±Î°ù Ïã§Ìå® : %u\n", WSAGetLastError());
         closesocket(dummySocket);
         WSACleanup();
         return false;
     }
     if (WSAIoctl(dummySocket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &lpfnConnectEx, sizeof(lpfnConnectEx), &dwBytes, nullptr, nullptr) == SOCKET_ERROR)
     {
-        printf("ConnectEx µÓ∑œ Ω«∆– : % u\n", WSAGetLastError());
+        printf("ConnectEx Îì±Î°ù Ïã§Ìå® : % u\n", WSAGetLastError());
         closesocket(dummySocket);
         WSACleanup();
         return false;

@@ -9,10 +9,5 @@
 
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "CorePch.h"
-#include <memory>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <mswsock.h>
-#include <assert.h>
 
 //#endif //PCH_H

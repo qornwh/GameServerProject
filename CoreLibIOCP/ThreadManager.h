@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "pch.h"
 #include <thread>
 
 extern thread_local uint32 TLS_ThreadId;

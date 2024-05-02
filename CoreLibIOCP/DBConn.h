@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "pch.h"
 #include <sql.h>
 
 class DBConn : public std::enable_shared_from_this<DBConn>
@@ -25,8 +24,6 @@ public:
 private:
 	SQLHDBC _hdbc = SQL_NULL_HANDLE;
 	SQLHSTMT _hstmt = SQL_NULL_HANDLE;
-
-	// error
 	SQLSMALLINT _length;
 	SQLINTEGER _rec = 0, _native;
 	SQLWCHAR _state[7], _message[256];

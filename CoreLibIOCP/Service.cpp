@@ -1,8 +1,8 @@
-﻿#include "Service.h"
-#include "pch.h"
+﻿#include "pch.h"
+#include "Service.h"
+#include "OverlappedSocket.h"
 #include "SocketConfig.h"
 #include "Session.h"
-#include "OverlappedSocket.h"
 
 Service::Service(uint16 port, int32 maxSessionCount) :
     _maxSessionCount(maxSessionCount)
@@ -22,7 +22,8 @@ Service::~Service()
 }
 
 void Service::Init()
-{// iocp 초기화
+{
+    // iocp 초기화
     _iocpHd = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, (u_long)0, 0);
     if (_iocpHd == INVALID_HANDLE_VALUE)
     {
@@ -46,7 +47,7 @@ void Service::Init()
     }
 
     // bind
-    if (!SocketConfig::SocketBind(_serverSocket))
+    if (!SocketConfig::SocketBind(_serverSocket, _ep.port))
     {
         WSACleanup();
         assert(-1);
@@ -65,7 +66,6 @@ void Service::Init()
 void Service::Start()
 {
     Init();
-
     for (int i = 0; i < 10; i++)
     {
         OverlappedSocket* overlappedPtr = new OverlappedSocket();
@@ -94,7 +94,9 @@ void Service::BroadCast(SendBufferRef sendBuffer)
     for (auto session : _sessions)
     {
         if (session->IsConnected())
+        {
             session->AsyncWrite(sendBuffer);
+        }
     }
 }
 
@@ -110,33 +112,26 @@ void Service::run()
         {
             if (overlappedPtr->GetType() == OverlappedSocket::Type::ACCP)
             {
-                // 서버랑 연결되는 시점
                 Accept(overlappedPtr);
             }
             else if (overlappedPtr->GetType() == OverlappedSocket::Type::READ)
             {
-                // read disconn, 등
                 std::shared_ptr<Session> session = overlappedPtr->GetSession();
-                if (session == nullptr)
-                    assert(-1);
-
+                CrashFunc(session != nullptr);
                 session->OnRead(numOfBytes);
             }
             else if (overlappedPtr->GetType() == OverlappedSocket::Type::SEND)
             {
                 std::shared_ptr<Session> session = overlappedPtr->GetSession();
-                if (session == nullptr)
-                    assert(-1);
-
+                CrashFunc(session != nullptr);
                 session->OnWrite(numOfBytes);
             }
         }
         else
         {
-            int errCode = ::WSAGetLastError();
+            int errCode = WSAGetLastError();
             if (errCode != WAIT_TIMEOUT)
             {
-                // 비정상 종료 체크
                 printf("GetQueuedCompletionStatus 에러 발생 : %d\n", errCode);
                 assert(-1);
             }
@@ -151,21 +146,13 @@ void Service::RegistAccept(OverlappedSocket* overlappedPtr)
     session->SetService(shared_from_this());
     overlappedPtr->SetSession(session);
     SocketAcceptRegister(overlappedPtr);
-    if (!SocketConfig::SetIoCompletionPort(session->GetSocket(), _iocpHd))
-    {
-        assert(-1);
-    }
+    CrashFunc(SocketConfig::SetIoCompletionPort(session->GetSocket(), _iocpHd));
 }
 
 void Service::Accept(OverlappedSocket* overlappedPtr)
 {
-    // 여기서 실제로 클라 연결요청이 들어오면 등록하고
-    // 다시 새로운 클라이언트를 iocp에 등록해두어야된다.
-    // 세션 추가
-
     std::shared_ptr<Session> session = overlappedPtr->GetSession();
-    if (session == nullptr)
-        assert(-1);
+    CrashFunc(session != nullptr);
 
     if (SocketConfig::SetUpdateAcceptSocket(session->GetSocket(), _serverSocket))
     {
@@ -175,7 +162,7 @@ void Service::Accept(OverlappedSocket* overlappedPtr)
 
     SOCKADDR_IN sockAddress;
     int sizeOfSockAddr = sizeof(sockAddress);
-    if (SOCKET_ERROR == ::getpeername(session->GetSocket(), OUT reinterpret_cast<SOCKADDR*>(&sockAddress), &sizeOfSockAddr))
+    if (SOCKET_ERROR == getpeername(session->GetSocket(), OUT reinterpret_cast<SOCKADDR*>(&sockAddress), &sizeOfSockAddr))
     {
         RegistAccept(overlappedPtr);
         return;
@@ -199,7 +186,16 @@ void Service::ReleaseSession(SessionRef session)
 void Service::SocketAcceptRegister(OverlappedSocket* overlappedPtr)
 {
     std::shared_ptr<Session> session = overlappedPtr->GetSession();
-    if (session == nullptr)
-        assert(-1);
+    CrashFunc(session != nullptr);
     session->AsyncConnect(overlappedPtr);
+}
+
+void Service::ErrorCode(int32 errorCode)
+{
+    wchar_t *s = nullptr;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
+                   nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                   reinterpret_cast<LPWSTR>(&s), 0, nullptr);
+    wprintf(L"ErrorCode : %d - ErrorMessage : %s\n", errorCode, s);
+    delete s;
 }

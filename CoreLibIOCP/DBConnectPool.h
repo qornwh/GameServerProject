@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "pch.h"
 #include <sql.h>
 #include "DBConn.h"
 #include "ReadWriteLock.h"
@@ -20,5 +19,4 @@ private:
     SQLHENV _henv = SQL_NULL_HANDLE;
     Queue<DBConnRef> _dbQueue;
     wchar_t _connStr[256];
-    // wchar_t* _connStr = nullptr;
 };

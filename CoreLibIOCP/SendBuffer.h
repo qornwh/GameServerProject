@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "pch.h"
 #include "ReadWriteLock.h"
 
 class SendBuffer

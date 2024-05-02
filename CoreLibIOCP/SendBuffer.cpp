@@ -15,7 +15,6 @@ SendBuffer::~SendBuffer()
 
 void SendBuffer::Close(uint32 writeSize)
 {
-    // crash if _wirtesize + writeSize > _allocSize
     CrashFunc(_writeSize + writeSize <= _allocSize);
     _writeSize = writeSize;
     _sendBufferChunk->Close(writeSize);
@@ -43,7 +42,6 @@ SendBufferRef SendBufferChunk::Open(uint32 size)
 
 void SendBufferChunk::Close(uint32 size)
 {
-    // crash _use == true
     Reset();
 }
 

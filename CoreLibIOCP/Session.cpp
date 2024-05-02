@@ -3,7 +3,7 @@
 #include "SendBuffer.h"
 #include "SocketConfig.h"
 
-Session::Session(EndPointUtil& ep) : _recvBuffer(4096)
+Session::Session(EndPointUtil& ep) : _recvBuffer(4096), _serverAddr(), _recvOLS(), _sendOLS()
 {
     _ep.host = ep.host;
     _ep.port = ep.port;
@@ -16,6 +16,7 @@ Session::~Session()
 void Session::Init()
 {
     _socket = SocketConfig::CreateSocket();
+    CrashFunc(_socket != INVALID_SOCKET);
     _recvOLS.Init();
     _recvOLS.SetType(2);
     _sendOLS.Init();
@@ -33,9 +34,10 @@ void Session::AsyncConnect(OverlappedSocket* overlappedPtr)
     bool bRetVal = SocketConfig::lpfnAcceptEx(_serviceRef.lock()->GetServerSocket(), _socket, _recvBuffer.WritePos(), 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, &dwBytes, reinterpret_cast<LPOVERLAPPED>(overlappedPtr));
     if (!bRetVal)
     {
-        int erroCode = ::WSAGetLastError();
-        if (erroCode != WSA_IO_PENDING)
+        int errorCode = WSAGetLastError();
+        if (errorCode != WSA_IO_PENDING)
         {
+            ErrorCode(errorCode);
             AsyncConnect(overlappedPtr);
         }
     }
@@ -65,10 +67,11 @@ void Session::AsyncRead()
     DWORD flags = 0;
     if (WSARecv(_socket, &wsaBuf, 1, OUT & numOfBytes, OUT & flags, reinterpret_cast<LPWSAOVERLAPPED>(&_recvOLS), nullptr) == SOCKET_ERROR)
     {
-        int errorCode = ::WSAGetLastError();
+        int errorCode = WSAGetLastError();
         if (errorCode != WSA_IO_PENDING)
         {
-            _recvOLS.SetSession(nullptr); // RELEASE_REF
+            ErrorCode(errorCode);
+            _recvOLS.SetSession(nullptr);
         }
     }
 }
@@ -119,18 +122,17 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
     {
         // 현재 WSASend로 iocp queue에 들어가 있고 보내지지 않았을경우 sendBuffer를 대기해둔다.
         AddWriteBuffer(sendBuffer);
+        return;
     }
-    else
-    {
-        _sendOLS.SetSession(shared_from_this());
-    }
-
+    
+    _sendOLS.SetSession(shared_from_this());
     {
         WriteLockGuard wl(lock, "write");
         for (auto buffer : _waitBuffers)
         {
             _sendBuffers.emplace_back(buffer);
         }
+        _sendBuffers.emplace_back(sendBuffer);
         _waitBuffers.clear();
     }
 
@@ -148,11 +150,11 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
 
     if (WSASend(_socket, wsaBufs.data(), wsaBufs.size(), &numOfBytes, flags, reinterpret_cast<LPWSAOVERLAPPED>(&_sendOLS), nullptr) == SOCKET_ERROR)
     {
-        int32 errorCode = ::WSAGetLastError();
+        int32 errorCode = WSAGetLastError();
         if (errorCode != WSA_IO_PENDING)
         {
-            // HandleError(errorCode);
-            _sendOLS.SetSession(nullptr); // RELEASE_REF
+            ErrorCode(errorCode);
+            _sendOLS.SetSession(nullptr);
         }
     }
 }
@@ -180,4 +182,14 @@ void Session::Disconnect()
     {
         _serviceRef.lock()->ReleaseSession(shared_from_this());
     }
+}
+
+void Session::ErrorCode(int32 errorCode)
+{
+    wchar_t *s = nullptr;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, 
+                   nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                   reinterpret_cast<LPWSTR>(&s), 0, nullptr);
+    wprintf(L"ErrorCode : %d - ErrorMessage : %s\n", errorCode, s);
+    delete s;
 }
