@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "SessionDB.h"
 
 SessionDB::SessionDB() : _dbOrm(4)

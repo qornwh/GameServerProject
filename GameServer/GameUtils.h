@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include "pch.h"
-#include <stringapiset.h>
 #include <boost/json.hpp>
+
+#include <WinNls.h>
 
 namespace GameUtils
 {

@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <random>
-#include "pch.h"
 #include "GameUtils.h"
 #include "Collider.h"
 #include "GameService.pb.h"

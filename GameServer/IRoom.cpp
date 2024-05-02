@@ -5,30 +5,31 @@
 #include "GameRoomQuest.h"
 #include "GameService.pb.h"
 
-void GameRoom::EnterSession(GameSessionRef session)
+void GameRoom::EnterSession(SessionRef session)
 {
-    _playerMap.emplace(session->GetPlayer()->GetCode(), session->GetPlayer());
-    session->SetRoomId(_id);
+    GameSessionRef gameSession = std::static_pointer_cast<GameSession>(session);
+    _playerMap.emplace(gameSession->GetPlayer()->GetCode(), gameSession->GetPlayer());
+    gameSession->SetRoomId(_id);
     {
         protocol::SInsertplayer sendPkt;
         protocol::Player* player = new protocol::Player;
         protocol::Unit* unit = new protocol::Unit;
-        unit->set_name(session->GetPlayer()->GetName());
-        unit->set_code(session->GetPlayer()->GetCode());
-        unit->set_type(session->GetPlayer()->GetType());
-        unit->set_hp(session->GetPlayer()->GetHp());
+        unit->set_name(gameSession->GetPlayer()->GetName());
+        unit->set_code(gameSession->GetPlayer()->GetCode());
+        unit->set_type(gameSession->GetPlayer()->GetType());
+        unit->set_hp(gameSession->GetPlayer()->GetHp());
  
         protocol::Position* position = new protocol::Position;
-        position->set_x(session->GetPlayer()->GetPosition().Y);
+        position->set_x(gameSession->GetPlayer()->GetPosition().Y);
         position->set_y(0);
-        position->set_z(session->GetPlayer()->GetPosition().X);
-        position->set_yaw(session->GetPlayer()->GetRotate());
+        position->set_z(gameSession->GetPlayer()->GetPosition().X);
+        position->set_yaw(gameSession->GetPlayer()->GetRotate());
         unit->set_allocated_position(position);
         player->set_allocated_unit(unit);
         sendPkt.set_allocated_player(player);
 
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_INSERTPLAYER);
-        BroadCastAnother(sendBuffer, session->GetPlayer()->GetCode());
+        BroadCastAnother(sendBuffer, gameSession->GetPlayer()->GetCode());
     }
 
     {
@@ -38,14 +39,14 @@ void GameRoom::EnterSession(GameSessionRef session)
         {
             if (it != nullptr)
             {
-                GameSessionRef gameSession = std::static_pointer_cast<GameSession>(it);
+                GameSessionRef anthorGameSession = std::static_pointer_cast<GameSession>(it);
 
-                if (gameSession->GetSessionId() == session->GetSessionId())
+                if (anthorGameSession->GetSessionId() == gameSession->GetSessionId())
                     continue;
 
-                if (gameSession->GetPlayer() != nullptr)
+                if (anthorGameSession->GetPlayer() != nullptr)
                 {
-                    std::shared_ptr<GamePlayerInfo> info = gameSession->GetPlayer();
+                    std::shared_ptr<GamePlayerInfo> info = anthorGameSession->GetPlayer();
                     protocol::Player* player = sendPkt.add_player();
                     protocol::Unit* unit = new protocol::Unit;
                     unit->set_name(info->GetName());
@@ -86,35 +87,46 @@ void GameRoom::EnterSession(GameSessionRef session)
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
         session->AsyncWrite(sendBuffer);
     }
-    IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>::EnterSession(session);
+    IRoom::EnterSession(session);
 }
 
-void GameRoom::OutSession(GameSessionRef session)
+void GameRoom::OutSession(SessionRef session)
 {
-    // playerInfo 레퍼런스카운트 미리 제거해둔다.
-    _playerMap.erase(session->GetPlayer()->GetCode());
-    session->SetRoomId(-1);
+    GameSessionRef gameSession = std::static_pointer_cast<GameSession>(session);
+    _playerMap.erase(gameSession->GetPlayer()->GetCode());
+    gameSession->SetRoomId(-1);
 
     protocol::SClosePlayer sendPkt;
-    sendPkt.set_code(session->GetPlayer()->GetCode());
-
+    sendPkt.set_code(gameSession->GetPlayer()->GetCode());
     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_CLOSEPLAYER);
-    BroadCastAnother(sendBuffer, session->GetPlayer()->GetCode());
-    IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>::OutSession(session);
+    BroadCastAnother(sendBuffer, gameSession->GetPlayer()->GetCode());
+    IRoom::OutSession(session);
 }
 
 void GameRoom::AttackSession(GameSessionRef session)
 {
+#ifdef IOCPMODE
+    // 구현 필요
+    DWORD dwNumberOfBytesTransferred = 0;
+    ULONG_PTR dwCompletionKey = _taskId.fetch_add(1);
+    OverlappedTask* overlapped = new OverlappedTask();
+    overlapped->f = [this, session]
+    {
+        attackQueue.push(session->GetPlayer());
+    };
+    PostQueuedCompletionStatus(_taskIo, dwNumberOfBytesTransferred, dwCompletionKey, reinterpret_cast<LPOVERLAPPED>(overlapped));
+    
+#else
     boost::asio::post(boost::asio::bind_executor(_gameStrand, [this, session]
     {
         attackQueue.push(session->GetPlayer());
     }));
+#endif
 }
 
 void GameRoom::BuffSession(GameSessionRef session)
 {
     GamePlayerInfoRef info = session->GetPlayer();
-
     info->Healing();
 
     protocol::SUnitBuff sendPkt;
@@ -131,46 +143,31 @@ void GameRoom::BuffSession(GameSessionRef session)
 
 void GameRoom::StartGameRoom()
 {
-    std::cout << "StartGameRoom !!!" << std::endl;
+    printf("StartGameRoom !!!\n");
     Tick();
 }
 
 void GameRoom::Tick()
 {
-    // _gameStrand는 Tick 처리용도이다.
-    // 일단 스트랜드는 싱글처리해도 되기때문에 딜레이를 넣어둔다.
-    // 먼저 딜레이후 일정 시간마다 _gameStrand에 Tick 함수를 계속 집어넣어서 시작한다.
+#ifdef IOCPMODE
+    task();
+    std::chrono::system_clock::time_point current = std::chrono::system_clock::now();
+    std::chrono::duration<double> sec = current - _timer;
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(sec).count() >= _timerDelay)
+    {
+        Work();
+        _timer = current;
+    }
+#else
     _timer.expires_at(_timer.expiry() + _timerDelay);
-    _tickCounter.Add();
     _timer.async_wait(boost::asio::bind_executor(_gameStrand, [this](boost::system::error_code error)
     {
-        Task();
-
-        // GameRoomQuestInfo& rqInfo = _gameRoomQuest->GetInfo();
-        // if (rqInfo.IsKilled())
-        // {
-        //     rqInfo.SetDeadMonster();
-        //
-        //     protocol::SRoomQuest pkt;
-        //     pkt.set_is_clear(rqInfo.IsClear());
-        //     pkt.set_kill_count(rqInfo.GetKillCount());
-        //     pkt.set_sum_kill(rqInfo.GetSumCount());
-        //     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::MessageCode::S_ROOMQUEST);
-        //     BroadCast(sendBuffer);
-        //     
-        //     MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
-        //     if (mapType == MapType::BOS)
-        //     {
-        //         for (auto session : _sessionList)
-        //         {
-        //             OutSession(session);
-        //         }
-        //     }
-        // }
+        Work();
     }));
+#endif
 }
 
-void GameRoom::Task()
+void GameRoom::Work()
 {
     _isTask.exchange(true);
     const MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
@@ -202,7 +199,9 @@ void GameRoom::Task()
         _unitPkt.clear_unit_state();
     }
     _isTask.exchange(false);
+#ifndef IOCPMODE
     Tick();
+#endif
 
     // 몬스터 이동.
     // -- 포지션, 방향 좌표 계산 필요
@@ -289,4 +288,36 @@ void GameRoom::InitMonsters()
             _monsterMap[i] = info;
         }
     }
+}
+
+void GameRoom::BroadCastAnother(SendBufferRef sendBuffer, int32 code)
+{
+#ifdef IOCPMODE
+    DWORD dwNumberOfBytesTransferred = 0;
+    ULONG_PTR dwCompletionKey = _taskId.fetch_add(1);
+    OverlappedTask* overlapped = new OverlappedTask();
+    overlapped->f = [this, sendBuffer, code]()
+    {
+        for (auto session : _sessionList)
+        {
+            GameSessionRef gameSession = std::static_pointer_cast<GameSession>(session);
+            if (gameSession->GetPlayer()->GetCode() != code)
+            {
+                gameSession->AsyncWrite(sendBuffer);
+            }
+        }
+    };
+    PostQueuedCompletionStatus(_taskIo, dwNumberOfBytesTransferred, dwCompletionKey, reinterpret_cast<LPOVERLAPPED>(overlapped));
+#else
+    boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
+    {
+        for (const auto session : _sessionList)
+        {
+            GameSessionRef gameSession = std::static_pointer_cast<GameSession>(session);
+            // 여기에 쓴다.
+            if (gameSession->GetPlayer()->GetCode() != code)
+                gameSession->AsyncWrite(sendBuffer);
+        }
+    }));
+#endif
 }

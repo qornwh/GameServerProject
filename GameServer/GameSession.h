@@ -5,8 +5,11 @@
 class GameSession : public Session
 {
 public:
+#ifdef IOCPMODE
+    GameSession(EndPointUtil& ep);
+#else
     GameSession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep);
-
+#endif
     void LoginHandler(BYTE* buffer, PacketHeader* header, int32 offset);
     void CreateCharacterHandler(BYTE* buffer, PacketHeader* header, int32 offset);
     void LoadHandler(BYTE* buffer, PacketHeader* header, int32 offset);
@@ -18,9 +21,7 @@ public:
     int32 OnRecv(BYTE* buffer, int32 len) override;
     void CreatePlayerInfo(int32 type, int32 hp);
     std::shared_ptr<class GamePlayerInfo> GetPlayer();
-
     uint16 GetSessionId() { return _sessionId; }
-
     void SetRoomId(uint32 id) { _roomId = id; }
     int32 GetRoomId() { return _roomId; }
 

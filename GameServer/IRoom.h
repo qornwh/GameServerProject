@@ -1,93 +1,112 @@
 ﻿#pragma once
 #include <random>
-#include "pch.h"
 #include "GameGlobal.h"
 #include "GameRoomManager.h"
 #include "GameSession.h"
 #include "GameObjectInfo.h"
-#include "GameUtils.h"
 
-template <typename T, typename = std::enable_if_t<std::is_base_of_v<SessionRef, T>>>
-class IRoom : public std::enable_shared_from_this<IRoom<T, SessionRef>>
+#ifdef IOCPMODE
+#include "OverlappedTask.h"
+#endif
+
+class IRoom : public std::enable_shared_from_this<IRoom>
 {
 #ifdef IOCPMODE
 public:
     IRoom(uint32 id) : _id(id)
     {
+        _taskIo = CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, (u_long)0, 0);
     }
-
-    virtual void EnterSession(T session)
+    
+    void task()
     {
-        // boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
-        // {
-        //     std::cout << "Session Add !!!" << std::endl;
-        //     _sessionList.insert(session);
-        // }));
-    }
-
-    virtual void OutSession(T session)
-    {
-        // boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
-        // {
-        //     std::cout << "Session Out !!!" << std::endl;
-        //     _sessionList.erase(session);
-        // }));
-    }
-
-    virtual void BroadCast(SendBufferRef sendBuffer)
-    {
-        // boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer]
-        // {
-        //     for (const auto session : _sessionList)
-        //     {
-        //         session->AsyncWrite(sendBuffer);
-        //     }
-        // }));
-    }
-
-    void BroadCastAnother(SendBufferRef sendBuffer, int32 code) const
-    {
-        // boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
-        // {
-        //     for (const auto session : _sessionList)
-        //     {
-        //         // 여기에 쓴다.
-        //         if (session->GetPlayer()->GetCode() != code)
-        //             session->AsyncWrite(sendBuffer);
-        //     }
-        // }));
+        DWORD numOfBytes = 0;
+        ULONG_PTR key = 0;
+        OverlappedTask* overlappedPtr = nullptr;
+        
+        if (GetQueuedCompletionStatus(_taskIo, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(&overlappedPtr), 10))
+        {
+            overlappedPtr->Execute();
+            delete overlappedPtr;
+        }
+        else
+        {
+            int errorCode = WSAGetLastError();
+            if (errorCode != WAIT_TIMEOUT)
+            {
+                printf("Task ErrorCode: %d !!!\n", errorCode);
+                assert(-1);
+            }
+        }
     }
 protected:
-    
+    HANDLE _taskIo;
+    Atomic<uint64> _taskId{0};
 #else
-    
 public:
     IRoom(boost::asio::io_context& io_context, uint32 id) : _id(id), _strand(boost::asio::make_strand(io_context))
     {
     }
-
-    virtual void EnterSession(T session)
+protected:
+    boost::asio::strand<boost::asio::io_context::executor_type> _strand;
+#endif
+    
+public:
+    virtual void EnterSession(SessionRef session)
     {
-        // 스트랜드 lock 처리 필요 x
-        // 1개씩 처리됨
+#ifdef IOCPMODE
+        DWORD dwNumberOfBytesTransferred = 0;
+        ULONG_PTR dwCompletionKey = _taskId.fetch_add(1);
+        OverlappedTask* overlapped = new OverlappedTask();
+        overlapped->f = [this, session]()
+        {
+            std::cout << "Session Add !!!" << std::endl;
+            _sessionList.insert(session);;
+        };
+        PostQueuedCompletionStatus(_taskIo, dwNumberOfBytesTransferred, dwCompletionKey, reinterpret_cast<LPOVERLAPPED>(overlapped));
+#else
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
             std::cout << "Session Add !!!" << std::endl;
             _sessionList.insert(session);
         }));
+#endif
     }
-
-    virtual void OutSession(T session)
+    virtual void OutSession(SessionRef session)
     {
+#ifdef IOCPMODE
+        DWORD dwNumberOfBytesTransferred = 0;
+        ULONG_PTR dwCompletionKey = _taskId.fetch_add(1);
+        OverlappedTask* overlapped = new OverlappedTask();
+        overlapped->f = [this, session]()
+        {
+            std::cout << "Session Out !!!" << std::endl;
+            _sessionList.erase(session);
+        };
+        PostQueuedCompletionStatus(_taskIo, dwNumberOfBytesTransferred, dwCompletionKey, reinterpret_cast<LPOVERLAPPED>(overlapped));
+#else
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
             std::cout << "Session Out !!!" << std::endl;
             _sessionList.erase(session);
         }));
+#endif
     }
-
     virtual void BroadCast(SendBufferRef sendBuffer)
     {
+#ifdef IOCPMODE
+        DWORD dwNumberOfBytesTransferred = 0;
+        ULONG_PTR dwCompletionKey = _taskId.fetch_add(1);
+        OverlappedTask* overlapped = new OverlappedTask();
+        overlapped->f = [this, sendBuffer]()
+        {
+            for (const auto session : _sessionList)
+            {
+                session->AsyncWrite(sendBuffer);
+            }
+        };
+        PostQueuedCompletionStatus(_taskIo, dwNumberOfBytesTransferred, dwCompletionKey, reinterpret_cast<LPOVERLAPPED>(overlapped));
+#else
         boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer]
         {
             for (const auto session : _sessionList)
@@ -95,57 +114,36 @@ public:
                 session->AsyncWrite(sendBuffer);
             }
         }));
-    }
-
-    void BroadCastAnother(SendBufferRef sendBuffer, int32 code)
-    {
-        boost::asio::post(boost::asio::bind_executor(_strand, [this, sendBuffer, code]
-        {
-            for (const auto session : _sessionList)
-            {
-                // 여기에 쓴다.
-                if (session->GetPlayer()->GetCode() != code)
-                    session->AsyncWrite(sendBuffer);
-            }
-        }));
-    }
-protected:
-    boost::asio::strand<boost::asio::io_context::executor_type> _strand;
 #endif
+    }
 
 public:
     virtual ~IRoom()
     {
     }
-    
-    virtual void SetTimer()
-    {
-    }
-
-    virtual void Tick()
-    {
-    }
 
 protected:
-    Set<T> _sessionList;
+    Set<SessionRef> _sessionList;
     int32 _id;
     uint32 _type;
     int32 _frameTime = 50; // 50ms, 20프레임
 };
 
-class GameRoom : public IRoom<GameSessionRef, SessionRef>
+class GameRoom : public IRoom
 {
 #ifdef IOCPMODE
 public:
-    GameRoom(uint32 id) :
-        IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>(id)
+    GameRoom(uint32 id) : IRoom(id)
     {
         _type = GRoomManger->RoomType::space;
+        _timer = std::chrono::system_clock::now();
     }
+private:
+    std::chrono::system_clock::time_point _timer;
+    int32 _timerDelay = 100;
 #else
 public:
-    GameRoom(boost::asio::io_context& io_context, uint32 id) :
-        IRoom<std::shared_ptr<GameSession>, std::shared_ptr<Session>>(io_context, id),
+    GameRoom(boost::asio::io_context& io_context, uint32 id) : IRoom(io_context, id),
         _timer(io_context, boost::asio::chrono::milliseconds(100)),
         _gameStrand(boost::asio::make_strand(io_context))
     {
@@ -162,15 +160,16 @@ public:
     {
     }
 
-    void EnterSession(GameSessionRef session) override;
-    void OutSession(GameSessionRef session) override;
+    void EnterSession(SessionRef session) override;
+    void OutSession(SessionRef session) override;
     void AttackSession(GameSessionRef session);
     void BuffSession(GameSessionRef session);
     void StartGameRoom();
-    void Tick() override;
-    void Task();
+    void Tick();
+    void Work();
     GameMapInfoRef CreateMapInfo(int32 type);
     void InitMonsters();
+    void BroadCastAnother(SendBufferRef sendBuffer, int32 code);
 
     GameMosterInfoRef GetMonster(int32 Code)
     {
@@ -201,7 +200,6 @@ private:
     Map<int32, GameMosterInfoRef> _monsterMap;
     Map<int32, GamePlayerInfoRef> _playerMap;
     Atomic<bool> _isTask{false};
-    GameUtils::TickCounter _tickCounter{10};
     protocol::SUnitStates _unitPkt;
     std::mt19937_64 rng;
 };

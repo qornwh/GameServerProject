@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <boost/json.hpp>
-#include "pch.h"
+
+#ifndef IOCPMODE
+#include <boost/asio.hpp>
+#endif
 
 class GameInit
 {

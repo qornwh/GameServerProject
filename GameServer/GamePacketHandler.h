@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include <boost/asio/buffer.hpp>
 #include <google/protobuf/message.h>
-
 #include "PacketHeader.h"
 #include "SendBuffer.h"
 #include "ThreadManager.h"

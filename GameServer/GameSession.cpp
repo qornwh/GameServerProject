@@ -1,4 +1,5 @@
-﻿#include "GameSession.h"
+﻿#include "pch.h"
+#include "GameSession.h"
 #include "GameGlobal.h"
 #include "GameService.pb.h"
 #include "PacketHeader.h"
@@ -8,6 +9,14 @@
 #include "IRoom.h"
 #include "SessionDB.h"
 
+#ifdef IOCPMODE
+GameSession::GameSession(EndPointUtil& ep) : Session(ep)
+{
+	static Atomic<uint16> GameSessionId(0);
+	GameSessionId.fetch_add(1);
+	_sessionId = GameSessionId;
+}
+#else
 GameSession::GameSession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep) : Session(
 	io_context, ep)
 {
@@ -15,6 +24,7 @@ GameSession::GameSession(boost::asio::io_context& io_context, const boost::asio:
 	GameSessionId.fetch_add(1);
 	_sessionId = GameSessionId;
 }
+#endif
 
 int32 GameSession::OnRecv(BYTE* buffer, int32 len)
 {
