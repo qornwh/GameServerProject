@@ -130,12 +130,48 @@ void Service::run()
         }
         else
         {
-            int errCode = WSAGetLastError();
-            if (errCode != WAIT_TIMEOUT)
+            int errorCode = WSAGetLastError();
+            if (errorCode != WAIT_TIMEOUT)
             {
-                printf("GetQueuedCompletionStatus 에러 발생 : %d\n", errCode);
+                ErrorCode(errorCode);
                 assert(-1);
             }
+        }
+    }
+}
+
+void Service::task()
+{
+    DWORD numOfBytes = 0;
+    ULONG_PTR key = 0;
+    OverlappedSocket* overlappedPtr = nullptr;
+
+    if (GetQueuedCompletionStatus(_iocpHd, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(&overlappedPtr), 10))
+    {
+        if (overlappedPtr->GetType() == OverlappedSocket::Type::ACCP)
+        {
+            Accept(overlappedPtr);
+        }
+        else if (overlappedPtr->GetType() == OverlappedSocket::Type::READ)
+        {
+            std::shared_ptr<Session> session = overlappedPtr->GetSession();
+            CrashFunc(session != nullptr);
+            session->OnRead(numOfBytes);
+        }
+        else if (overlappedPtr->GetType() == OverlappedSocket::Type::SEND)
+        {
+            std::shared_ptr<Session> session = overlappedPtr->GetSession();
+            CrashFunc(session != nullptr);
+            session->OnWrite(numOfBytes);
+        }
+    }
+    else
+    {
+        int errorCode = WSAGetLastError();
+        if (errorCode != WAIT_TIMEOUT)
+        {
+            ErrorCode(errorCode);
+            assert(-1);
         }
     }
 }

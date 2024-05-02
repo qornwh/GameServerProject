@@ -20,6 +20,7 @@ public:
     void Init();
     virtual bool Start();
     void run();
+    void task();
     virtual void RegistAccept(OverlappedSocket* overlappedPtr);
     void Accept(OverlappedSocket* overlappedPtr);
     virtual SessionRef CreateSession();
