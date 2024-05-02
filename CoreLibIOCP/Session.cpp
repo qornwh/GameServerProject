@@ -17,9 +17,7 @@ void Session::Init()
 {
     _socket = SocketConfig::CreateSocket();
     CrashFunc(_socket != INVALID_SOCKET);
-    _recvOLS.Init();
     _recvOLS.SetType(2);
-    _sendOLS.Init();
     _sendOLS.SetType(3);
 }
 
@@ -167,7 +165,9 @@ void Session::AddWriteBuffer(SendBufferRef sendBuffer)
 
 void Session::OnWrite(int32 len)
 {
+    WriteLockGuard wl(lock, "write");
     _sendOLS.SetSession(nullptr);
+    _sendBuffers.clear();
 }
 
 void Session::Disconnect()

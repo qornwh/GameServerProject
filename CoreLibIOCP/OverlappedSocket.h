@@ -15,19 +15,11 @@ public:
         DISC,
     };
 
-    void Init();
-
+    OverlappedSocket();
     void SetType(int32 type);
-    int GetType()
-    {
-        return _type;
-    }
-
     void SetSession(SessionRef session);
-    SessionRef GetSession()
-    {
-        return _session;
-    }
+    int GetType() { return _type; }
+    SessionRef GetSession() { return _session; }
 
 private:
     WSAOVERLAPPED _overlapped;

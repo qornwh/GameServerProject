@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "OverlappedSocket.h"
 
-void OverlappedSocket::Init()
+OverlappedSocket::OverlappedSocket()
 {
     ZeroMemory(&_overlapped, sizeof(_overlapped));
 }

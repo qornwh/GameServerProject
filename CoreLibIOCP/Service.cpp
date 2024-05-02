@@ -69,7 +69,6 @@ bool Service::Start()
     for (int i = 0; i < 10; i++)
     {
         OverlappedSocket* overlappedPtr = new OverlappedSocket();
-        overlappedPtr->Init();
         overlappedPtr->SetType(0); // 초기 설정
         RegistAccept(overlappedPtr);
     }
