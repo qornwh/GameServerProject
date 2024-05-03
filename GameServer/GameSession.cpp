@@ -212,7 +212,7 @@ void GameSession::CreateCharacterHandler(BYTE* buffer, PacketHeader* header, int
 				character->set_code(playerCode);
 				pkt.set_allocated_charater(character);
 
-				std::cout << "캐릭터 생성 name : " << pkt.charater().name().c_str()
+				std::cout << "Create Charater : " << pkt.charater().name().c_str()
 					<< " jobCode : " << jobCode << " playerCode : " << playerCode << std::endl;
 			}
 		}
