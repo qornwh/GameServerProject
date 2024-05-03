@@ -11,7 +11,7 @@ SessionDB::~SessionDB()
 
 bool SessionDB::LoginDB(const wchar_t* id, int& accountCode)
 {
-	const wchar_t* query = L"SELECT accountCode, id, pwd FROM Account WHERE iid = ?";
+	const wchar_t* query = L"SELECT accountCode, id, pwd FROM Account WHERE id = ?";
 	DBConnRef conn = GDBPool->Pop();
 	_dbOrm.SetDBConn(conn);
 	bool result = conn->Prepare(query);
