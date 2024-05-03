@@ -10,6 +10,8 @@ public:
 #else
     GameSession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep);
 #endif
+    ~GameSession();
+    
     void LoginHandler(BYTE* buffer, PacketHeader* header, int32 offset);
     void CreateCharacterHandler(BYTE* buffer, PacketHeader* header, int32 offset);
     void LoadHandler(BYTE* buffer, PacketHeader* header, int32 offset);
@@ -30,4 +32,5 @@ private:
     int32 _roomId = -1;
     uint16 _sessionId = -1;
     int32 _accountCode = -1;
+    String _logId = "";
 };

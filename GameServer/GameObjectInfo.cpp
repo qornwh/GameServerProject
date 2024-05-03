@@ -459,7 +459,7 @@ GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 typ
 
 GamePlayerInfo::~GamePlayerInfo()
 {
-    std::cout << "close player info" << std::endl;
+    std::cout << "Close Player Name: " << _name << std::endl;
 }
 
 void GamePlayerInfo::Update()

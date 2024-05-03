@@ -88,6 +88,7 @@ void GameRoom::EnterSession(SessionRef session)
         session->AsyncWrite(sendBuffer);
     }
     IRoom::EnterSession(session);
+    std::cout << "Enter SessionID: " << gameSession->GetPlayer()->GetCode() << " Name: " << gameSession->GetPlayer()->GetName() << std::endl;
 }
 
 void GameRoom::OutSession(SessionRef session)
@@ -101,6 +102,7 @@ void GameRoom::OutSession(SessionRef session)
     SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_CLOSEPLAYER);
     BroadCastAnother(sendBuffer, gameSession->GetPlayer()->GetCode());
     IRoom::OutSession(session);
+    std::cout << "Out SessionID: " << gameSession->GetPlayer()->GetCode() << " Name: " << gameSession->GetPlayer()->GetName() << std::endl;
 }
 
 void GameRoom::AttackSession(GameSessionRef session)
@@ -143,7 +145,7 @@ void GameRoom::BuffSession(GameSessionRef session)
 
 void GameRoom::StartGameRoom()
 {
-    printf("StartGameRoom !!!\n");
+    std::wcout << "GameRoom number: " << _id << " start" << std::endl;
     Tick();
 }
 
@@ -151,12 +153,17 @@ void GameRoom::Tick()
 {
 #ifdef IOCPMODE
     task();
-    std::chrono::system_clock::time_point current = std::chrono::system_clock::now();
-    std::chrono::duration<double> sec = current - _timer;
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(sec).count() >= _timerDelay)
+    bool curLoopTask = isLoopTask.load();
+    if (!curLoopTask && isLoopTask.compare_exchange_strong(curLoopTask, true))
     {
-        Work();
-        _timer = current;
+        std::chrono::system_clock::time_point current = std::chrono::system_clock::now();
+        std::chrono::duration<double> sec = current - _timer;
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(sec).count() >= _timerDelay)
+        {
+            Work();
+            _timer = current;
+        }
+        isLoopTask.exchange(false);
     }
 #else
     _timer.expires_at(_timer.expiry() + _timerDelay);

@@ -16,6 +16,11 @@ GameSession::GameSession(EndPointUtil& ep) : Session(ep)
 	GameSessionId.fetch_add(1);
 	_sessionId = GameSessionId;
 }
+
+GameSession::~GameSession()
+{
+    std::cout << "LogOut ID: " << _logId << std::endl;
+}
 #else
 GameSession::GameSession(boost::asio::io_context& io_context, const boost::asio::ip::tcp::endpoint& ep) : Session(
 	io_context, ep)
@@ -157,6 +162,8 @@ void GameSession::LoginHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 					char* nameByte = GameUtils::Utils::WcharToChar(name);
 					charater->set_name(nameByte);
 				}
+				_logId.append(readPkt.id());
+				std::cout << "Login Access ID: " << readPkt.id().c_str() << std::endl;
 			}
 			SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
 				logPkt, protocol::MessageCode::LOGINACCESS);
@@ -171,6 +178,7 @@ void GameSession::LoginHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 			SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
 				caPkt, protocol::MessageCode::CREATEACCOUNT);
 			AsyncWrite(sendBuffer);
+			std::cout << "Create Account ID: " << readPkt.id().c_str() << std::endl;
 		}
 		delete wId;
 		delete wPwd;
@@ -203,6 +211,9 @@ void GameSession::CreateCharacterHandler(BYTE* buffer, PacketHeader* header, int
 				character->set_type(jobCode);
 				character->set_code(playerCode);
 				pkt.set_allocated_charater(character);
+
+				std::cout << "캐릭터 생성 name : " << pkt.charater().name().c_str()
+					<< " jobCode : " << jobCode << " playerCode : " << playerCode << std::endl;
 			}
 		}
 		SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(

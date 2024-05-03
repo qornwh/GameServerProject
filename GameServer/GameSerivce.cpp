@@ -73,7 +73,7 @@ SessionRef GameService::CreateSession()
 
 bool GameService::Start()
 {
-    std::cout << "Start Service !!!" << std::endl;
+    std::cout << "Start Service" << std::endl;
 #ifdef IOCPMODE
     Init();
 

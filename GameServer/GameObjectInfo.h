@@ -89,9 +89,7 @@ public:
     ~GameMosterInfo();
 
     void Update() override;
-
     void SetObjecteState(ObjectState state) override;
-
     void SetStartPosition(int32 x, int32 y);
     void GetStartPosition(int32& x, int32& y);
 
@@ -115,7 +113,6 @@ public:
     virtual int32 AddHitCounter(int count = 1);
     virtual int32 AddMoveCounter(int count = 1);
     virtual int32 AddDieCounter(int count = 1);
-
     virtual void IdlePosition();
 
 private:
@@ -165,10 +162,6 @@ public:
 
 private:
     int32 _targetCode;
-    
-    // 혹시나 해서 들고 있는다.
     std::weak_ptr<GameSession> _gameSession;
-
-    //
     bool _attacked = false;
 };

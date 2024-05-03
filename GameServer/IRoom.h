@@ -34,7 +34,7 @@ public:
             int errorCode = WSAGetLastError();
             if (errorCode != WAIT_TIMEOUT)
             {
-                printf("Task ErrorCode: %d !!!\n", errorCode);
+                std::cout << "Task ErrorCode: " << errorCode << std::endl;
                 assert(-1);
             }
         }
@@ -60,14 +60,12 @@ public:
         OverlappedTask* overlapped = new OverlappedTask();
         overlapped->f = [this, session]()
         {
-            std::cout << "Session Add !!!" << std::endl;
-            _sessionList.insert(session);;
+            _sessionList.insert(session);
         };
         PostQueuedCompletionStatus(_taskIo, dwNumberOfBytesTransferred, dwCompletionKey, reinterpret_cast<LPOVERLAPPED>(overlapped));
 #else
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            std::cout << "Session Add !!!" << std::endl;
             _sessionList.insert(session);
         }));
 #endif
@@ -80,14 +78,12 @@ public:
         OverlappedTask* overlapped = new OverlappedTask();
         overlapped->f = [this, session]()
         {
-            std::cout << "Session Out !!!" << std::endl;
             _sessionList.erase(session);
         };
         PostQueuedCompletionStatus(_taskIo, dwNumberOfBytesTransferred, dwCompletionKey, reinterpret_cast<LPOVERLAPPED>(overlapped));
 #else
         boost::asio::post(boost::asio::bind_executor(_strand, [this, session]
         {
-            std::cout << "Session Out !!!" << std::endl;
             _sessionList.erase(session);
         }));
 #endif
@@ -141,6 +137,7 @@ public:
 private:
     std::chrono::system_clock::time_point _timer;
     int32 _timerDelay = 100;
+    Atomic<bool> isLoopTask{false};
 #else
 public:
     GameRoom(boost::asio::io_context& io_context, uint32 id) : IRoom(io_context, id),

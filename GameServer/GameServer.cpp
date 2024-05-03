@@ -33,17 +33,13 @@ long WINAPI ExceptionCallBack(EXCEPTION_POINTERS* exception_pointers)
 int main()
 {
     SetUnhandledExceptionFilter(ExceptionCallBack);
-    std::wcout.imbue(std::locale("kor"));
-    std::wcin.imbue(std::locale("kor"));
+    std::wcout.imbue(std::locale("korean"));
 
     // sql 인증
     //const wchar_t* connStr = L"Driver={SQL Server};Server=127.0.0.1;Database=BSGameServerDB;Uid=qornwh;Pwd=123456;";
     // windows 인증
     const wchar_t* connStr = L"Driver={SQL Server};Server=DESKTOP-TFSEO7R\\SQLEXPRESS;Database=BSGameServerDB;Trusted_Connection=Yes;";
     GDBPool->Init(connStr);
-
-    auto count = std::thread::hardware_concurrency() * 2;
-    std::cout << "core : " << count << std::endl;
     uint16 port = 12128;
     
 #ifdef IOCPMODE
@@ -65,6 +61,15 @@ int main()
         // crash!!
         return 0;
     }
+
+    GThreadManager->CreateThread([&service]()
+    {
+        while (true)
+        {
+            service->task();
+            GRoomManger->getRoom(0)->Tick();
+        }
+    });
 
     // 메인스레드 초기화
     TLS_ThreadId = 0;
