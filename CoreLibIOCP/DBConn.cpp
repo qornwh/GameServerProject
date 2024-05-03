@@ -73,7 +73,7 @@ bool DBConn::Fetch()
 void DBConn::ErrorDisplay(SQLRETURN ret)
 {
     SQLGetDiagRec(SQL_HANDLE_STMT, _hstmt, ++_rec, _state, &_native, _message, sizeof(_message), &_length);
-    printf("%s : %ld : %ld : %s\n", _state, _rec, _native, _message);
+    wprintf(L"Sql Error %d : %s\n", ret, _message);
 }
 
 bool DBConn::BindCol(SQLUSMALLINT colIdx, SQLSMALLINT cType, SQLULEN len, SQLPOINTER value, SQLLEN* index)

@@ -178,7 +178,8 @@ void GameSession::LoginHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 			SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(
 				caPkt, protocol::MessageCode::CREATEACCOUNT);
 			AsyncWrite(sendBuffer);
-			std::cout << "Create Account ID: " << readPkt.id().c_str() << std::endl;
+			if (result)
+				std::cout << "Create Account ID: " << readPkt.id().c_str() << std::endl;
 		}
 		delete wId;
 		delete wPwd;

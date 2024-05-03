@@ -18,12 +18,9 @@ public:
 
         if (dataSize < sizeof(PacketHeader))
             return false;
-
         if (dataSize < header->size)
-        {
-            // cout << " header code : " << header->id << " header size : " << header->size << " data size : " << dataSize << endl;
             return false;
-        }
+        
         return true;
     }
 

@@ -33,7 +33,8 @@ long WINAPI ExceptionCallBack(EXCEPTION_POINTERS* exception_pointers)
 int main()
 {
     SetUnhandledExceptionFilter(ExceptionCallBack);
-    std::wcout.imbue(std::locale("korean"));
+    std::wcout.imbue(std::locale("kor"));
+    std::setlocale(LC_ALL, "Korean");
 
     // sql 인증
     //const wchar_t* connStr = L"Driver={SQL Server};Server=127.0.0.1;Database=BSGameServerDB;Uid=qornwh;Pwd=123456;";

@@ -52,7 +52,6 @@ bool DBConn::Execute()
 
 bool DBConn::Exec(const wchar_t* query)
 {
-    //SQLRETURN ret = SQLExecDirectW(_hstmt, reinterpret_cast<SQLWCHAR*>(query), SQL_NTSL);
     SQLRETURN ret = SQLExecDirect(_hstmt, (SQLWCHAR*)query, SQL_NTSL);
     if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
         return true;
@@ -75,7 +74,7 @@ bool DBConn::Fetch()
 void DBConn::ErrorDisplay(SQLRETURN ret)
 {
     SQLGetDiagRec(SQL_HANDLE_STMT, _hstmt, ++_rec, _state, &_native, _message, sizeof(_message), &_length);
-    printf("%ls : %ld : %ld : %ls\n", _state, _rec, _native, _message);
+    wprintf(L"Sql Error %d : %s\n", ret, _message);
 }
 
 bool DBConn::BindCol(SQLUSMALLINT colIdx, SQLSMALLINT cType, SQLULEN len, SQLPOINTER value, SQLLEN* index)
