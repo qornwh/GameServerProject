@@ -1,4 +1,4 @@
-﻿# boost을 이용한 온라인 게임 서버 구현
+﻿# IOCP, boost을 이용한 온라인 게임 서버 구현
 
 ## 포트폴리오 문서 주소
 - [**포트폴리오**](https://qornwh.github.io/bjsBlog.github.io/posts/OnlineGameportfolio-0/)
