@@ -655,8 +655,8 @@ void GamePlayerInfo::SetAttacked(bool attack)
     _attacked = attack;
 }
 
-void GamePlayerInfo::SetPlayerCode(int32 playerCode)
+void GamePlayerInfo::SetPlayerCode(int32 playerCode, int32 gold)
 {
     _playerCode = playerCode;
-    _inventory.Init(_playerCode);
+    _inventory.Init(_playerCode, gold);
 }

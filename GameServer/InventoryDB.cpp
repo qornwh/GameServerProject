@@ -36,7 +36,6 @@ bool InventoryDB::GetItem(int32& itemCode, int32& type, int32& count)
     }
     else
     {
-        conn->FreeStmt();
         return false;
     }
 }
@@ -60,9 +59,4 @@ void InventoryDB::SaveUpdateDB(int32 playerCode, int32 itemCode, int32 type, int
     _dbOrm.BindParamInt(&itemCode);
     conn->Exec(updateQuery);
     _dbOrm.ParamInit();
-}
-
-void InventoryDB::SetCommit()
-{
-    conn->Fetch();
 }

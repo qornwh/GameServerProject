@@ -11,7 +11,7 @@ Inventory::~Inventory()
 {
 }
 
-void Inventory::Init(int32 playerCode)
+void Inventory::Init(int32 playerCode, int32 gold)
 {
     _playerCode = playerCode;
     InventoryDB inventoryDB;
@@ -25,6 +25,7 @@ void Inventory::Init(int32 playerCode)
     {
         AddItem(itemCode, itemType, itemCount);
     }
+    _gold = gold;
 }
 
 void Inventory::GetItemInfo()
@@ -86,7 +87,6 @@ void Inventory::SaveDB()
             break;
         }
     }
-    inventoryDB.SetCommit();
 
     // 골드 DB기록
     SessionDB sessionDB;

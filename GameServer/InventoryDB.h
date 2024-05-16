@@ -13,8 +13,6 @@ public:
 	void SaveInsertDB(int32 playerCode, int32 itemCode, int32 type, int32 count);
 	void SaveUpdateDB(int32 playerCode, int32 itemCode, int32 type, int32 count);
 
-	void SetCommit();
-
 private:
 	DBOrm _dbOrm;
 	int32 _itemCode = -1;

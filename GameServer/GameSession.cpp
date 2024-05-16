@@ -154,8 +154,9 @@ void GameSession::LoginHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 					int32 playerCode = 0;
 					int32 jobCode = 0;
 					int32 mapCode = 0;
+					int32 gold = 0;
 					WCHAR name[10] = {0 ,};
-					sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode);
+					sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode, gold);
 					protocol::Charater* charater = logPkt.add_charater();
 					charater->set_code(playerCode);
 					charater->set_type(jobCode);
@@ -204,8 +205,9 @@ void GameSession::CreateCharacterHandler(BYTE* buffer, PacketHeader* header, int
 				int32 playerCode = 0;
 				int32 jobCode = 0;
 				int32 mapCode = 0;
+				int32 gold = 0;
 				WCHAR name[10] = { 0 , };
-				sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode);
+				sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode, gold);
 				protocol::Charater* character = new protocol::Charater();
 				char* nameByte = GameUtils::Utils::WcharToChar(name);
 				character->set_name(nameByte);
@@ -235,13 +237,14 @@ void GameSession::LoadHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 		{
 			int32 jobCode = 0;
 			int32 mapCode = 0;
+			int32 gold = 0;
 			WCHAR name[10] = { 0 , };
-			sdb.GetPlayerDBInfo(_playerCode, name, jobCode, mapCode);
+			sdb.GetPlayerDBInfo(_playerCode, name, jobCode, mapCode, gold);
 			String nameStr(GameUtils::Utils::WcharToChar(name));
 
 			CreatePlayerInfo(jobCode, 1000);
 			GetPlayer()->SetName(nameStr);
-			GetPlayer()->SetPlayerCode(_playerCode);
+			GetPlayer()->SetPlayerCode(_playerCode, gold);
 
 			// 나를 확인용 메시지 전달.
 			if (GetService() != nullptr)

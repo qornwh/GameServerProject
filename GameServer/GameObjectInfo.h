@@ -164,7 +164,7 @@ public:
     int32 GetTarget() { return _targetCode; }
     GameSessionRef GetGameSession() { return _gameSession.lock(); }
     void SetAttacked(bool attack);
-    void SetPlayerCode(int32 playerCode);
+    void SetPlayerCode(int32 playerCode, int32 gold);
 
     Inventory& GetInventory() { return _inventory; }
 

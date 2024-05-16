@@ -12,7 +12,7 @@ public:
 	bool CreateAccount(const wchar_t* id, const wchar_t* pwd);
 	bool CreateCharacter(const wchar_t* name, int32 jobCode, int32 accountCode);
 	bool PlayerDB(int32 accountCode);
-	void GetPlayerDBInfo(int32& playerCode, wchar_t* name, int32& jobCode, int32& mapCode);
+	void GetPlayerDBInfo(int32& playerCode, wchar_t* name, int32& jobCode, int32& mapCode, int32& gold);
 	void SavePlayerDB(int32 playerCode, int32 gold);
 
 private:
@@ -26,5 +26,6 @@ private:
 	wchar_t _name[10] = { 0, };
 	int32 _jobCode = -1;
 	int32 _mapCode = -1;
+	int32 _gold = 0;
 };
 

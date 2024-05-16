@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SessionDB.h"
 
-SessionDB::SessionDB() : _dbOrm(4)
+SessionDB::SessionDB() : _dbOrm(5)
 {
 }
 
@@ -77,7 +77,7 @@ bool SessionDB::CreateCharacter(const wchar_t* name, int32 jobCode, int32 accoun
 
 bool SessionDB::PlayerDB(int32 accountCode)
 {
-	const wchar_t* query = L"SELECT playerCode, name, jobCode, mapCode FROM Player WHERE accountCode = ?";
+	const wchar_t* query = L"SELECT playerCode, name, jobCode, mapCode, gold FROM Player WHERE accountCode = ?";
 	DBConnRef conn = GDBPool->Pop();
 
 	_dbOrm.SetDBConn(conn);
@@ -96,6 +96,7 @@ bool SessionDB::PlayerDB(int32 accountCode)
 	_dbOrm.BindColWchar(sizeof(_name), &_name);
 	_dbOrm.BindColInt(sizeof(_jobCode), &_jobCode);
 	_dbOrm.BindColInt(sizeof(_mapCode), &_mapCode);
+	_dbOrm.BindColInt(sizeof(_gold), &_gold);
 
 	result = conn->Fetch();
 	conn->CloseCursor();
@@ -105,11 +106,12 @@ bool SessionDB::PlayerDB(int32 accountCode)
 	return result;
 }
 
-void SessionDB::GetPlayerDBInfo(int32& playerCode, wchar_t* name, int32& jobCode, int32& mapCode)
+void SessionDB::GetPlayerDBInfo(int32& playerCode, wchar_t* name, int32& jobCode, int32& mapCode, int32& gold)
 {
 	playerCode = _playerCode;
 	jobCode = _jobCode;
 	mapCode = _mapCode;
+	gold = _gold;
 	wcscpy_s(name, 10, _name);
 }
 

@@ -9,7 +9,7 @@ public:
     Inventory();
     ~Inventory();
 
-    void Init(int32 playerCode); // 초기 DB 데이터 로드
+    void Init(int32 playerCode, int32 gold); // 초기 DB 데이터 로드
     void GetItemInfo(); // 아이템 정보 들고오기
     bool CheckGold(int32 gold); // 아이템, 머니 있는지 확인
     bool CheckItem(int32 code, int32 count = 1); // 아이템, 머니 있는지 확인
