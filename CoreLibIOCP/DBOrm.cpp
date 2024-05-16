@@ -40,7 +40,7 @@ void DBOrm::BindParamWchar(SQLULEN len, SQLPOINTER value)
 	_paramIdx++;
 }
 
-void DBOrm::GindParamInit()
+void DBOrm::ParamInit()
 {
-	_paramIdx = 0;
+	_paramIdx = 1;
 }

@@ -46,7 +46,7 @@ void InventoryDB::SaveInsertDB(int32 playerCode, int32 itemCode, int32 type, int
     _dbOrm.BindParamInt(&type);
     _dbOrm.BindParamInt(&count);
     conn->Exec(insertQuery);
-    _dbOrm.GindParamInit();
+    _dbOrm.ParamInit();
 }
 
 void InventoryDB::SaveUpdateDB(int32 playerCode, int32 itemCode, int32 type, int32 count)
@@ -56,7 +56,7 @@ void InventoryDB::SaveUpdateDB(int32 playerCode, int32 itemCode, int32 type, int
     _dbOrm.BindParamInt(&playerCode);
     _dbOrm.BindParamInt(&itemCode);
     conn->Exec(updateQuery);
-    _dbOrm.GindParamInit();
+    _dbOrm.ParamInit();
 }
 
 void InventoryDB::SetCommit()

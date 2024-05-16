@@ -13,7 +13,7 @@ public:
 
 	void BindParamInt(SQLPOINTER value);
 	void BindParamWchar(SQLULEN len, SQLPOINTER value);
-	void GindParamInit();
+	void ParamInit();
 
 	void ReSetIdx()
 	{
