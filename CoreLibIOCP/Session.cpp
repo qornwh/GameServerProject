@@ -54,7 +54,7 @@ void Session::AsyncRead()
     {
         return;
     }
-
+#pragma region AsyncRead
     _recvOLS.SetSession(shared_from_this());
 
     WSABUF wsaBuf;
@@ -63,6 +63,7 @@ void Session::AsyncRead()
 
     DWORD numOfBytes = 0;
     DWORD flags = 0;
+#pragma endregion
     if (WSARecv(_socket, &wsaBuf, 1, OUT & numOfBytes, OUT & flags, reinterpret_cast<LPWSAOVERLAPPED>(&_recvOLS), nullptr) == SOCKET_ERROR)
     {
         int errorCode = WSAGetLastError();
@@ -115,7 +116,7 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
     {
         return;
     }
-
+#pragma region AsyncWrite
     if (_sendOLS.GetSession() != nullptr)
     {
         // 현재 WSASend로 iocp queue에 들어가 있고 보내지지 않았을경우 sendBuffer를 대기해둔다.
@@ -145,7 +146,7 @@ void Session::AsyncWrite(SendBufferRef sendBuffer)
 
     DWORD numOfBytes = 0;
     DWORD flags = 0;
-
+#pragma endregion
     if (WSASend(_socket, wsaBufs.data(), wsaBufs.size(), &numOfBytes, flags, reinterpret_cast<LPWSAOVERLAPPED>(&_sendOLS), nullptr) == SOCKET_ERROR)
     {
         int32 errorCode = WSAGetLastError();

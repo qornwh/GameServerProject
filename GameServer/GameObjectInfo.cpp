@@ -1,5 +1,8 @@
 ﻿#include "GameObjectInfo.h"
+
+#include "GameDrop.h"
 #include "GameGlobal.h"
+#include "GameItem.h"
 #include "GameMapInfo.h"
 #include "GameRoomQuest.h"
 #include "GameSession.h"
@@ -73,13 +76,41 @@ void GameObjectInfo::SetObjecteState(ObjectState state)
 GameMosterInfo::GameMosterInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX,
                                int32 startZ):
     GameObjectInfo(gameRoom, uuid, type, hp),
-    _startX(startX), _startY(startZ), _targetCode(-1), genYaw(0, 360)
+    _startX(startX), _startY(startZ), _targetCode(-1), genYaw(0, 360), genWeapon(0, 10), genItem(0, 3)
 {
     _preIncreaseValue = _speed / _MoveCounter.GetTickValue();
 }
 
 GameMosterInfo::~GameMosterInfo()
 {
+}
+
+void GameMosterInfo::Spawn()
+{
+    SetPosition(_startX, _startY);
+    _nextPosition = _collider.GetPosition();
+    _increaseX = 0;
+    _increaseY = 0;
+    _hp = 100;
+    _targetCode = -1;
+    SetObjecteState(ObjectState::IDLE);
+    DropInit();
+}
+
+void GameMosterInfo::DropInit()
+{
+    // genWeapon(rng);
+    // genItem(rng);
+
+    _itemList.clear();
+    for (auto dropItem : GDropItem->GetMonsterDropList(GetType()))
+    {
+        // 코드, 개수
+        _itemList.emplace_back(dropItem.GetItemCode(), dropItem.GetCount());
+    }
+
+    // 골드는 고정
+    _itemList.emplace_back(0, 100);
 }
 
 void GameMosterInfo::Update()
@@ -189,7 +220,6 @@ void GameMosterInfo::Update()
         {
             if (AddHitCounter() == 0)
             {
-                // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
                 protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
                 childPkt->set_is_monster(true);
                 childPkt->set_demage(GetDamage());
@@ -213,7 +243,6 @@ void GameMosterInfo::Update()
     case ObjectState::DIE:
         {
             // 리스폰 필요
-            // 이순간 동시에 여러번 맞기 가능하기 때문에 패킷 데미지 처리 필요!!
             if (AddDieCounter() == 0)
             {
                 protocol::UnitState* childPkt = room->GetUnitPacket().add_unit_state();
@@ -228,6 +257,8 @@ void GameMosterInfo::Update()
                 childPkt->set_allocated_monster(monster);
             }
         }
+        break;
+    default:
         break;
     }
 }
@@ -254,12 +285,6 @@ void GameMosterInfo::SetObjecteState(ObjectState state)
         _AttackCounter.ResetTic();
         break;
     }
-}
-
-void GameMosterInfo::SetStartPosition(int32 x, int32 y)
-{
-    SetPosition(x, y);
-    UpdateYaw();
 }
 
 void GameMosterInfo::GetStartPosition(int32& x, int32& y)
@@ -399,7 +424,7 @@ void GameMosterInfo::UpdateYaw(float theta)
     _increaseY = GameEngine::MathUtils::GetSin(GetRotate());
 }
 
-int32 GameMosterInfo::AddAttackCounter(int count)
+int32 GameMosterInfo::AddAttackCounter(int32 count)
 {
     int32 value = _AttackCounter.Add(count);
     if (value == _AttackCounter.GetTickValue() - 1)
@@ -407,7 +432,7 @@ int32 GameMosterInfo::AddAttackCounter(int count)
     return value;
 }
 
-int32 GameMosterInfo::AddIdleCounter(int count)
+int32 GameMosterInfo::AddIdleCounter(int32 count)
 {
     int32 value = _IdleCounter.Add(count);
     if (value == _IdleCounter.GetTickValue() - 1)
@@ -415,7 +440,7 @@ int32 GameMosterInfo::AddIdleCounter(int count)
     return value;
 }
 
-int32 GameMosterInfo::AddHitCounter(int count)
+int32 GameMosterInfo::AddHitCounter(int32 count)
 {
     int32 value = _HitCounter.Add(count);
     if (value == _HitCounter.GetTickValue() - 1)
@@ -423,23 +448,17 @@ int32 GameMosterInfo::AddHitCounter(int count)
     return value;
 }
 
-int32 GameMosterInfo::AddMoveCounter(int count)
+int32 GameMosterInfo::AddMoveCounter(int32 count)
 {
     return _MoveCounter.Add(count);
 }
 
-int32 GameMosterInfo::AddDieCounter(int count)
+int32 GameMosterInfo::AddDieCounter(int32 count)
 {
     int32 value = _DieCounter.Add(count);
     if (value == _DieCounter.GetTickValue() - 1)
     {
-        SetPosition(_startX, _startY);
-        _nextPosition = _collider.GetPosition();
-        _increaseX = 0;
-        _increaseY = 0;
-        _hp = 100;
-        _targetCode = -1;
-        SetObjecteState(ObjectState::IDLE);
+        Spawn();
     }
     return value;
 }
@@ -459,6 +478,7 @@ GamePlayerInfo::GamePlayerInfo(GameSessionRef gameSession, int32 uuid, int32 typ
 
 GamePlayerInfo::~GamePlayerInfo()
 {
+    _inventory.SaveDB();
     std::cout << "Close Player Name: " << _name << std::endl;
 }
 
@@ -509,6 +529,21 @@ void GamePlayerInfo::Update()
                 {
                     info->SetObjecteState(ObjectState::DIE);
                     room->GetQuest()->GetInfo().AddDeadMonster();
+                    // 아이템 드롭
+                    for (auto item : info->GetDropList())
+                    {
+                        int32 itemCode = item.first;
+                        if (GItem->GetItem(itemCode)->GetCode() > 0)
+                        {
+                            int32 itemCount = item.second;
+                            int32 itemType = GItem->GetItem(itemCode)->GetType();
+                            _inventory.AddItem(itemCode, itemType, itemCount);
+                        }
+                        else if (itemCode == 0)
+                        {
+                            _inventory.AddGold(item.second);
+                        }
+                    }
                 }
             }
         }
@@ -618,4 +653,10 @@ void GamePlayerInfo::SetTarget(int32 uuid)
 void GamePlayerInfo::SetAttacked(bool attack)
 {
     _attacked = attack;
+}
+
+void GamePlayerInfo::SetPlayerCode(int32 playerCode)
+{
+    _playerCode = playerCode;
+    _inventory.Init(_playerCode);
 }

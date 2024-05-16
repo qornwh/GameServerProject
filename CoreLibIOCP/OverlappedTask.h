@@ -1,19 +1,11 @@
 ﻿#pragma once
-
-class OverlappedTask
+// 일감 처리용 OVERLAPPED
+class OverlappedTask 
 {
 public:
     OverlappedTask();
-    template <typename Func, typename... Args>
-    void bindExecute(Func& func, Args&&... args)
-    {
-        f = [func, args...]()
-        {
-            func(args...);
-        };
-    }
     void Execute();
-
+    // 일감 처리용 function pointer
     Function f = nullptr;
 private:
     WSAOVERLAPPED _overlapped;

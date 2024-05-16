@@ -1,5 +1,6 @@
 ﻿#include "Inventory.h"
 #include "DBConnectPool.h"
+#include "InventoryDB.h"
 
 Inventory::Inventory()
 {
@@ -9,10 +10,20 @@ Inventory::~Inventory()
 {
 }
 
-void Inventory::Init()
+void Inventory::Init(int32 playerCode)
 {
-    DBConnRef ref = GDBPool->Pop();
-    CrashFunc(ref == nullptr);
+    _playerCode = playerCode;
+    InventoryDB inventoryDB;
+    inventoryDB.LoadDB(_playerCode);
+    
+    int32 itemCode = 0;
+    int32 itemType = 0;
+    int32 itemCount = 0;
+
+    while(inventoryDB.GetItem(itemCode, itemType, itemCount))
+    {
+        AddItem(itemCode, itemType, itemCount);
+    }
 }
 
 void Inventory::GetItemInfo()
@@ -21,58 +32,76 @@ void Inventory::GetItemInfo()
 
 bool Inventory::CheckGold(int32 gold)
 {
+    if (_gold >= gold)
+        return true;
     return false;
 }
 
 bool Inventory::CheckItem(int32 code, int32 count)
 {
+    if (_inventoryItemList.find(code) != _inventoryItemList.end())
+    {
+        if (_inventoryItemList[code].GetCount() >= count)
+            return true;
+    }
     return false;
 }
 
 void Inventory::UseGold(int32 gold)
 {
+    if (CheckGold(gold))
+        gold += gold;
 }
 
-void Inventory::UseItem(int32 code, int32 count)
+void Inventory::UseItem(int32 itemCode, int32 count)
 {
+    if (CheckItem(itemCode, count))
+    {
+        int curCount = _inventoryItemList[itemCode].GetCount();
+        _inventoryItemList[itemCode].UpdateItem(curCount - count);
+    }
 }
 
 void Inventory::SaveDB()
 {
+    InventoryDB inventoryDB;
+    for (auto inventoryItem : _inventoryItemList)
+    {
+        InventoryItem& item = inventoryItem.second;
+
+        switch (item.GetState())
+        {
+        case InventoryItemState::INSERT:
+            {
+                inventoryDB.SaveInsertDB(_playerCode, item.GetCode(), item.GetType(), item.GetCount());
+            }
+            break;
+        case InventoryItemState::UPDATE:
+            {
+                inventoryDB.SaveUpdateDB(_playerCode, item.GetCode(), item.GetType(), item.GetCount());
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    inventoryDB.SetCommit();
 }
 
-Item::Item(int32 code, int32 type, int32 count) : _code(code), _type(type), _count(count)
+void Inventory::AddGold(int32 gold)
 {
+    _gold += gold;
 }
 
-Item::Item()
+void Inventory::AddItem(int32 itemCode, int32 type, int32 count)
 {
-}
-
-Item::~Item()
-{
-}
-
-void Item::Use(int32 count)
-{
-}
-
-void Item::SetCount(int32 count)
-{
-}
-
-ItemEquipment::ItemEquipment(int32 code, int32 type, int32 attack, int32 count)
-{
-}
-
-ItemEquipment::~ItemEquipment()
-{
-}
-
-void ItemEquipment::Use(int32 count)
-{
-}
-
-void ItemEquipment::SetCount(int32 count)
-{
+    if (_inventoryItemList.find(itemCode) != _inventoryItemList.end())
+    {
+        int curCount = _inventoryItemList[itemCode].GetCount();
+        _inventoryItemList[itemCode].UpdateItem(curCount + count);
+    }
+    else
+    {
+        _inventoryItemList.emplace(itemCode, InventoryItem(itemCode, type, count, InventoryItemState::NONE));
+    }
 }

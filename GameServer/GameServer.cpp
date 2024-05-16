@@ -47,10 +47,6 @@ int main()
     // 게임 정보 초기화
     GameInit gInit;
     GameServiceRef service = std::make_shared<GameService>(port);
-    {
-        ItemDB idb;
-        idb.LoadDB();
-    }
     
     if (!SocketConfig::Init())
     {

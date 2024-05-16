@@ -2,7 +2,7 @@
 #include "GameGlobal.h"
 #include "GameItem.h"
 
-ItemDB::ItemDB() : _dbOrm(4)
+ItemDB::ItemDB() : _dbOrm(5)
 {
 }
 
@@ -12,8 +12,8 @@ ItemDB::~ItemDB()
 
 void ItemDB::LoadDB()
 {
-	const wchar_t* query = L"SELECT itemCode, type, name, maxSize FROM Item";
-	DBConnRef conn = GDBPool->Pop();
+	const wchar_t* query = L"SELECT itemCode, type, name, maxSize, attack FROM Item";
+	conn = GDBPool->Pop();
 	_dbOrm.SetDBConn(conn);
 	conn->Exec(query);
 
@@ -21,12 +21,23 @@ void ItemDB::LoadDB()
 	_dbOrm.BindColInt(sizeof(_type), &_type);
 	_dbOrm.BindColWchar(sizeof(_name), &_name);
 	_dbOrm.BindColInt(sizeof(_maxSize), &_maxSize);
+	_dbOrm.BindColInt(sizeof(_attack), &_attack);
+}
 
-	while (conn->Fetch())
+bool ItemDB::GetItem(int32& itemCode, int32& type, wchar_t* name, int32& maxSize, int32& attack)
+{
+	if(conn->Fetch())
 	{
-		GItem->AddItem(_itemCode, _type, _name, _maxSize);
+		itemCode = _itemCode;
+		type = _type;
+		name = &_name[0];
+		maxSize = _maxSize;
+		attack = _attack;
+		return true;
 	}
-	conn->FreeStmt();
-
-	//GDBPool->Push(conn);
+	else
+	{
+		conn->FreeStmt();
+		return false;
+	}
 }

@@ -2,7 +2,9 @@
 #include <random>
 #include "GameUtils.h"
 #include "Collider.h"
+#include "DropItem.h"
 #include "GameService.pb.h"
+#include "Inventory.h"
 
 static std::mt19937_64 rng;
 
@@ -88,9 +90,10 @@ public:
     GameMosterInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp, int32 startX, int32 startZ);
     ~GameMosterInfo();
 
+    void Spawn();
+    void DropInit();
     void Update() override;
     void SetObjecteState(ObjectState state) override;
-    void SetStartPosition(int32 x, int32 y);
     void GetStartPosition(int32& x, int32& y);
 
     void SetTarget(int32 uuid);
@@ -107,12 +110,13 @@ public:
     Vector2& GetNextPosition() { return _nextPosition; }
     float GetRangeX() { return _increaseX; }
     float GetRangeZ() { return _increaseY; }
-
-    virtual int32 AddAttackCounter(int count = 1);
-    virtual int32 AddIdleCounter(int count = 1);
-    virtual int32 AddHitCounter(int count = 1);
-    virtual int32 AddMoveCounter(int count = 1);
-    virtual int32 AddDieCounter(int count = 1);
+    Vector<std::pair<int32, int32>>& GetDropList() { return _itemList; }
+    
+    virtual int32 AddAttackCounter(int32 count = 1);
+    virtual int32 AddIdleCounter(int32 count = 1);
+    virtual int32 AddHitCounter(int32 count = 1);
+    virtual int32 AddMoveCounter(int32 count = 1);
+    virtual int32 AddDieCounter(int32 count = 1);
     virtual void IdlePosition();
 
 private:
@@ -130,6 +134,9 @@ private:
 
     std::uniform_int_distribution<> genYaw;
 
+    std::uniform_int_distribution<> genWeapon;
+    std::uniform_int_distribution<> genItem;
+
 protected:
     GameUtils::TickCounter _YawCounter{4};
     GameUtils::TickCounter _MoveCounter{10};
@@ -138,6 +145,8 @@ protected:
     GameUtils::TickCounter _DieCounter{30};
     GameUtils::TickCounter _AttackCounter{10};
     GameUtils::TickCounter _ReadyAttackCounter{10};
+
+    Vector<std::pair<int32, int32>> _itemList;
 };
 
 class GamePlayerInfo : public GameObjectInfo
@@ -147,21 +156,22 @@ public:
     ~GamePlayerInfo();
 
     void Update() override;
-
     void Attack(GameObjectInfoRef target, Vector<int32>& attackList);
     void Healing();
     bool AttackRect(Vector2 position, GameObjectInfoRef target);
     bool AttackCircle(Vector2 position, GameObjectInfoRef target);
-
     void SetTarget(int32 uuid);
     int32 GetTarget() { return _targetCode; }
-
     GameSessionRef GetGameSession() { return _gameSession.lock(); }
-
     void SetAttacked(bool attack);
+    void SetPlayerCode(int32 playerCode);
+
+    Inventory& GetInventory() { return _inventory; }
 
 private:
     int32 _targetCode;
+    int32 _playerCode;
     std::weak_ptr<GameSession> _gameSession;
     bool _attacked = false;
+    Inventory _inventory;
 };

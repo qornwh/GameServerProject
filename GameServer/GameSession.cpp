@@ -233,15 +233,15 @@ void GameSession::LoadHandler(BYTE* buffer, PacketHeader* header, int32 offset)
 		bool result = sdb.PlayerDB(_accountCode);
 		if (result)
 		{
-			int32 playerCode = 0;
 			int32 jobCode = 0;
 			int32 mapCode = 0;
 			WCHAR name[10] = { 0 , };
-			sdb.GetPlayerDBInfo(playerCode, name, jobCode, mapCode);
+			sdb.GetPlayerDBInfo(_playerCode, name, jobCode, mapCode);
 			String nameStr(GameUtils::Utils::WcharToChar(name));
 
 			CreatePlayerInfo(jobCode, 1000);
 			GetPlayer()->SetName(nameStr);
+			GetPlayer()->SetPlayerCode(_playerCode);
 
 			// 나를 확인용 메시지 전달.
 			if (GetService() != nullptr)

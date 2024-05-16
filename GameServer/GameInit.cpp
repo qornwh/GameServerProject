@@ -5,6 +5,11 @@
 #include "IRoom.h"
 #include <fstream>
 
+#include "DropItemDB.h"
+#include "GameDrop.h"
+#include "GameItem.h"
+#include "ItemDB.h"
+
 #ifdef IOCPMODE
 GameInit::GameInit()
 {
@@ -27,6 +32,10 @@ GameInit::GameInit()
 	boost::json::value monsterJson = GameUtils::JsonParser::Parser("monsters", unitJson);
 	boost::json::value mapJson = GameUtils::JsonParser::Parser("maps", json);
 
+	// DB item, dropItem 설정
+	SetItem();
+	SetDropItem();
+	
 	// skill 설정
 	SetSkill(playerJson, false);
 	SetSkill(monsterJson, true);
@@ -196,5 +205,38 @@ void GameInit::SetSkill(boost::json::value& unitJson, bool isMonster)
 					GSkill->GetMonsterSkill()[type].AddSkill(skillCode, isRectType, target, heal);
 			}
 		}
+	}
+}
+
+void GameInit::SetItem()
+{
+	ItemDB itemDB;
+
+	itemDB.LoadDB();
+
+	int32 itemCode = 0;
+	int32 itemType = 0;
+	wchar_t name[20];
+	int32 maxSize = 1;
+	int32 attack = 0;
+
+	while(itemDB.GetItem(itemCode, itemType, name, maxSize, attack))
+	{
+		GItem->AddItem(itemCode, itemType, maxSize, attack);
+	}
+}
+
+void GameInit::SetDropItem()
+{
+	DropItemDB dropItemDB;
+
+	dropItemDB.DropDB();
+
+	int32 itemCode = 0;
+	int32 monsterCode = 0;
+
+	while(dropItemDB.GetDropItem(itemCode, monsterCode))
+	{
+		GDropItem->AddDropItem(monsterCode, itemCode, 1);
 	}
 }

@@ -32,5 +32,6 @@ private:
     int32 _roomId = -1;
     uint16 _sessionId = -1;
     int32 _accountCode = -1;
+    int32 _playerCode = -1;
     String _logId = "";
 };

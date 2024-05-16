@@ -2,7 +2,7 @@
 #include "DBOrm.h"
 #include <sqlext.h>
 
-DBOrm::DBOrm(int size)
+DBOrm::DBOrm(int32 size)
 {
 	_sqlLenList.resize(size);
 }
@@ -38,4 +38,9 @@ void DBOrm::BindParamWchar(SQLULEN len, SQLPOINTER value)
 {
 	_conn->BindParameter(_paramIdx, SQL_PARAM_INPUT, SQL_C_WCHAR, SQL_WVARCHAR, len, 0, value, 0, nullptr);
 	_paramIdx++;
+}
+
+void DBOrm::GindParamInit()
+{
+	_paramIdx = 0;
 }

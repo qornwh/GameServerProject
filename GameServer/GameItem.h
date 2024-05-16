@@ -1,16 +1,16 @@
 #pragma once
-#include "Inventory.h"
+#include "Item.h"
 
 class GameItem : public std::enable_shared_from_this<GameItem>
 {
 public:
     GameItem();
     ~GameItem();
-    void AddItem(int32 code, int32 type, wchar_t* name, int32 maxSize);
-    Item& GetItem(int32 code);
+    void AddItem(int32 code, int32 type, int32 maxSize, int32 attack);
+    ItemRef GetItem(int32 code);
     void ClearItem();
 
 private:
-    Map<int, Item> _itemMap;
+    Map<int32, ItemRef> _itemMap;
 };
 

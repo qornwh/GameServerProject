@@ -2,7 +2,7 @@
 
 GameItem::GameItem()
 {
-    _itemMap.emplace(-1, Item(-1, -1, -1));
+    _itemMap.emplace(-1, std::make_shared<Item>(-1, -1, -1, -1));
 }
 
 GameItem::~GameItem()
@@ -10,16 +10,16 @@ GameItem::~GameItem()
     _itemMap.clear();
 }
 
-void GameItem::AddItem(int32 code, int32 type, wchar_t* name, int32 maxSize)
+void GameItem::AddItem(int32 code, int32 type, int32 maxSize, int32 attack)
 {
     if (_itemMap.find(code) != _itemMap.end())
     {
         return;
     }
-    _itemMap.emplace(code, Item(code, type, maxSize));
+    _itemMap.emplace(code, std::make_shared<Item>(code, type, maxSize, attack));
 }
 
-Item& GameItem::GetItem(int32 code)
+ItemRef GameItem::GetItem(int32 code)
 {
     if (_itemMap.find(code) == _itemMap.end())
     {

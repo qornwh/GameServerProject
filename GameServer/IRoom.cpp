@@ -176,10 +176,11 @@ void GameRoom::Tick()
 
 void GameRoom::Work()
 {
+#pragma region Work
     _isTask.exchange(true);
     const MapType mapType = _gameMapInfo->GetMonsterMapInfo()->GetMapType();
     const MapInfoRef monsterMap = _gameMapInfo->GetMonsterMapInfo();
-
+#pragma endregion
     while (!attackQueue.empty())
     {
         GamePlayerInfoRef attackInfo = attackQueue.front();
@@ -201,7 +202,9 @@ void GameRoom::Work()
 
     if (_unitPkt.unit_state_size() > 0)
     {
-        SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(_unitPkt, protocol::MessageCode::S_UNITSTATES);
+        SendBufferRef sendBuffer = 
+            GamePacketHandler::MakePacketHandler(_unitPkt, 
+                protocol::MessageCode::S_UNITSTATES);
         BroadCast(sendBuffer);
         _unitPkt.clear_unit_state();
     }
@@ -277,8 +280,7 @@ void GameRoom::InitMonsters()
             int32 startZ = genY(rng);
             GameMosterInfoRef info = std::make_shared<GameMosterInfo>(
                 std::static_pointer_cast<GameRoom>(shared_from_this()), i, i % 2, 100, startX, startZ);
-            info->SetStartPosition(startX, startZ);
-            info->SetObjecteState(ObjectState::MOVE);
+            info->Spawn();
 
             _monsterMap[i] = info;
         }
@@ -289,8 +291,7 @@ void GameRoom::InitMonsters()
         {
             GameBossInfoRef info = std::make_shared<GameBossInfo>(std::static_pointer_cast<GameRoom>(shared_from_this()),
                                                                     i, 2, 300, 0, 0);
-            info->SetStartPosition(0, 0);
-            info->SetObjecteState(ObjectState::MOVE);
+            info->Spawn();
 
             _monsterMap[i] = info;
         }

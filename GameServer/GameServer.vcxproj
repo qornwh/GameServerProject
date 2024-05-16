@@ -174,7 +174,10 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DropItemDB.h" />
     <ClInclude Include="GameBossInfo.h" />
+    <ClInclude Include="GameDrop.h" />
+    <ClInclude Include="DropItem.h" />
     <ClInclude Include="GameGlobal.h" />
     <ClInclude Include="GameInit.h" />
     <ClInclude Include="GameItem.h" />
@@ -185,8 +188,11 @@
     <ClInclude Include="GameSkill.h" />
     <ClInclude Include="GameUtils.h" />
     <ClInclude Include="Inventory.h" />
+    <ClInclude Include="InventoryDB.h" />
+    <ClInclude Include="InventoryItem.h" />
     <ClInclude Include="IRoom.h" />
     <ClInclude Include="GamePacketHandler.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="ItemDB.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GameSerivce.h" />
@@ -194,7 +200,10 @@
     <ClInclude Include="SessionDB.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DropItemDB.cpp" />
     <ClCompile Include="GameBossInfo.cpp" />
+    <ClCompile Include="GameDrop.cpp" />
+    <ClCompile Include="DropItem.cpp" />
     <ClCompile Include="GameGlobal.cpp" />
     <ClCompile Include="GameInit.cpp" />
     <ClCompile Include="GameItem.cpp" />
@@ -206,7 +215,10 @@
     <ClCompile Include="GameSkill.cpp" />
     <ClCompile Include="GameUtils.cpp" />
     <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="InventoryDB.cpp" />
+    <ClCompile Include="InventoryItem.cpp" />
     <ClCompile Include="IRoom.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemDB.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="GameSerivce.cpp" />

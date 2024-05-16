@@ -4,7 +4,7 @@
 class DBOrm
 {
 public:
-	DBOrm(int size);
+	DBOrm(int32 size);
 	~DBOrm();
 
 	void SetDBConn(DBConnRef conn);
@@ -13,6 +13,7 @@ public:
 
 	void BindParamInt(SQLPOINTER value);
 	void BindParamWchar(SQLULEN len, SQLPOINTER value);
+	void GindParamInit();
 
 	void ReSetIdx()
 	{
@@ -22,7 +23,7 @@ public:
 
 private:
 	DBConnRef _conn;
-	int _colIdx = 1;
-	int _paramIdx = 1;
+	int32 _colIdx = 1;
+	int32 _paramIdx = 1;
 	Vector<SQLLEN> _sqlLenList;
 };

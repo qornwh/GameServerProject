@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS Account
 DROP TABLE IF EXISTS Player
 DROP TABLE IF EXISTS Item
 DROP TABLE IF EXISTS ItemEquipment
+DROP TABLE IF EXISTS ItemDrop
 DROP TABLE IF EXISTS Inventory
 DROP TABLE IF EXISTS IpLog
 DROP TABLE IF EXISTS QuestInfo
@@ -22,6 +23,7 @@ CREATE TABLE Player
 	jobCode int NOT NULL,
 	mapCode int NOT NULL,
 	accountCode int NOT NULL,
+    gold int NOT NULL DEFAULT 0,
 )
 
 CREATE TABLE Item
@@ -30,14 +32,14 @@ CREATE TABLE Item
 	type int NOT NULL,
 	name varchar(20) NOT NULL,
 	maxSize int NOT NULL,
+	attack int NOT Null DEFAULT 0,
 )
 
-CREATE TABLE ItemEquipment
+CREATE TABLE ItemDrop
 (
-	itemCode int NOT NULL PRIMARY KEY,
-	type int NOT NULL,
-	name varchar(20) NOT NULL,
-	attack int Not Null,
+    itemCode int NOT NULL,
+    monsterCode int NOT NULL,
+    CONSTRAINT ItemDrop_PK PRIMARY KEY(itemCode,monsterCode)
 )
 
 CREATE TABLE Inventory
@@ -45,6 +47,7 @@ CREATE TABLE Inventory
 	playerCode int NOT NULL,
 	itemCode int NOT NULL,
 	itemType int NOT NULL,
+    itemCount int NOT NULL,
 )
 
 CREATE TABLE IpLog
@@ -78,22 +81,33 @@ CREATE TABLE QuestKillState
 )
 
 INSERT INTO Account (id, pwd) VALUES
-('Gm1', 1234)
+('Gm', 1234)
 
 INSERT INTO Player (name, jobCode, mapCode, accountCode) VALUES
-('Gm1', 1, 1, 1)
+('GmPlayer', 1, 1, 1)
 
-INSERT INTO Item (itemCode, type, name, maxSize) VALUES 
-(1, 1, '해골 기사의 뼈조각', 200),
-(2, 1, '해골 궁수의 천조각', 200),
-(3, 1, '기마병의 심장', 200),
-(4, 2, '체력 회복 포션', 200)
-
-INSERT INTO ItemEquipment (itemCode, type, name, attack) VALUES
-(1, 1, '낡은 검', 100),
-(2, 1, '낡은 활', 150)
+INSERT INTO Item (itemCode, type, name, maxSize, attack) VALUES 
+(1, 3, '해골 기사의 뼈조각', 200, 0),
+(2, 3, '해골 궁수의 천조각', 200, 0),
+(3, 3, '기마병의 심장', 200, 0),
+(101, 2, '체력 회복 포션', 200, 0),
+(1001, 1, '낡은 검', 1, 100),
+(1002, 1, '낡은 활', 1, 150)
 
 INSERT INTO QuestInfo (questCode, name, type) VALUES
 (1, '병사 처치', 2),
 (2, '재료 수급', 2)
 
+INSERT INTO ItemDrop (itemCode, monsterCode) VALUES
+(1001, 0),
+(1, 0),
+(4, 0),
+(1002, 1),
+(2, 1),
+(4, 1)
+
+INSERT INTO Inventory (playerCode, itemCode, itemType, itemCount) VALUES
+(1, 1, 3, 10),
+(1, 2, 3, 10),
+(1, 101, 2, 10),
+(1, 1001, 1, 1)

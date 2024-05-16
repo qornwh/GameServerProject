@@ -22,3 +22,5 @@ using GameMosterInfoRef = std::shared_ptr<class GameMosterInfo>;
 using GameBossInfoRef = std::shared_ptr<class GameBossInfo>;
 using GamePlayerInfoRef = std::shared_ptr<class GamePlayerInfo>;
 using GameRoomQuestRef = std::shared_ptr<class GameRoomQuest>;
+
+using ItemRef = std::shared_ptr<class Item>;

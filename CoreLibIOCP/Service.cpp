@@ -145,21 +145,25 @@ void Service::task()
     ULONG_PTR key = 0;
     OverlappedSocket* overlappedPtr = nullptr;
 
-    if (GetQueuedCompletionStatus(_iocpHd, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(&overlappedPtr), 10))
+    if (GetQueuedCompletionStatus(_iocpHd, &numOfBytes, &key, 
+        reinterpret_cast<LPOVERLAPPED*>(&overlappedPtr), 10))
     {
-        if (overlappedPtr->GetType() == OverlappedSocket::Type::ACCP)
+        int32 type = overlappedPtr->GetType();
+        if (type == OverlappedSocket::Type::ACCP)
         {
             Accept(overlappedPtr);
         }
-        else if (overlappedPtr->GetType() == OverlappedSocket::Type::READ)
+        else if (type == OverlappedSocket::Type::READ)
         {
-            std::shared_ptr<Session> session = overlappedPtr->GetSession();
+            std::shared_ptr<Session> session = 
+                overlappedPtr->GetSession();
             CrashFunc(session != nullptr);
             session->OnRead(numOfBytes);
         }
-        else if (overlappedPtr->GetType() == OverlappedSocket::Type::SEND)
+        else if (type == OverlappedSocket::Type::SEND)
         {
-            std::shared_ptr<Session> session = overlappedPtr->GetSession();
+            std::shared_ptr<Session> session = 
+                overlappedPtr->GetSession();
             CrashFunc(session != nullptr);
             session->OnWrite(numOfBytes);
         }
