@@ -13,6 +13,7 @@ public:
 	bool CreateCharacter(const wchar_t* name, int32 jobCode, int32 accountCode);
 	bool PlayerDB(int32 accountCode);
 	void GetPlayerDBInfo(int32& playerCode, wchar_t* name, int32& jobCode, int32& mapCode);
+	void SavePlayerDB(int32 playerCode, int32 gold);
 
 private:
 	DBOrm _dbOrm;

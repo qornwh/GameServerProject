@@ -1,6 +1,7 @@
 ﻿#include "Inventory.h"
 #include "DBConnectPool.h"
 #include "InventoryDB.h"
+#include "SessionDB.h"
 
 Inventory::Inventory()
 {
@@ -86,6 +87,10 @@ void Inventory::SaveDB()
         }
     }
     inventoryDB.SetCommit();
+
+    // 골드 DB기록
+    SessionDB sessionDB;
+    sessionDB.SavePlayerDB(_playerCode, _gold);
 }
 
 void Inventory::AddGold(int32 gold)

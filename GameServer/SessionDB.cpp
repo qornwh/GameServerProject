@@ -112,3 +112,18 @@ void SessionDB::GetPlayerDBInfo(int32& playerCode, wchar_t* name, int32& jobCode
 	mapCode = _mapCode;
 	wcscpy_s(name, 10, _name);
 }
+
+void SessionDB::SavePlayerDB(int32 playerCode, int32 gold)
+{
+	const wchar_t* query = L"UPDATE Player SET gold = ? WHERE playerCode = ?";
+	DBConnRef conn = GDBPool->Pop();
+
+	_dbOrm.SetDBConn(conn);
+	bool result = conn->Prepare(query);
+	_dbOrm.BindParamInt(&gold);
+	_dbOrm.BindParamInt(&playerCode);
+	result = conn->Execute();
+	result = conn->Fetch();
+	conn->CloseCursor();
+	conn->FreeStmt();
+}
