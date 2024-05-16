@@ -125,7 +125,5 @@ void SessionDB::SavePlayerDB(int32 playerCode, int32 gold)
 	_dbOrm.BindParamInt(&gold);
 	_dbOrm.BindParamInt(&playerCode);
 	result = conn->Execute();
-	result = conn->Fetch();
-	conn->CloseCursor();
 	conn->FreeStmt();
 }

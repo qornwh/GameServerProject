@@ -14,6 +14,7 @@ InventoryItem::~InventoryItem()
 
 void InventoryItem::UpdateItem(int32 count)
 {
-    _state = InventoryItemState::UPDATE;
+    if (_state != InventoryItemState::INSERT)
+        _state = InventoryItemState::UPDATE;
     _count = count;
 }

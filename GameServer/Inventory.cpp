@@ -23,7 +23,7 @@ void Inventory::Init(int32 playerCode, int32 gold)
 
     while(inventoryDB.GetItem(itemCode, itemType, itemCount))
     {
-        AddItem(itemCode, itemType, itemCount);
+        _inventoryItemList.emplace(itemCode, InventoryItem(itemCode, itemType, itemCount, InventoryItemState::NONE));
     }
     _gold = gold;
 }
@@ -107,6 +107,6 @@ void Inventory::AddItem(int32 itemCode, int32 type, int32 count)
     }
     else
     {
-        _inventoryItemList.emplace(itemCode, InventoryItem(itemCode, type, count, InventoryItemState::NONE));
+        _inventoryItemList.emplace(itemCode, InventoryItem(itemCode, type, count, InventoryItemState::INSERT));
     }
 }

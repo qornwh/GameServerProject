@@ -9,8 +9,6 @@ InventoryDB::InventoryDB() : _dbOrm(3)
 InventoryDB::~InventoryDB()
 {
     conn->EndTran();
-    conn->CloseCursor();
-    conn->FreeStmt();
 }
 
 void InventoryDB::LoadDB(int32 playerCode)
