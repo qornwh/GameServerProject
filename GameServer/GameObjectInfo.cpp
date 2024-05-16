@@ -4,14 +4,15 @@
 #include "GameGlobal.h"
 #include "GameItem.h"
 #include "GameMapInfo.h"
+#include "GamePacketHandler.h"
 #include "GameRoomQuest.h"
 #include "GameSession.h"
 #include "GameSkill.h"
 #include "IRoom.h"
 
 GameObjectInfo::GameObjectInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type),
-    _hp(hp), _maxHp(hp),
-    _collider(0.35f)
+                                                                                         _hp(hp), _maxHp(hp),
+                                                                                         _collider(0.35f)
 {
     _gameRoomRef = gameRoom;
 }
@@ -530,6 +531,7 @@ void GamePlayerInfo::Update()
                     info->SetObjecteState(ObjectState::DIE);
                     room->GetQuest()->GetInfo().AddDeadMonster();
                     // 아이템 드롭
+                    protocol::DropMessage pkt;
                     for (auto item : info->GetDropList())
                     {
                         int32 itemCode = item.first;
@@ -538,12 +540,21 @@ void GamePlayerInfo::Update()
                             int32 itemCount = item.second;
                             int32 itemType = GItem->GetItem(itemCode)->GetType();
                             _inventory.AddItem(itemCode, itemType, itemCount);
+                            protocol::Item* pItem = pkt.add_items();
+                            pItem->set_item_code(itemCode);
+                            pItem->set_item_count(itemCount);
                         }
                         else if (itemCode == 0)
                         {
                             _inventory.AddGold(item.second);
+                            protocol::Item* pItem = pkt.add_items();
+                            pItem->set_item_code(itemCode);
+                            pItem->set_item_count(item.second);
                         }
                     }
+
+                    SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(pkt, protocol::DROPMESSAGE);
+                    _gameSession.lock()->AddWriteBuffer(sendBuffer);
                 }
             }
         }

@@ -22,6 +22,7 @@ enum MessageCode {
     CREATEACCOUNT = 16; // 계정 생성
     C_LOAD = 17; // 클라이언트 인게임 요청
     CREATECHARACTER = 18; // 캐릭터 생성 요청
+    DROPMESSAGE = 19; // 드롭 흭득 메시지
 }
 
 message Login {
@@ -177,4 +178,13 @@ message CMovePotal {
 
 message SEndGame {
     bool end_game = 1;
+}
+
+message Item {
+    int32 item_code = 1;
+    int32 item_count = 2;
+}
+
+message DropMessage {
+    repeated Item items = 1;
 }

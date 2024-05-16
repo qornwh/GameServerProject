@@ -73,6 +73,12 @@ extern CreateCharacterDefaultTypeInternal _CreateCharacter_default_instance_;
 class Demage;
 struct DemageDefaultTypeInternal;
 extern DemageDefaultTypeInternal _Demage_default_instance_;
+class DropMessage;
+struct DropMessageDefaultTypeInternal;
+extern DropMessageDefaultTypeInternal _DropMessage_default_instance_;
+class Item;
+struct ItemDefaultTypeInternal;
+extern ItemDefaultTypeInternal _Item_default_instance_;
 class Login;
 struct LoginDefaultTypeInternal;
 extern LoginDefaultTypeInternal _Login_default_instance_;
@@ -141,6 +147,8 @@ template<> ::protocol::Charater* Arena::CreateMaybeMessage<::protocol::Charater>
 template<> ::protocol::CreateAccount* Arena::CreateMaybeMessage<::protocol::CreateAccount>(Arena*);
 template<> ::protocol::CreateCharacter* Arena::CreateMaybeMessage<::protocol::CreateCharacter>(Arena*);
 template<> ::protocol::Demage* Arena::CreateMaybeMessage<::protocol::Demage>(Arena*);
+template<> ::protocol::DropMessage* Arena::CreateMaybeMessage<::protocol::DropMessage>(Arena*);
+template<> ::protocol::Item* Arena::CreateMaybeMessage<::protocol::Item>(Arena*);
 template<> ::protocol::Login* Arena::CreateMaybeMessage<::protocol::Login>(Arena*);
 template<> ::protocol::LoginAccess* Arena::CreateMaybeMessage<::protocol::LoginAccess>(Arena*);
 template<> ::protocol::Monster* Arena::CreateMaybeMessage<::protocol::Monster>(Arena*);
@@ -183,12 +191,13 @@ enum MessageCode : int {
   CREATEACCOUNT = 16,
   C_LOAD = 17,
   CREATECHARACTER = 18,
+  DROPMESSAGE = 19,
   MessageCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MessageCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MessageCode_IsValid(int value);
 constexpr MessageCode MessageCode_MIN = LOGIN;
-constexpr MessageCode MessageCode_MAX = CREATECHARACTER;
+constexpr MessageCode MessageCode_MAX = DROPMESSAGE;
 constexpr int MessageCode_ARRAYSIZE = MessageCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageCode_descriptor();
@@ -5001,6 +5010,322 @@ class SEndGame final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_GameService_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Item final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.Item) */ {
+ public:
+  inline Item() : Item(nullptr) {}
+  ~Item() override;
+  explicit PROTOBUF_CONSTEXPR Item(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Item(const Item& from);
+  Item(Item&& from) noexcept
+    : Item() {
+    *this = ::std::move(from);
+  }
+
+  inline Item& operator=(const Item& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Item& operator=(Item&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Item& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Item* internal_default_instance() {
+    return reinterpret_cast<const Item*>(
+               &_Item_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    28;
+
+  friend void swap(Item& a, Item& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Item* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Item* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Item* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Item>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Item& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const Item& from) {
+    Item::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Item* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "protocol.Item";
+  }
+  protected:
+  explicit Item(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kItemCodeFieldNumber = 1,
+    kItemCountFieldNumber = 2,
+  };
+  // int32 item_code = 1;
+  void clear_item_code();
+  int32_t item_code() const;
+  void set_item_code(int32_t value);
+  private:
+  int32_t _internal_item_code() const;
+  void _internal_set_item_code(int32_t value);
+  public:
+
+  // int32 item_count = 2;
+  void clear_item_count();
+  int32_t item_count() const;
+  void set_item_count(int32_t value);
+  private:
+  int32_t _internal_item_count() const;
+  void _internal_set_item_count(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.Item)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    int32_t item_code_;
+    int32_t item_count_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GameService_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DropMessage final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.DropMessage) */ {
+ public:
+  inline DropMessage() : DropMessage(nullptr) {}
+  ~DropMessage() override;
+  explicit PROTOBUF_CONSTEXPR DropMessage(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  DropMessage(const DropMessage& from);
+  DropMessage(DropMessage&& from) noexcept
+    : DropMessage() {
+    *this = ::std::move(from);
+  }
+
+  inline DropMessage& operator=(const DropMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DropMessage& operator=(DropMessage&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DropMessage& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DropMessage* internal_default_instance() {
+    return reinterpret_cast<const DropMessage*>(
+               &_DropMessage_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    29;
+
+  friend void swap(DropMessage& a, DropMessage& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DropMessage* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DropMessage* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DropMessage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DropMessage>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const DropMessage& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const DropMessage& from) {
+    DropMessage::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DropMessage* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "protocol.DropMessage";
+  }
+  protected:
+  explicit DropMessage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kItemsFieldNumber = 1,
+  };
+  // repeated .protocol.Item items = 1;
+  int items_size() const;
+  private:
+  int _internal_items_size() const;
+  public:
+  void clear_items();
+  ::protocol::Item* mutable_items(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >*
+      mutable_items();
+  private:
+  const ::protocol::Item& _internal_items(int index) const;
+  ::protocol::Item* _internal_add_items();
+  public:
+  const ::protocol::Item& items(int index) const;
+  ::protocol::Item* add_items();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >&
+      items() const;
+
+  // @@protoc_insertion_point(class_scope:protocol.DropMessage)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item > items_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GameService_2eproto;
+};
 // ===================================================================
 
 
@@ -7710,9 +8035,101 @@ inline void SEndGame::set_end_game(bool value) {
   // @@protoc_insertion_point(field_set:protocol.SEndGame.end_game)
 }
 
+// -------------------------------------------------------------------
+
+// Item
+
+// int32 item_code = 1;
+inline void Item::clear_item_code() {
+  _impl_.item_code_ = 0;
+}
+inline int32_t Item::_internal_item_code() const {
+  return _impl_.item_code_;
+}
+inline int32_t Item::item_code() const {
+  // @@protoc_insertion_point(field_get:protocol.Item.item_code)
+  return _internal_item_code();
+}
+inline void Item::_internal_set_item_code(int32_t value) {
+  
+  _impl_.item_code_ = value;
+}
+inline void Item::set_item_code(int32_t value) {
+  _internal_set_item_code(value);
+  // @@protoc_insertion_point(field_set:protocol.Item.item_code)
+}
+
+// int32 item_count = 2;
+inline void Item::clear_item_count() {
+  _impl_.item_count_ = 0;
+}
+inline int32_t Item::_internal_item_count() const {
+  return _impl_.item_count_;
+}
+inline int32_t Item::item_count() const {
+  // @@protoc_insertion_point(field_get:protocol.Item.item_count)
+  return _internal_item_count();
+}
+inline void Item::_internal_set_item_count(int32_t value) {
+  
+  _impl_.item_count_ = value;
+}
+inline void Item::set_item_count(int32_t value) {
+  _internal_set_item_count(value);
+  // @@protoc_insertion_point(field_set:protocol.Item.item_count)
+}
+
+// -------------------------------------------------------------------
+
+// DropMessage
+
+// repeated .protocol.Item items = 1;
+inline int DropMessage::_internal_items_size() const {
+  return _impl_.items_.size();
+}
+inline int DropMessage::items_size() const {
+  return _internal_items_size();
+}
+inline void DropMessage::clear_items() {
+  _impl_.items_.Clear();
+}
+inline ::protocol::Item* DropMessage::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:protocol.DropMessage.items)
+  return _impl_.items_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >*
+DropMessage::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:protocol.DropMessage.items)
+  return &_impl_.items_;
+}
+inline const ::protocol::Item& DropMessage::_internal_items(int index) const {
+  return _impl_.items_.Get(index);
+}
+inline const ::protocol::Item& DropMessage::items(int index) const {
+  // @@protoc_insertion_point(field_get:protocol.DropMessage.items)
+  return _internal_items(index);
+}
+inline ::protocol::Item* DropMessage::_internal_add_items() {
+  return _impl_.items_.Add();
+}
+inline ::protocol::Item* DropMessage::add_items() {
+  ::protocol::Item* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:protocol.DropMessage.items)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >&
+DropMessage::items() const {
+  // @@protoc_insertion_point(field_list:protocol.DropMessage.items)
+  return _impl_.items_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
