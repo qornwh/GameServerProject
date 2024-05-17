@@ -12,7 +12,7 @@
 
 GameObjectInfo::GameObjectInfo(GameRoomRef gameRoom, int32 uuid, int32 type, int32 hp) : _uuid(uuid), _type(type),
                                                                                          _hp(hp), _maxHp(hp),
-                                                                                         _collider(0.35f)
+                                                                                         _collider(0.35f), _damage(0)
 {
     _gameRoomRef = gameRoom;
 }
