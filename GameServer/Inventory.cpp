@@ -28,8 +28,9 @@ void Inventory::Init(int32 playerCode, int32 gold)
     _gold = gold;
 }
 
-void Inventory::GetItemInfo()
+Map<int32, InventoryItem>& Inventory::GetItemInfo()
 {
+    return _inventoryItemList;
 }
 
 bool Inventory::CheckGold(int32 gold)

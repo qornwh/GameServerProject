@@ -87,6 +87,24 @@ void GameRoom::EnterSession(SessionRef session)
         SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOAD);
         session->AsyncWrite(sendBuffer);
     }
+
+    {
+        protocol::SLoadInventory sendPkt;
+        Inventory& inventory = gameSession->GetPlayer()->GetInventory();
+        int32 gold = inventory.GetGold();
+        for (auto& entry : inventory.GetItemInfo())
+        {
+            int32 itemCode = entry.second.GetCode();
+            int32 itemCount = entry.second.GetCount();
+            protocol::Item* item = sendPkt.add_items();
+            item->set_item_code(itemCode);
+            item->set_item_count(itemCount);
+        }
+        sendPkt.set_gold(gold);
+
+        SendBufferRef sendBuffer = GamePacketHandler::MakePacketHandler(sendPkt, protocol::MessageCode::S_LOADINVENTORY);
+        session->AsyncWrite(sendBuffer);
+    }
     IRoom::EnterSession(session);
     std::cout << "Enter SessionID: " << gameSession->GetPlayer()->GetCode() << " Name: " << gameSession->GetPlayer()->GetName() << std::endl;
 }

@@ -109,6 +109,9 @@ extern SInsertplayerDefaultTypeInternal _SInsertplayer_default_instance_;
 class SLoad;
 struct SLoadDefaultTypeInternal;
 extern SLoadDefaultTypeInternal _SLoad_default_instance_;
+class SLoadInventory;
+struct SLoadInventoryDefaultTypeInternal;
+extern SLoadInventoryDefaultTypeInternal _SLoadInventory_default_instance_;
 class SMove;
 struct SMoveDefaultTypeInternal;
 extern SMoveDefaultTypeInternal _SMove_default_instance_;
@@ -159,6 +162,7 @@ template<> ::protocol::SClosePlayer* Arena::CreateMaybeMessage<::protocol::SClos
 template<> ::protocol::SEndGame* Arena::CreateMaybeMessage<::protocol::SEndGame>(Arena*);
 template<> ::protocol::SInsertplayer* Arena::CreateMaybeMessage<::protocol::SInsertplayer>(Arena*);
 template<> ::protocol::SLoad* Arena::CreateMaybeMessage<::protocol::SLoad>(Arena*);
+template<> ::protocol::SLoadInventory* Arena::CreateMaybeMessage<::protocol::SLoadInventory>(Arena*);
 template<> ::protocol::SMove* Arena::CreateMaybeMessage<::protocol::SMove>(Arena*);
 template<> ::protocol::SPlayerData* Arena::CreateMaybeMessage<::protocol::SPlayerData>(Arena*);
 template<> ::protocol::SRoomQuest* Arena::CreateMaybeMessage<::protocol::SRoomQuest>(Arena*);
@@ -192,12 +196,13 @@ enum MessageCode : int {
   C_LOAD = 17,
   CREATECHARACTER = 18,
   DROPMESSAGE = 19,
+  S_LOADINVENTORY = 20,
   MessageCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   MessageCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool MessageCode_IsValid(int value);
 constexpr MessageCode MessageCode_MIN = LOGIN;
-constexpr MessageCode MessageCode_MAX = DROPMESSAGE;
+constexpr MessageCode MessageCode_MAX = S_LOADINVENTORY;
 constexpr int MessageCode_ARRAYSIZE = MessageCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* MessageCode_descriptor();
@@ -5326,6 +5331,174 @@ class DropMessage final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_GameService_2eproto;
 };
+// -------------------------------------------------------------------
+
+class SLoadInventory final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protocol.SLoadInventory) */ {
+ public:
+  inline SLoadInventory() : SLoadInventory(nullptr) {}
+  ~SLoadInventory() override;
+  explicit PROTOBUF_CONSTEXPR SLoadInventory(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SLoadInventory(const SLoadInventory& from);
+  SLoadInventory(SLoadInventory&& from) noexcept
+    : SLoadInventory() {
+    *this = ::std::move(from);
+  }
+
+  inline SLoadInventory& operator=(const SLoadInventory& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SLoadInventory& operator=(SLoadInventory&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SLoadInventory& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SLoadInventory* internal_default_instance() {
+    return reinterpret_cast<const SLoadInventory*>(
+               &_SLoadInventory_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    30;
+
+  friend void swap(SLoadInventory& a, SLoadInventory& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SLoadInventory* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SLoadInventory* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SLoadInventory* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SLoadInventory>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SLoadInventory& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const SLoadInventory& from) {
+    SLoadInventory::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SLoadInventory* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "protocol.SLoadInventory";
+  }
+  protected:
+  explicit SLoadInventory(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kItemsFieldNumber = 1,
+    kGoldFieldNumber = 2,
+  };
+  // repeated .protocol.Item items = 1;
+  int items_size() const;
+  private:
+  int _internal_items_size() const;
+  public:
+  void clear_items();
+  ::protocol::Item* mutable_items(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >*
+      mutable_items();
+  private:
+  const ::protocol::Item& _internal_items(int index) const;
+  ::protocol::Item* _internal_add_items();
+  public:
+  const ::protocol::Item& items(int index) const;
+  ::protocol::Item* add_items();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >&
+      items() const;
+
+  // int32 gold = 2;
+  void clear_gold();
+  int32_t gold() const;
+  void set_gold(int32_t value);
+  private:
+  int32_t _internal_gold() const;
+  void _internal_set_gold(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:protocol.SLoadInventory)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item > items_;
+    int32_t gold_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_GameService_2eproto;
+};
 // ===================================================================
 
 
@@ -8123,9 +8296,75 @@ DropMessage::items() const {
   return _impl_.items_;
 }
 
+// -------------------------------------------------------------------
+
+// SLoadInventory
+
+// repeated .protocol.Item items = 1;
+inline int SLoadInventory::_internal_items_size() const {
+  return _impl_.items_.size();
+}
+inline int SLoadInventory::items_size() const {
+  return _internal_items_size();
+}
+inline void SLoadInventory::clear_items() {
+  _impl_.items_.Clear();
+}
+inline ::protocol::Item* SLoadInventory::mutable_items(int index) {
+  // @@protoc_insertion_point(field_mutable:protocol.SLoadInventory.items)
+  return _impl_.items_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >*
+SLoadInventory::mutable_items() {
+  // @@protoc_insertion_point(field_mutable_list:protocol.SLoadInventory.items)
+  return &_impl_.items_;
+}
+inline const ::protocol::Item& SLoadInventory::_internal_items(int index) const {
+  return _impl_.items_.Get(index);
+}
+inline const ::protocol::Item& SLoadInventory::items(int index) const {
+  // @@protoc_insertion_point(field_get:protocol.SLoadInventory.items)
+  return _internal_items(index);
+}
+inline ::protocol::Item* SLoadInventory::_internal_add_items() {
+  return _impl_.items_.Add();
+}
+inline ::protocol::Item* SLoadInventory::add_items() {
+  ::protocol::Item* _add = _internal_add_items();
+  // @@protoc_insertion_point(field_add:protocol.SLoadInventory.items)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::protocol::Item >&
+SLoadInventory::items() const {
+  // @@protoc_insertion_point(field_list:protocol.SLoadInventory.items)
+  return _impl_.items_;
+}
+
+// int32 gold = 2;
+inline void SLoadInventory::clear_gold() {
+  _impl_.gold_ = 0;
+}
+inline int32_t SLoadInventory::_internal_gold() const {
+  return _impl_.gold_;
+}
+inline int32_t SLoadInventory::gold() const {
+  // @@protoc_insertion_point(field_get:protocol.SLoadInventory.gold)
+  return _internal_gold();
+}
+inline void SLoadInventory::_internal_set_gold(int32_t value) {
+  
+  _impl_.gold_ = value;
+}
+inline void SLoadInventory::set_gold(int32_t value) {
+  _internal_set_gold(value);
+  // @@protoc_insertion_point(field_set:protocol.SLoadInventory.gold)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
