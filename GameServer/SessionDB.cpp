@@ -126,4 +126,5 @@ void SessionDB::SavePlayerDB(int32 playerCode, int32 gold)
 	_dbOrm.BindParamInt(&playerCode);
 	result = conn->Execute();
 	conn->FreeStmt();
+	_dbOrm.ReSetIdx();
 }

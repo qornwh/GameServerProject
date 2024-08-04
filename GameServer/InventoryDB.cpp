@@ -34,6 +34,8 @@ bool InventoryDB::GetItem(int32& itemCode, int32& type, int32& count)
     }
     else
     {
+        conn->CloseCursor();
+        conn->FreeStmt();
         return false;
     }
 }
@@ -46,7 +48,7 @@ void InventoryDB::SaveInsertDB(int32 playerCode, int32 itemCode, int32 type, int
     _dbOrm.BindParamInt(&type);
     _dbOrm.BindParamInt(&count);
     conn->Exec(insertQuery);
-    _dbOrm.ParamInit();
+    _dbOrm.ReSetIdx();
 }
 
 void InventoryDB::SaveUpdateDB(int32 playerCode, int32 itemCode, int32 type, int32 count)

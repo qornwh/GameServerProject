@@ -18,6 +18,7 @@ public:
     void SaveDB();
     void AddGold(int32 gold);
     void AddItem(int32 itemCode, int32 type, int32 count);
+    int32 GetGold() { return _gold; }
 
 private:
     Lock lock;

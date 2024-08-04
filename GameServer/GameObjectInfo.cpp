@@ -549,7 +549,7 @@ void GamePlayerInfo::Update()
                             _inventory.AddGold(item.second);
                             protocol::Item* pItem = pkt.add_items();
                             pItem->set_item_code(itemCode);
-                            pItem->set_item_count(item.second);
+                            pItem->set_item_count(_inventory.GetGold());
                         }
                     }
 

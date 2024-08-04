@@ -63,7 +63,7 @@ void DummyService::AsyncSession()
 {
     for (auto session : _sessions)
     {
-        DummySessionRef dummySession = std::std::static_pointer_cast<DummySession>(session);
+        DummySessionRef dummySession = std::static_pointer_cast<DummySession>(session);
         DummyPlayerInfoRef info = dummySession->GetInfo();
         if (info != nullptr)
         {

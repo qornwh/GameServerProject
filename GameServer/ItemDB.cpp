@@ -37,6 +37,7 @@ bool ItemDB::GetItem(int32& itemCode, int32& type, wchar_t* name, int32& maxSize
 	}
 	else
 	{
+		conn->CloseCursor();
 		conn->FreeStmt();
 		return false;
 	}

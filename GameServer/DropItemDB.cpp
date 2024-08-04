@@ -29,6 +29,7 @@ bool DropItemDB::GetDropItem(int32& itemCode, int32& monsterCode)
     }
     else
     {
+        conn->CloseCursor();
         conn->FreeStmt();
         return false;
     }

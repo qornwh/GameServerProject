@@ -28,7 +28,7 @@ void DBPool::Init(const wchar_t* connStr)
 
     wcscpy_s(_connStr, connStr);
     WriteLockGuard writeLock(lock, "write");
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1; i++)
     {
         DBConnRef conn = DBConnRef(new DBConn(), GlobalPush);
         conn->Init(_henv, _connStr);

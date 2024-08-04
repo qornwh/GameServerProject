@@ -97,6 +97,9 @@ bool DBConn::BindParameter(SQLUSMALLINT colIdx, SQLSMALLINT paramType, SQLSMALLI
 bool DBConn::FreeStmt()
 {
     SQLRETURN ret = SQLFreeStmt(_hstmt, SQL_UNBIND);
+    if (ret < 0)
+        ErrorDisplay(ret);
+    ret = SQLFreeStmt(_hstmt, SQL_RESET_PARAMS);
     if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO)
         return true;
     ErrorDisplay(ret);
