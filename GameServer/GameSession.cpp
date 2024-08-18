@@ -39,7 +39,7 @@ int32 GameSession::OnRecv(BYTE* buffer, int32 len)
 		PacketHeader* header = reinterpret_cast<PacketHeader*>(&buffer[offset]);
 		if (!GamePacketHandler::CheckPacketHeader(header, offset, len))
 			break;
-		HandlePacket(buffer, offset, header);
+		HandlePacket(buffer, header);
 		offset += header->size;
 	}
 	return offset;
@@ -56,7 +56,7 @@ std::shared_ptr<GamePlayerInfo> GameSession::GetPlayer()
 	return _player;
 }
 
-void GameSession::HandlePacket(BYTE* buffer, int32 offset, PacketHeader* header)
+void GameSession::HandlePacket(BYTE* buffer, PacketHeader* header)
 {
 	uint16 id = header->id;
 
@@ -64,17 +64,17 @@ void GameSession::HandlePacket(BYTE* buffer, int32 offset, PacketHeader* header)
 	{
 	case protocol::MessageCode::LOGIN:
 	{
-		LoginHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+		LoginHandler(buffer, header, static_cast<int32>(sizeof(PacketHeader)));
 	}
 		break;
 	case protocol::MessageCode::CREATECHARACTER:
 	{
-		CreateCharacterHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+		CreateCharacterHandler(buffer, header, static_cast<int32>(sizeof(PacketHeader)));
 	}
 		break;
 	case protocol::MessageCode::C_LOAD:
 	{
-		LoadHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+		LoadHandler(buffer, header, static_cast<int32>(sizeof(PacketHeader)));
 
 		if (GRoomManger->getRoom(0) != nullptr)
 		{
@@ -84,24 +84,24 @@ void GameSession::HandlePacket(BYTE* buffer, int32 offset, PacketHeader* header)
 		break;
 	case protocol::MessageCode::S_MOVE:
 	{
-		MoveHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+		MoveHandler(buffer, header, static_cast<int32>(sizeof(PacketHeader)));
 	}
 		break;
 	case protocol::MessageCode::S_CHAT:
 	{
-		ChatHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+		ChatHandler(buffer, header, static_cast<int32>(sizeof(PacketHeader)));
 	}
 		break;
 	case protocol::MessageCode::S_PLAYERDATA:
 		break;
 	case protocol::MessageCode::C_PLAYERATTACK:
 	{
-		AttackHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+		AttackHandler(buffer, header, static_cast<int32>(sizeof(PacketHeader)));
 	}
 		break;
 	case protocol::MessageCode::C_MOVEPOTAL:
 	{
-		ChangeRoomHandler(buffer, header, offset + static_cast<int32>(sizeof(PacketHeader)));
+		ChangeRoomHandler(buffer, header, static_cast<int32>(sizeof(PacketHeader)));
 	}
 		break;
 	}

@@ -19,7 +19,7 @@ public:
     void ChatHandler(BYTE* buffer, PacketHeader* header, int32 offset);
     void AttackHandler(BYTE* buffer, PacketHeader* header, int32 offset);
     void ChangeRoomHandler(BYTE* buffer, PacketHeader* header, int32 offset);
-    void HandlePacket(BYTE* buffer, int32 offset, PacketHeader* header);
+    void HandlePacket(BYTE* buffer, PacketHeader* header);
     int32 OnRecv(BYTE* buffer, int32 len) override;
     void CreatePlayerInfo(int32 type, int32 hp);
     std::shared_ptr<class GamePlayerInfo> GetPlayer();
